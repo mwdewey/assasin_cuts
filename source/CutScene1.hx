@@ -10,6 +10,7 @@ import flixel.FlxState;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 
 /**
  * ...
@@ -27,9 +28,11 @@ class CutScene1 extends FlxState
 	
 	override public function create():Void
     {
-		labelTest = new FlxText(0, FlxG.height / 2, FlxG.width, "");
+		labelTest = new FlxText(0, FlxG.height / 2, FlxG.width, "In a town a long, long time ago...");
 		labelTest.setFormat(null, 40, FlxColor.WHITE, "center");
 		add(labelTest);
+		
+		new FlxTimer(1.0, endCutScene, 1);
 		
         super.create();
     }
@@ -39,5 +42,11 @@ class CutScene1 extends FlxState
 		super.update();
 		
 	}	
+	
+	function endCutScene(Timer:FlxTimer):Void {
+	
+		FlxG.switchState(new GameState1());
+		
+	}
 	
 }
