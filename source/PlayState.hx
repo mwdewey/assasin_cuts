@@ -12,11 +12,18 @@ import flixel.util.FlxMath;
  */
 class PlayState extends FlxState
 {
+	private var ui:UI;
+	private var text:String = "";
+	private var health:Int = 100;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{
+		ui = new UI();
+		add(ui);
+		
 		super.create();
 	}
 	
