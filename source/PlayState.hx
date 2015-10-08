@@ -41,6 +41,29 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+		if (FlxG.keys.pressed.X) {
+			ui.updateHealthBar(health--);
+		}
+		if (FlxG.keys.pressed.Z) {
+			ui.updateHealthBar(health++);
+		}
+		
+		if (FlxG.keys.pressed.A) {
+			ui.updateText("Hello whale");
+		}
+		
+		if (FlxG.keys.pressed.B) {
+			ui.updateText("Verily, I am the greatest warrior of our time, gifted with swag and charisma of the most admirable vein.");
+		}
+		
+		if (FlxG.keys.pressed.SPACE) {
+			ui.updateText("");
+		}
+		
+		if (FlxG.keys.pressed.C) {
+			ui.updateText("I wanna be the very best, like no one ever was. To catch them is my real test, to train them is my cause. I will travel across the land, searchin' far and wide. Teach Pokemon to understand the power that's inside. POKEMON!!! Gotta catch em all I'ts you anD me I no its' my dstiney");
+		}
+		
 		super.update();
 	}	
 }

@@ -17,6 +17,9 @@ class MenuState extends FlxState
 	 */
 	override public function create():Void
 	{
+		FlxG.cameras.bgColor = 0xFF84DBF4;
+		FlxG.switchState(new PlayState());
+		
 		super.create();
 	}
 	
