@@ -16,7 +16,7 @@ using flixel.util.FlxSpriteUtil;
 class HairDresser extends FlxSprite
 {
 	public static var MAX_SPEED:Int = 2000;
-	public static var SPEED:Int = 1000;
+	public static var SPEED:Int = 100;
 	
 	public function new() 
 	{
@@ -33,12 +33,12 @@ class HairDresser extends FlxSprite
 		this.acceleration.y = 500;
 		this.acceleration.x = 0;
 		
-		//this.velocity.x *= 0.8;
+		this.velocity.x *= 0.8;
 		
-		if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)    this.acceleration.y -= SPEED;
-		if (FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN)  this.acceleration.y += SPEED;
-		if (FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT)  this.acceleration.x -= SPEED;
-		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) this.acceleration.x += SPEED;
+		if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)    this.velocity.y -= SPEED;
+		if (FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN)  this.velocity.y += SPEED;
+		if (FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT)  this.velocity.x -= SPEED;
+		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) this.velocity.x += SPEED;
 		
 		if (FlxG.keys.justPressed.SPACE) this.velocity.y = -500;
 		
