@@ -16,6 +16,7 @@ class GameState1 extends FlxState
 	{
 	
 	var hairDresser:HairDresser;
+	var ogre:Ogre;
 
 	public function new() 
 	{
@@ -28,8 +29,10 @@ class GameState1 extends FlxState
         super.create();
 		
 		hairDresser = new HairDresser();
-		
 		add(hairDresser);
+		
+		ogre = new Ogre(FlxG.width/2, FlxG.height/2-100, hairDresser);
+		add(ogre);
     }
 	
 	override public function update():Void
