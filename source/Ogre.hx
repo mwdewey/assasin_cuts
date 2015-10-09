@@ -15,21 +15,23 @@ class Ogre extends FlxSprite
 {
 
 	public var maxSpeed:Float = 200;
+	public var centerX:Float;
+	public var centerY:Float;
 	//define AI variables
 	private var _brain:FSM;
 	private var stunTimer:Float;
 	public var stunLimit:Float;
 	public var swingDist:Float;
 	public var movePoint:FlxPoint;
-	public var _player:FlxSprite;
+	public var _player:HairDresser;
 	
 	
-	public function new(X:Float=0, Y:Float=0, player:FlxSprite) {
+	public function new(X:Float=0, Y:Float=0, player:HairDresser) {
 		super(X, Y);
 		
 		//Load Ogre art
 		this.makeGraphic(256, 256, FlxColor.FUCHSIA); //replace with Ogre Art
-		this.
+		
 		//horizontal drag
 		drag.x = 450;
 		
@@ -42,9 +44,12 @@ class Ogre extends FlxSprite
 		swingDist = 100;
 		//reference player sprite
 		_player = player;
+		//set the center x and y coordinates of ogre
+		centerX = this.width / 2;
+		centerY = this.height / 2;
 		//ogre moves horizontally towards player.  
 		//Set a point using the player's x-position and a fixed y-position
-		movePoint = new FlxPoint(_player.x, Y+128);
+		movePoint = new FlxPoint(_player.centerX, Y+128);
 	}
 	
 	
@@ -64,7 +69,7 @@ class Ogre extends FlxSprite
 		FlxVelocity.moveTowardsPoint(this, movePoint, Std.int(maxSpeed));
 		
 		//if player is within swingDist AND not above ogre, switch to attack state
-		if (Math.abs(this.x - _player.x) <= swingDist && _player.y >= movePoint.y) {
+		if (Math.abs((this.x + this.centerX) - (_player.x + _player.centerX)) <= swingDist && _player.y >= movePoint.y) {
 			stunTimer = stunLimit;	
 			_brain.activeState = attack;
 			this.color = FlxColor.RED;

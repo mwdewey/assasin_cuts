@@ -17,6 +17,8 @@ class HairDresser extends FlxSprite
 {
 	public static var MAX_SPEED:Int = 2000;
 	public static var SPEED:Int = 1000;
+	public var centerX:Float;
+	public var centerY:Float;
 	
 	public function new() 
 	{
@@ -26,6 +28,10 @@ class HairDresser extends FlxSprite
 		this.drawRect(0, 0, 96, 192, FlxColor.GREEN);
 		
 		this.maxVelocity.set(MAX_SPEED);
+		
+		//set the center x and y coordinates of hairDresser
+		centerX = this.width / 2;
+		centerY = this.height / 2;
 	}
 	
 	override public function update():Void
