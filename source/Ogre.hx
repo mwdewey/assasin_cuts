@@ -22,6 +22,8 @@ class Ogre extends FlxSprite
 	public var playerPos(default, null):FlxPoint;
 	
 	
+	
+	
 	public function new(X:Float=0, Y:Float=0) {
 		super(X, Y);
 		

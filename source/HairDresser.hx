@@ -30,10 +30,10 @@ class HairDresser extends FlxSprite
 	
 	override public function update():Void
 	{
-		this.acceleration.y = 500;
+		this.acceleration.y = 1000;
 		this.acceleration.x = 0;
 		
-		this.velocity.x *= 0.8;
+		this.velocity.x *= 0.9;
 		
 		if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)    this.velocity.y -= SPEED;
 		if (FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN)  this.velocity.y += SPEED;
@@ -44,7 +44,12 @@ class HairDresser extends FlxSprite
 		
 		super.update();
 		
+		// update velocity for collisions
+		if (this.x < 0 || this.x+this.width > FlxG.width) this.velocity.x *= -0.5;
+		if (this.y < 0 || this.y+this.height > FlxG.height) this.velocity.y *= -0.5;
+		
 		this.bound();
+		
 		
 	}
 	
