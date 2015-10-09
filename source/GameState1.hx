@@ -19,6 +19,7 @@ class GameState1 extends FlxState
 	var s1:StaticObject;
 	var s2:StaticObject;
 	var s3:StaticObject;
+	var ogre:Ogre;
 
 	public function new() 
 	{
@@ -34,9 +35,10 @@ class GameState1 extends FlxState
 		s1 = new StaticObject(300, 300, 100, 100);
 		s2 = new StaticObject(300, 300, 100, 100);
 		s3 = new StaticObject(300, 300, 100, 100);
-		
 		add(hairDresser);
-		add(testSprite);
+		
+		ogre = new Ogre(FlxG.width/2, FlxG.height/2-100, hairDresser);
+		add(ogre);
     }
 	
 	override public function update():Void
