@@ -28,6 +28,8 @@ class CutScene1 extends FlxState
 	
 	override public function create():Void
     {
+		Reg.score = 150;
+		
 		labelTest = new FlxText(0, FlxG.height / 2, FlxG.width, "In a town a long, long time ago...");
 		labelTest.setFormat(null, 40, FlxColor.WHITE, "center");
 		add(labelTest);

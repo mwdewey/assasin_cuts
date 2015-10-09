@@ -32,20 +32,28 @@ class GameState1 extends FlxState
         super.create();
 		
 		hairDresser = new HairDresser();
-		s1 = new StaticObject(300, 300, 100, 100);
-		s2 = new StaticObject(300, 300, 100, 100);
-		s3 = new StaticObject(300, 300, 100, 100);
-		add(hairDresser);
+		trace(Reg.score);
 		
-		ogre = new Ogre(FlxG.width/2, FlxG.height/2-100, hairDresser);
-		add(ogre);
+		s1 = new StaticObject(100, 300, 100, 100);
+		s2 = new StaticObject(300, 300, 100, 100);
+		s3 = new StaticObject(500, 300, 100, 100);
+		add(s1);
+		add(s2);
+		add(s3);
+		
+		add(Reg.hairDresser);
+		
+		//ogre = new Ogre(FlxG.width/2, FlxG.height/2-100, hairDresser);
+		//add(ogre);
     }
 	
 	override public function update():Void
 	{
 		super.update();
 		
-		FlxG.collide(hairDresser,testSprite);
+		FlxG.collide(hairDresser, s1);
+		FlxG.collide(hairDresser, s2);
+		FlxG.collide(hairDresser, s3);
 		
 	}
 	

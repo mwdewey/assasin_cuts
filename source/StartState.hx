@@ -27,6 +27,10 @@ class StartState extends FlxState
 	
 	override public function create():Void
     {
+		FlxG.mouse.visible = false;
+		Reg.hairDresser = new HairDresser();
+		Reg.score = 100;
+		
 		labelTest = new FlxText(0, FlxG.height / 2, FlxG.width, "Press any key to start");
 		labelTest.setFormat(null, 40, FlxColor.WHITE, "center");
 		add(labelTest);
