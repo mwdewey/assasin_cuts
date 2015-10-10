@@ -26,7 +26,6 @@ class Ogre extends FlxSprite
 	public var movePoint:FlxPoint;
 	public var _player:HairDresser;
 	
-	
 	public function new(X:Float=0, Y:Float=0, player:HairDresser) {
 		super(X, Y);
 		

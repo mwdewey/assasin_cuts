@@ -9,7 +9,7 @@ import flixel.util.FlxSave;
  */
 class Reg
 {
-	public static var hd:HairDresser = new HairDresser();;
+	public static var hairDresser:HairDresser;
 	public static var score:Int;
 	public static var time:Int;
 	public static var currentState:Int;
