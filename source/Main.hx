@@ -10,15 +10,13 @@ import flixel.FlxState;
 
 class Main extends Sprite 
 {
-	var gameWidth:Int = 1024; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
-	var gameHeight:Int = 768; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-	var initialState:Class<FlxState> = MenuState; // The FlxState the game starts with.
-	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
-	var framerate:Int = 60; // How many frames per second the game should run at.
-	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
-	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
-	
-	// You can pretty much ignore everything from here on - your code should go in your states.
+	var gameWidth:Int = 1024;
+	var gameHeight:Int = 768;
+	var initialState:Class<FlxState> = StartState; 
+	var zoom:Float = -1;
+	var framerate:Int = 60;
+	var skipSplash:Bool = true;
+	var startFullscreen:Bool = false;
 	
 	public static function main():Void
 	{	
@@ -62,7 +60,7 @@ class Main extends Sprite
 			gameWidth = Math.ceil(stageWidth / zoom);
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
-
+	
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
 	}
 }
