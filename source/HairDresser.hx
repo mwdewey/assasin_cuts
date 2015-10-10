@@ -10,6 +10,8 @@ import flixel.FlxState;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import flixel.FlxG;
+import flixel.FlxCamera;
+import flixel.util.FlxPoint;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -24,6 +26,8 @@ class HairDresser extends FlxSprite
 	{
 		super();
 		
+		FlxG.camera.follow(this, FlxCamera.STYLE_PLATFORMER,new FlxPoint(0,0),1);
+		
 		this.makeGraphic(96,192, FlxColor.TRANSPARENT, true);
 		this.drawRect(0, 0, 96, 192, FlxColor.GREEN);
 		
@@ -34,7 +38,7 @@ class HairDresser extends FlxSprite
 		centerY = this.height / 2;
 		
 		// set gravity
-		this.acceleration.y = 1000;
+		this.acceleration.y = 1500;
 		this.acceleration.x = 0;
 	}
 	
@@ -50,18 +54,9 @@ class HairDresser extends FlxSprite
 		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) this.velocity.x += SPEED;
 		
 		// jump
-		if (FlxG.keys.justPressed.SPACE) this.velocity.y = -500;
+		if (FlxG.keys.justPressed.SPACE) this.velocity.y = -1000;
 		
 		super.update();
-		
-		// update velocity for collisions
-		if (this.x < 0 || this.x+this.width > FlxG.width) this.velocity.x *= -0.2;
-		if (this.y < 0 || this.y+this.height > FlxG.height) this.velocity.y *= -0.2;
-		
-		// bound object to inside screen
-		this.bound();
-		
-		
 	}
 	
 	

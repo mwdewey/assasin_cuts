@@ -27,15 +27,13 @@ class StartState extends FlxState
 	
 	override public function create():Void
     {
+		super.create();
+		
 		FlxG.mouse.visible = false;
-		Reg.hairDresser = new HairDresser();
-		Reg.score = 100;
 		
 		labelTest = new FlxText(0, FlxG.height / 2, FlxG.width, "Press any key to start");
 		labelTest.setFormat(null, 40, FlxColor.WHITE, "center");
 		add(labelTest);
-		
-        super.create();
     }
 	
 	override public function update():Void
@@ -44,5 +42,10 @@ class StartState extends FlxState
 		
 		super.update();
 	}	
+	
+	override public function destroy():Void
+    {
+        //super.destroy();
+    }
 	
 }
