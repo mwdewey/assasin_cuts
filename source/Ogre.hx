@@ -13,10 +13,11 @@ import flixel.util.FlxVelocity;
  */
 class Ogre extends FlxSprite  
 {
-
+	
 	public var maxSpeed:Float = 200;
 	public var centerX:Float;
 	public var centerY:Float;
+	public var HP:Float;
 	//define AI variables
 	private var _brain:FSM;
 	private var stunTimer:Float;
@@ -49,7 +50,9 @@ class Ogre extends FlxSprite
 		centerY = this.height / 2;
 		//ogre moves horizontally towards player.  
 		//Set a point using the player's x-position and a fixed y-position
-		movePoint = new FlxPoint(_player.centerX, Y+128);
+		movePoint = new FlxPoint(_player.centerX, Y + 128);
+		//set HP
+		HP = 100;
 	}
 	
 	
