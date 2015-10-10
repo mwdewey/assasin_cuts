@@ -23,12 +23,11 @@ class CutScene1 extends FlxState
 	public function new() 
 	{
 		super();
-		
 	}
 	
 	override public function create():Void
     {
-		Reg.score = 150;
+		super.create();
 		
 		labelTest = new FlxText(0, FlxG.height / 2, FlxG.width, "In a town a long, long time ago...");
 		labelTest.setFormat(null, 40, FlxColor.WHITE, "center");
@@ -36,7 +35,6 @@ class CutScene1 extends FlxState
 		
 		new FlxTimer(1.0, endCutScene, 1);
 		
-        super.create();
     }
 	
 	override public function update():Void
