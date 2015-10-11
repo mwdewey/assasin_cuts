@@ -16,12 +16,34 @@ import flixel.util.FlxTimer;
  * ...
  * @author robert
  */
-class restartState extends FlxState 
+class RestartState extends FlxState 
 {
-
-	public function new() 
+	//store name of cut scene to return to
+	var cutScene:FlxState;
+	var restartLabel:FlxText;
+	
+	public function new(scene:FlxState) 
+	{
+		super();
+		cutScene = scene;
+	}
+	
+	override public function create():Void
+    {
+		super.create();
+		
+		restartLabel = new FlxText(0, FlxG.height / 2, FlxG.width, "Wait!\nThat's not how it happened!");
+		restartLabel.setFormat(null, 40, FlxColor.WHITE, "center");
+		add(restartLabel);
+		
+    }
+	
+	override public function update():Void
 	{
 		
-	}
+		super.update();
+		
+		if (FlxG.keys.justPressed.SPACE) FlxG.switchState(cutScene);
+	}	
 	
 }

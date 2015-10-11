@@ -62,6 +62,8 @@ class GameState1 extends FlxState
 		
 		FlxG.collide(hairDresser, obsticalGroup);
 		//FlxG.collide(hairDresser, floorGroup);
+		
+		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene1()));
 	}
 	
 }
