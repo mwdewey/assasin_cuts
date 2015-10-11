@@ -17,16 +17,21 @@ using flixel.util.FlxSpriteUtil;
 
 class HairDresser extends FlxSprite
 {
-	public static var MAX_SPEED:Int = 2000;
+	public static var MAX_SPEED:Int = 1000;
 	public static var SPEED:Int = 100;
 	public var centerX:Float;
 	public var centerY:Float;
+	
+	public var isOnGround:Bool;
 	
 	public function new() 
 	{
 		super();
 		
-		FlxG.camera.follow(this, FlxCamera.STYLE_PLATFORMER,new FlxPoint(0,0),1);
+		isOnGround = false;
+		
+		FlxG.camera.follow(this, FlxCamera.STYLE_PLATFORMER, new FlxPoint(0, 0), 1);
+		FlxG.camera.zoom = 1;
 		
 		this.makeGraphic(96,192, FlxColor.TRANSPARENT, true);
 		this.drawRect(0, 0, 96, 192, FlxColor.GREEN);
@@ -54,9 +59,10 @@ class HairDresser extends FlxSprite
 		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) this.velocity.x += SPEED;
 		
 		// jump
-		if (FlxG.keys.justPressed.SPACE) this.velocity.y = -1000;
+		if (FlxG.keys.justPressed.SPACE && isOnGround) this.velocity.y = -1000;
 		
 		super.update();
+		
 	}
 	
 	

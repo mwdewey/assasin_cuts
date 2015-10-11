@@ -10,6 +10,7 @@ import flixel.FlxG;
 import flixel.group.FlxGroup;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
+import flixel.FlxObject;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -39,29 +40,39 @@ class GameState1 extends FlxState
 		hairDresser = new HairDresser();
 		
 		floorGroup = new FlxGroup();
-		floorList = new List<StaticObject>();
-		for (i in 0...100) floorList.add(new StaticObject(i * 100, FlxG.height - 100, 100, 100));
-		for (obj in floorList) add(obj);
+		for (i in 0...100) floorGroup.add(new StaticObject(i * 100, FlxG.height - 100, 100, 100));
 		
 		obsticalGroup = new FlxGroup();
-		for (i in 0...25) obsticalGroup.add(new StaticObject(i * 400, 500, 100, 100));
+		for (i in 0...25) obsticalGroup.add(new StaticObject(i * 400, 500, 64, 64));
 		
-		//add(floorGroup);
+		add(new Background());
+		add(floorGroup);
 		add(obsticalGroup);
 		add(hairDresser);
-		
-		//ogre = new Ogre(FlxG.width/2, FlxG.height/2-100, hairDresser);
-		//add(ogre);
     }
 	
 	override public function update():Void
 	{
 		super.update();
 		
-		for (obj in floorList) FlxG.collide(hairDresser, obj);
+		//check if on ground
+		hairDresser.isOnGround = false;
+		FlxG.overlap(hairDresser, obsticalGroup,goundDetect);
+		FlxG.overlap(hairDresser, floorGroup, goundDetect);
 		
+		trace(hairDresser.isOnGround);
+		
+		// move character
 		FlxG.collide(hairDresser, obsticalGroup);
-		//FlxG.collide(hairDresser, floorGroup);
+		FlxG.collide(hairDresser, floorGroup);
+		
+		// update ref
+		Reg.ref_x = hairDresser.x;
+		Reg.ref_y = hairDresser.y;
+	}
+	
+	private function goundDetect(Object1:FlxObject, Object2:FlxObject):Void {
+		hairDresser.isOnGround = true;
 	}
 	
 }

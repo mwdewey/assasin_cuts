@@ -36,7 +36,6 @@ class StaticObject extends FlxSprite
 	{
 		super.update();
 		
-		
 	}
 	
 	
