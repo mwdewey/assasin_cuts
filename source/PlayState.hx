@@ -49,7 +49,7 @@ class PlayState extends FlxState
 		}
 		
 		if (FlxG.keys.pressed.A) {
-			ui.updateText("Hello whale");
+			ui.updateText("Harrison Ford: Hello whale");
 		}
 		
 		if (FlxG.keys.pressed.B) {
@@ -65,8 +65,14 @@ class PlayState extends FlxState
 		}
 		
 		if (FlxG.keys.pressed.H) {
-			ui.updateHairCount(313);
+			ui.increaseHairCount();
 		}
+		
+		if (FlxG.keys.justReleased.F) {
+			ui.displayFullscreenImage();
+		}
+		
+		
 		
 		super.update();
 	}	

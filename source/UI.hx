@@ -33,6 +33,8 @@ class UI extends FlxTypedGroup<FlxSprite>
 	var goalStringIndex:Int = 0;
 	var hairCount = 0;
 	
+	var sprFullScreen:FlxSprite;
+	
 	var MAX_LENGTH_OF_TEXT:Int = 240;
 	var TIMER_LENGTH:Int = 0 * 60 + 30 * 1;
 	
@@ -67,14 +69,17 @@ class UI extends FlxTypedGroup<FlxSprite>
 		textTime = new FlxText(5, 5, 85, "5:00", 20);
 		textTime.color = 0xFF000000;
 		timerClock = new FlxTimer(TIMER_LENGTH, myCallback, 1);
+		sprFullScreen = new FlxSprite(0, 0, "assets/images/racoon.jpg");
+		sprFullScreen.alpha = 0;
 		
 		//add(sprHealth);
 		add(barHealth);
-		add(sprTextBox);
-		add(textTextBox);
 		add(sprHair);
 		add(textTime);
 		add(textHair);
+		add(sprFullScreen);
+		add(sprTextBox);
+		add(textTextBox);
 		
 		//prevent any scrolling onscreen
 		forEach(function(spr:FlxSprite) {
@@ -154,5 +159,15 @@ class UI extends FlxTypedGroup<FlxSprite>
 		var prefix:String = "x";
 		if (hairCount < 10) prefix += "0";
 		textHair.text = prefix + Std.string(hairCount);
+	}
+	
+	public function displayFullscreenImage(image:String = "assets/images/ford.jpg") {
+		if (sprFullScreen.alpha==0){
+			sprFullScreen.alpha = 1;
+			sprFullScreen.loadGraphic(image);
+		}
+		else {
+			sprFullScreen.alpha = 0;
+		}
 	}
 }
