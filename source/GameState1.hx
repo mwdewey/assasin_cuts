@@ -71,11 +71,11 @@ class GameState1 extends FlxState
 		FlxG.collide(hairDresser, floorGroup);
 		
 		// update ref
-		Reg.ref_x = hairDresser.x;
-		Reg.ref_y = hairDresser.y;
+		Reg.ref_x = FlxG.camera.scroll.x;
+		Reg.ref_y = FlxG.camera.scroll.y;
 		
-		tempSprite.x = hairDresser.x + 64 -  1024/2;
-		tempSprite.y = hairDresser.y + 192/2 - 768 / 2;
+		tempSprite.x = FlxG.camera.scroll.x;
+		tempSprite.y = FlxG.camera.scroll.y;
 		
 		// check overlapable obejcts
 		
