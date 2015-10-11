@@ -45,8 +45,17 @@ class OgreTest extends FlxState
 		
 		//damage manager
 		if (FlxG.keys.justPressed.SHIFT) {
-			player.isAttack = true;
-			ogre.takeDamage(player.damage);
+			//when facing left, attack is successful when there is collision on left side of player
+			if (player.face_left && FlxG.collide(ogre, player) && player.centerX > ogre.centerX) {
+				player.isAttack = true;
+				ogre.takeDamage(player.damage);
+			}
+			//also successful if collision on other side when facing right
+			else if (!player.face_left && FlxG.collide(ogre, player) && player.centerX < ogre.centerX) {
+				player.isAttack = true;
+				ogre.takeDamage(player.damage);
+			}
+			
 		}
 	}
 }

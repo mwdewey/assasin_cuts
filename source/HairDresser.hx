@@ -32,7 +32,7 @@ class HairDresser extends FlxSprite
 	public var damage:Float;
 	public var isOnGround:Bool;
 	
-	private var face_left:Bool = false;
+	public var face_left:Bool = false;
 	
 	public function new() 
 	{
@@ -99,6 +99,7 @@ class HairDresser extends FlxSprite
 		if (isAttack) {
 			Timer = attackLimit;
 			_brain.activeState = attack;
+			isAttack = false;
 		}
 		// movement
 			if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)    {
