@@ -21,6 +21,7 @@ class MenuState extends FlxState
 		FlxG.switchState(new PlayState());
 		
 		super.create();
+		
 	}
 	
 	/**
