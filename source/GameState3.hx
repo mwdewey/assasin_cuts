@@ -21,4 +21,10 @@ class GameState3 extends FlxState
 		
 	}
 	
+	override public function update() {
+		super.update();
+		
+		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene3()));
+	}
+	
 }

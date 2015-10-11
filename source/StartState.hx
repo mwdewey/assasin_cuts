@@ -32,7 +32,7 @@ class StartState extends FlxState
 		FlxG.mouse.visible = false;
 		FlxG.worldBounds.setSize(100000, 1000);
 		
-		labelTest = new FlxText(0, FlxG.height / 2, FlxG.width, "Press any key to start");
+		labelTest = new FlxText(0, FlxG.height / 2, FlxG.width, "Press SPACE to start");
 		labelTest.setFormat(null, 40, FlxColor.WHITE, "center");
 		add(labelTest);
     }

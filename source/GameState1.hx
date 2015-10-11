@@ -69,6 +69,8 @@ class GameState1 extends FlxState
 		// update ref
 		Reg.ref_x = hairDresser.x;
 		Reg.ref_y = hairDresser.y;
+		
+		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene1()));
 	}
 	
 	private function goundDetect(Object1:FlxObject, Object2:FlxObject):Void {
