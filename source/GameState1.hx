@@ -40,10 +40,10 @@ class GameState1 extends FlxState
 		hairDresser = new HairDresser();
 		
 		floorGroup = new FlxGroup();
-		for (i in 0...100) floorGroup.add(new StaticObject(i * 100, FlxG.height - 100, 100, 100));
+		for (i in 0...100) floorGroup.add(new StaticObject(i * 64, FlxG.height - 64, "assets/images/GroundTile.png"));
 		
 		obsticalGroup = new FlxGroup();
-		for (i in 0...25) obsticalGroup.add(new StaticObject(i * 400, 500, 64, 64));
+		for (i in 0...25) obsticalGroup.add(new StaticObject(i * 400, 500, "assets/images/GroundTile.png"));
 		
 		add(new Background());
 		add(floorGroup);

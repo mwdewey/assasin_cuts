@@ -21,12 +21,11 @@ class StaticObject extends FlxSprite
 	var w:Int;
 	var h:Int;
 
-	public function new(pos_x:Int, pos_y:Int, w:Int, h:Int) 
+	public function new(pos_x:Int, pos_y:Int, path:String) 
 	{
 		super();
 		
-		this.makeGraphic(w,h, FlxColor.TRANSPARENT, true);
-		this.drawRect(0, 0, w, h, FlxColor.RED);
+		this.loadGraphic(path,false,64,64);
 		
 		this.setPosition(pos_x,pos_y);
 		this.immovable = true;
