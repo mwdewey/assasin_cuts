@@ -41,10 +41,10 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
-		if (FlxG.keys.pressed.X) {
+		if (FlxG.keys.pressed.Z) {
 			ui.updateHealthBar(health--);
 		}
-		if (FlxG.keys.pressed.Z) {
+		if (FlxG.keys.pressed.X) {
 			ui.updateHealthBar(health++);
 		}
 		
@@ -62,6 +62,10 @@ class PlayState extends FlxState
 		
 		if (FlxG.keys.pressed.C) {
 			ui.updateText("I wanna be the very best, like no one ever was. To catch them is my real test, to train them is my cause. I will travel across the land, searchin' far and wide. Teach Pokemon to understand the power that's inside. POKEMON!!! Gotta catch em all I'ts you anD me I no its' my dstiney");
+		}
+		
+		if (FlxG.keys.pressed.H) {
+			ui.updateHairCount(313);
 		}
 		
 		super.update();

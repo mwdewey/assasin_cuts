@@ -7,6 +7,7 @@ package;
  import flixel.text.FlxText;
  import flixel.util.FlxColor;
  import flixel.ui.FlxBar;
+ import flixel.util.FlxTimer;
  using flixel.util.FlxSpriteUtil;
 
 /**
@@ -14,8 +15,9 @@ package;
  */
 class UI extends FlxTypedGroup<FlxSprite> 
 {
-	var MAX_LENGTH_OF_TEXT:Int = 240;
+	
 	var frame:Int = 0;
+	var waitframe:Int = -1;
 	
 	var barHealth:FlxBar;
 	var sprTextBox:FlxSprite;
@@ -23,11 +25,21 @@ class UI extends FlxTypedGroup<FlxSprite>
 	
 	var sprHair:FlxSprite;
 	var textHair:FlxText;
-	var textTime:FlxSprite;
+	var textTime:FlxText;
+	var timerClock:FlxTimer;
+	
 	
 	var goalString:String = "";
 	var goalStringIndex:Int = 0;
+	var hairCount = 0;
 	
+	var MAX_LENGTH_OF_TEXT:Int = 240;
+	var TIMER_LENGTH:Int = 0 * 60 + 30 * 1;
+	
+	private function myCallback(Timer:FlxTimer):Void
+	{
+		trace("Yeehaw");
+	}
 
 	public function new() 
 	{
@@ -40,6 +52,7 @@ class UI extends FlxTypedGroup<FlxSprite>
 		sprTextBox = new FlxSprite().makeGraphic(700, 150);
 		sprTextBox.x = (FlxG.width - sprTextBox.width)/2; //center it onscreen
 		sprTextBox.y = (4 / 5) * FlxG.height;
+		sprTextBox.alpha = 0;
 		textTextBox = new FlxText(0, (2 / 3) * FlxG.height, (4 / 5) * FlxG.width, "", 20/*, BOOL use imbedded fonts)*/); 
 		textTextBox.color = 0xFF000000;
 		textTextBox.fieldWidth = sprTextBox.width - 40;
@@ -48,22 +61,36 @@ class UI extends FlxTypedGroup<FlxSprite>
 		textTextBox.alignment = "left";
 		trace(textTextBox.text.length);
 		if (textTextBox.text.length > MAX_LENGTH_OF_TEXT) FlxG.cameras.bgColor = 0xFF000000;
-		sprHair = new FlxSprite(0, 0, "assets/images/racoon.jpg");
+		sprHair = new FlxSprite(FlxG.width*(1/10)+10, 5, "assets/images/winkydog.png"); 
+		textHair = new FlxText(sprHair.x + sprHair.width + 15, sprHair.y + sprHair.width / 2 - 12, 85, "x00", 20);
+		textHair.color = 0xFF000000;
+		textTime = new FlxText(5, 5, 85, "5:00", 20);
+		textTime.color = 0xFF000000;
+		timerClock = new FlxTimer(TIMER_LENGTH, myCallback, 1);
 		
 		//add(sprHealth);
 		add(barHealth);
 		add(sprTextBox);
 		add(textTextBox);
-		//add(sprHair);
+		add(sprHair);
+		add(textTime);
+		add(textHair);
 		
 		//prevent any scrolling onscreen
 		forEach(function(spr:FlxSprite) {
              spr.scrollFactor.set();
-         });	
+         });
+		 
 	}
 	
 	override public function update():Void {
 		frame++;
+		
+		if (frame == waitframe) {
+			waitframe = -1;
+			textTextBox.alpha = 0;
+			sprTextBox.alpha = 0;
+		}
 		
 		if (textTextBox.text != goalString) {
 			if (textTextBox.text.length > MAX_LENGTH_OF_TEXT) {
@@ -77,6 +104,7 @@ class UI extends FlxTypedGroup<FlxSprite>
 			}
 		}
 		
+		updateClockDisplay();
 		
 		super.update();
 	}
@@ -87,9 +115,44 @@ class UI extends FlxTypedGroup<FlxSprite>
 	}
 	
 	public function updateText(texte:String) : Void {
+		textTextBox.alpha = 1;
+		sprTextBox.alpha = 1;
 		goalString = texte;
 		textTextBox.text = "";
 		goalStringIndex = 0;
+		waitframe = frame + texte.length + 100; //This relies upon the fact that we draw one letter per frame
 	}
 	
+	private function updateClockDisplay() {
+		var seconds_left:Int = Std.int(TIMER_LENGTH - timerClock.progress * TIMER_LENGTH);
+		var min:String = Std.string(Std.int(seconds_left / 60));
+		var sec:String = Std.string(seconds_left % 60);
+		if (min.length == 1) min = "0" + min;
+		if (sec.length == 1) sec = "0" + sec;
+		textTime.text = min + ":" + sec;
+		
+		if (min == "00" && sec == "00") TIMER_LENGTH = 0;
+		
+		//turn red when < 20 seconds left
+		if (min == "00" && Std.parseFloat(sec) < 20) textTime.color = 0xFFFF0000;
+		
+		//alternatively,  turn red when under x percentage
+		/*var x:Int = 20; //<-- 10 means ten percent of time left
+		if (timerClock.progress >= (1 - .01 * x) )
+			textTime.color = 0xFFFF0000;*/
+	}
+	
+	public function updateHairCount(haire:Int) : Void {
+		hairCount = haire;
+		var prefix:String = "x";
+		if (hairCount < 10) prefix += "0";
+		textHair.text = prefix + Std.string(hairCount);
+	}
+	
+	public function increaseHairCount(haire:Int=1) : Void {
+		hairCount += haire;
+		var prefix:String = "x";
+		if (hairCount < 10) prefix += "0";
+		textHair.text = prefix + Std.string(hairCount);
+	}
 }
