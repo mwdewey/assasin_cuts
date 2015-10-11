@@ -43,6 +43,10 @@ class OgreTest extends FlxState
 		FlxG.collide(player, floor);
 		FlxG.collide(ogre, floor);
 		
-		//damage manager	
+		//damage manager
+		if (FlxG.keys.justPressed.SHIFT) {
+			player.isAttack = true;
+			ogre.takeDamage(player.damage);
+		}
 	}
 }

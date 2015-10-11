@@ -21,8 +21,14 @@ class HairDresser extends FlxSprite
 	public static var SPEED:Int = 100;
 	public var centerX:Float;
 	public var centerY:Float;
+	
 	//Attack and Control variables
-	private var _brain:FSM;
+	public var _brain:FSM;
+	private var Timer:Float;
+	private var stunLimit:Float;
+	private var attackLimit:Float;
+	public var isAttack:Bool = false;
+	
 	public var damage:Float;
 	public var isOnGround:Bool;
 	
@@ -61,6 +67,8 @@ class HairDresser extends FlxSprite
 		
 		damage = 10;
 		_brain = new FSM(move);
+		stunLimit = 75;
+		attackLimit = 15;
 	}
 	
 	override public function update():Void
@@ -76,30 +84,7 @@ class HairDresser extends FlxSprite
 			animation.play("idle_right");
 		}
 		
-		// movement
-		if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)    {
-			this.velocity.y -= SPEED;
-			if (face_left) {
-				animation.play("jump_left");
-			}
-			else {
-				animation.play("jump_right");
-			}
-		}
-		if (FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN)  this.velocity.y += SPEED;
-		if (FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT)  {
-			this.velocity.x -= SPEED;
-			face_left = true;
-			animation.play("run_left");
-		}
-		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) {
-			this.velocity.x += SPEED;
-			face_left = false;
-			animation.play("run_right");
-		}
-		
-		// jump
-		if (FlxG.keys.justPressed.SPACE && isOnGround) this.velocity.y = -1000;
+		_brain.update();
 		
 		super.update();
 		
@@ -111,10 +96,42 @@ class HairDresser extends FlxSprite
 	}
 	
 	public function move():Void {
-
+		if (isAttack) {
+			Timer = attackLimit;
+			_brain.activeState = attack;
+		}
+		// movement
+			if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)    {
+				this.velocity.y -= SPEED;
+				if (face_left) {
+					animation.play("jump_left");
+				}
+				else {
+					animation.play("jump_right");
+				}
+			}
+			if (FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN)  this.velocity.y += SPEED;
+			if (FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT)  {
+				this.velocity.x -= SPEED;
+				face_left = true;
+				animation.play("run_left");
+			}
+			if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) {
+				this.velocity.x += SPEED;
+				face_left = false;
+				animation.play("run_right");
+			}
+		
+			// jump
+			if (FlxG.keys.justPressed.SPACE && isOnGround) this.velocity.y = -1000;
 	}
 	
 	public function attack():Void {
-		
+		//when timer runs out, switch to move state
+		if (Timer <= 0) {
+			_brain.activeState = move;
+		}
+		else
+			Timer -= 1;
 	}
 }

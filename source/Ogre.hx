@@ -97,29 +97,12 @@ class Ogre extends FlxSprite
 		if (_brain.activeState != stun) {
 			stunTimer = stunLimit;
 			_brain.activeState = stun;
+			this.color = FlxColor.FUCHSIA;
 		}
 	}
 	
 	
 	override public function update():Void {
-		//STUN STATE
-		//Initial state
-		//triggered when enough damage is sustained in other states
-		//-run stunned animation, play until timer runs out
-		//-when timer is done, goto Move State
-		
-		//MOVE STATE
-		//-Track Player Position
-		//-Update movement in direction of player, run move animation
-		//-If within certain range of player, goto Attack State
-		//-If enough damage is sustained, goto Stun State
-		
-		//ATTACK STATE
-		//-run attack animation; if weapon hitbox connects, deal damage
-		//-delay short period of time
-		//-If enough damage is sustained, goto Stun State
-		//-otherwise, goto Move State
-		
 		//update movePoint with player's position
 		movePoint.x = _player.x;
 		_brain.update();
