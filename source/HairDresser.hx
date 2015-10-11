@@ -32,7 +32,7 @@ class HairDresser extends FlxSprite
 		
 		isOnGround = false;
 		
-		FlxG.camera.follow(this, FlxCamera.STYLE_LOCKON);
+		FlxG.camera.follow(this, FlxCamera.STYLE_PLATFORMER,null,0);
 		FlxG.camera.zoom = 1;
 		
 		//this.makeGraphic(96,192, FlxColor.TRANSPARENT, true);
@@ -90,12 +90,11 @@ class HairDresser extends FlxSprite
 			else animation.play("jump_right");
 		}
 		
-		trace(isOnGround);
-		
 		// jump
 		if (FlxG.keys.justPressed.SPACE && isOnGround) this.velocity.y = -1000;
 		
 		super.update();
+		FlxG.camera.update();
 		
 	}
 	
