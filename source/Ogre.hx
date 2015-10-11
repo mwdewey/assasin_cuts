@@ -71,7 +71,7 @@ class Ogre extends FlxSprite
 		FlxVelocity.moveTowardsPoint(this, movePoint, Std.int(maxSpeed));
 		
 		//if player is within swingDist AND not above ogre, switch to attack state
-		if (Math.abs((this.x + this.centerX) - (_player.x + _player.centerX)) <= swingDist && _player.y >= movePoint.y) {
+		if (Math.abs((this.x + this.centerX) - (_player.x + _player.centerX)) <= swingDist && (_player.y + _player.centerY) >= this.y) {
 			stunTimer = stunLimit;	
 			_brain.activeState = attack;
 			this.color = FlxColor.RED;
