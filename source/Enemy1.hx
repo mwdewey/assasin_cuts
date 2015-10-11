@@ -6,18 +6,30 @@ import flixel.util.FlxColor;
 class Enemy1 extends FlxSprite
 {
 
-	public function new() 
+	var pos_x:Int;
+	var pos_y:Int;
+	
+	var w:Int;
+	var h:Int;
+
+	public function new(pos_x:Int, pos_y:Int) 
 	{
 		super();
 		
-		//this.loadGraphic("assets/images/background.png", false, w, h);
-		this.makeGraphic(96, 192, FlxColor.AZURE);
+		//this.loadGraphic(path,false,64,64);
+		this.makeGraphic(64,128, FlxColor.AZURE);
 		
+		this.setPosition(pos_x,pos_y);
 	}
 	
 	override public function update():Void
 	{
 		super.update();
+		
+	}
+	
+	public function killEnemy():Void {
+			this.velocity.y = -100;
 	}
 	
 }
