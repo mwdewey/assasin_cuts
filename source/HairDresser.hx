@@ -21,6 +21,9 @@ class HairDresser extends FlxSprite
 	public static var SPEED:Int = 100;
 	public var centerX:Float;
 	public var centerY:Float;
+	//Attack variables
+	public var isAttack:Bool;
+	public var damage:Float;
 	
 	public function new() 
 	{
@@ -40,10 +43,13 @@ class HairDresser extends FlxSprite
 		// set gravity
 		this.acceleration.y = 1500;
 		this.acceleration.x = 0;
+		
+		damage = 10;
 	}
 	
 	override public function update():Void
 	{		
+		isAttack = false;
 		// friction horizontal movement
 		this.velocity.x *= 0.93;
 		
@@ -55,6 +61,9 @@ class HairDresser extends FlxSprite
 		
 		// jump
 		if (FlxG.keys.justPressed.SPACE) this.velocity.y = -1000;
+		
+		// attack
+		if (FlxG.keys.justPressed.SHIFT) isAttack = true;
 		
 		super.update();
 	}
