@@ -24,6 +24,8 @@ class HairDresser extends FlxSprite
 	
 	public var isOnGround:Bool;
 	
+	private var face_left:Bool = false;
+	
 	public function new() 
 	{
 		super();
@@ -33,8 +35,17 @@ class HairDresser extends FlxSprite
 		FlxG.camera.follow(this, FlxCamera.STYLE_PLATFORMER, new FlxPoint(0, 0), 1);
 		FlxG.camera.zoom = 1;
 		
-		this.makeGraphic(96,192, FlxColor.TRANSPARENT, true);
-		this.drawRect(0, 0, 96, 192, FlxColor.GREEN);
+		//this.makeGraphic(96,192, FlxColor.TRANSPARENT, true);
+		//this.drawRect(0, 0, 96, 192, FlxColor.GREEN);
+		loadGraphic("assets/images/Characters/Main/Running.png", true, 64, 96);
+		animation.add("run_right", [5, 7, 9, 11], 5, true);
+		animation.add("run_left", [4, 6, 8, 10], 5, true);
+		
+		animation.add("jump_left", [8]);
+		animation.add("jump_right", [5]);
+		
+		animation.add("idle_left", [0]);
+		animation.add("idle_right", [1]);
 		
 		this.maxVelocity.set(MAX_SPEED);
 		
@@ -52,11 +63,35 @@ class HairDresser extends FlxSprite
 		// friction horizontal movement
 		this.velocity.x *= 0.93;
 		
+		//idle
+		if (face_left) {
+			animation.play("idle_left");
+		}
+		else {
+			animation.play("idle_right");
+		}
+		
 		// movement
-		if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)    this.velocity.y -= SPEED;
+		if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)    {
+			this.velocity.y -= SPEED;
+			if (face_left) {
+				animation.play("jump_left");
+			}
+			else {
+				animation.play("jump_right");
+			}
+		}
 		if (FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN)  this.velocity.y += SPEED;
-		if (FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT)  this.velocity.x -= SPEED;
-		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) this.velocity.x += SPEED;
+		if (FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT)  {
+			this.velocity.x -= SPEED;
+			face_left = true;
+			animation.play("run_left");
+		}
+		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) {
+			this.velocity.x += SPEED;
+			face_left = false;
+			animation.play("run_right");
+		}
 		
 		// jump
 		if (FlxG.keys.justPressed.SPACE && isOnGround) this.velocity.y = -1000;
