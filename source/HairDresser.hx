@@ -38,8 +38,8 @@ class HairDresser extends FlxSprite
 		//this.makeGraphic(96,192, FlxColor.TRANSPARENT, true);
 		//this.drawRect(0, 0, 96, 192, FlxColor.GREEN);
 		loadGraphic("assets/images/Characters/Main/Running.png", true, 64, 96);
-		animation.add("run_right", [5, 7, 9, 11], 5, true);
-		animation.add("run_left", [4, 6, 8, 10], 5, true);
+		animation.add("run_right", [5, 7, 9, 11,9,7], 8, true);
+		animation.add("run_left", [4, 6, 8, 10,8,6], 8, true);
 		
 		animation.add("jump_left", [8]);
 		animation.add("jump_right", [5]);
