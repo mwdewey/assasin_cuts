@@ -21,10 +21,12 @@ class Ogre extends FlxSprite
 	//define AI variables
 	private var _brain:FSM;
 	private var stunTimer:Float;
-	public var stunLimit:Float;
+	private var stunLimit:Float;
 	public var swingDist:Float;
 	public var movePoint:FlxPoint;
 	public var _player:HairDresser;
+	
+	
 	
 	public function new(X:Float=0, Y:Float=0, player:HairDresser) {
 		super(X, Y);
@@ -88,6 +90,15 @@ class Ogre extends FlxSprite
 			stunTimer -= 1;
 	}
 	
+	//function for taking damage; switches to stun
+	public function takeDamage(damage:Float) {
+		HP -= damage;
+		//if not already stunned, set timer and switch to stun
+		if (_brain.activeState != stun) {
+			stunTimer = stunLimit;
+			_brain.activeState = stun;
+		}
+	}
 	
 	override public function update():Void {
 		//STUN STATE
