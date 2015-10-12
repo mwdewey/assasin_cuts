@@ -13,10 +13,15 @@ import flixel.FlxSprite;
 import flixel.FlxObject;
 import flixel.ui.FlxBar;
 
+
+
 /**
  * ...
  * @author robert
  */
+
+ 
+ 
 class OgreTest extends FlxState 
 {
 	var player:HairDresser;
@@ -37,18 +42,23 @@ class OgreTest extends FlxState
 		floor = new FlxGroup();
 		for(i in 0...100) floor.add(new StaticObject(i*64, FlxG.height-64, "assets/images/GroundTile.png"));
 		add(floor);
+		
 		player = new HairDresser();
 		add(player);
+		
 		ogre = new Ogre(600, FlxG.height - 320, player);
 		add(ogre);
+		
 		projectileGroup = new FlxGroup();
 		add(projectileGroup);
+		
 		ui = new UI();
 		add(ui);
+		
 		barHealth = new FlxBar(0,0,FlxBar.FILL_LEFT_TO_RIGHT, 250,25);
 		barHealth.createGradientBar([0xEE000000, 0xEE0C0C0], [0xFF00FF00, 0xFFFFFF00, 0xFFFF0000], 1, 180, true, 0xFF000000);
 		updateBarPos();
-		barHealth.y = 400;
+		barHealth.y = ogre.y - 10;
 		barHealth.percent = 100;
 		add(barHealth);
 		
@@ -61,6 +71,7 @@ class OgreTest extends FlxState
 		player.isOnGround = false;
 		FlxG.overlap(player, floor, goundDetect);
 		
+		//check collisions
 		FlxG.collide(player, floor);
 		FlxG.collide(ogre, floor);
 		
@@ -70,7 +81,9 @@ class OgreTest extends FlxState
 		
 		updateBarPos();
 		
+		//E button triggers player's projectile attack
 		if (FlxG.keys.justPressed.E) {
+			player.startAttack();
 			if(player.face_left)
 				projectileGroup.add(new Projectile(player.x,player.y,player.x-200,player.y));
 			else
@@ -84,7 +97,7 @@ class OgreTest extends FlxState
 	}
 	
 	public function updateHealthBar() : Void{
-		//barHealth.health = healthe;
+		barHealth.health = ogre.HP;
 		barHealth.percent = (ogre.HP / ogre.startHP) * 100;
 	}
 	
@@ -96,13 +109,13 @@ class OgreTest extends FlxState
 	
 	// player and enemy interaction
 	private function enemyDetect(Object1:FlxObject, Object2:FlxObject):Void {
-		if (FlxG.keys.justPressed.F) {
+		/*if (FlxG.keys.justPressed.F) {
 			var player:HairDresser = cast Object1;
 			var ogre:Ogre = cast Object2;
 			
 			ogre.takeDamage(player.damage);
 			updateHealthBar();
-		}
+		}*/
 	}
 	
 	// projectile and enemy interaction
