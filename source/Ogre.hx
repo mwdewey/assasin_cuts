@@ -1,11 +1,13 @@
 package;
 import flixel.FlxSprite;
 import flixel.system.scaleModes.FillScaleMode;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.util.FlxPoint;
 import flixel.util.FlxVelocity;
+import flixel.util.FlxSpriteUtil;
 
 
 /**
@@ -45,7 +47,7 @@ import flixel.util.FlxVelocity;
 		super(X, Y);
 		
 		//Load Ogre art
-		this.makeGraphic(256, 256, FlxColor.FUCHSIA); //replace with Ogre Art
+		this.loadGraphic("assets/images/Characters/Ogre_0.png", true, 96, 128);
 		
 		//define variables
 		drag.x = 450;
@@ -57,7 +59,7 @@ import flixel.util.FlxVelocity;
 		_player = player;
 		//ogre moves horizontally towards player.  
 		//Set a point using the player's x-position and a fixed y-position
-		movePoint = new FlxPoint(_player.centerX, Y + 128);
+		movePoint = new FlxPoint(_player.centerX, Y + 64);
 		
 		//_brain starts in stun
 		_brain = new FSM(stun);

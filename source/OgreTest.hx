@@ -12,6 +12,8 @@ import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.FlxObject;
 import flixel.ui.FlxBar;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxSpriteUtil;
 
 
 
@@ -46,7 +48,7 @@ class OgreTest extends FlxState
 		player = new HairDresser();
 		add(player);
 		
-		ogre = new Ogre(600, FlxG.height - 320, player);
+		ogre = new Ogre(600, FlxG.height - 192, player);
 		add(ogre);
 		
 		projectileGroup = new FlxGroup();
@@ -83,7 +85,7 @@ class OgreTest extends FlxState
 		ui.updateHealthBar(player.HP);
 		
 		//E button triggers player's projectile attack
-		if (FlxG.keys.justPressed.E && player.isMove) {
+		if (FlxG.keys.justPressed.SPACE && player.isMove) {
 			player.startAttack();
 			if(player.face_left)
 				projectileGroup.add(new Projectile(player.x,player.y,player.x-200,player.y));
@@ -120,8 +122,22 @@ class OgreTest extends FlxState
 		
 		ogre.takeDamage(p.damage);
 		updateHealthBar();
+		//if this damage brings HP at or below zero, destroy it
+		if (ogre.HP <= 0) {
+			FlxSpriteUtil.fadeOut(ogre, 0.5, false, ogreDestroy);
+			FlxSpriteUtil.fadeOut(barHealth, 0.5, false, barDestroy);
+		}
 		
 		p.destroy();
-		
 	}
+	
+	//destroy ogre
+	public function ogreDestroy(t:FlxTween):Void {
+		ogre.destroy();
+	}
+	//destroy barHealth
+	public function barDestroy(t:FlxTween):Void {
+		barHealth.destroy();
+	}
+	
 }
