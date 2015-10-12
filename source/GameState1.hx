@@ -107,6 +107,8 @@ class GameState1 extends FlxState
 		
 		
 		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene1()));
+		else if (FlxG.keys.justPressed.F5) FlxG.switchState(new CutScene2());
+
 		
 		if (FlxG.keys.justPressed.E) {
 			if(hairDresser.face_left)
