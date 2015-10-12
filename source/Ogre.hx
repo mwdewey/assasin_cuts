@@ -27,10 +27,11 @@ import flixel.util.FlxVelocity;
 	public var HP:Float;
 	
 	//AI variables
-	private var _brain:FSM; //FSM that keeps track of current sprite-state
+	public var _brain:FSM; //FSM that keeps track of current sprite-state
 	private var Timer:Float; //timer used for time-dependent sprite-states
 	private var stunLimit:Float; //length of stun sprite-state
 	private var attackLimit:Float; //length of attack sprite-state
+	public var isMove:Bool; //checks if in move state
 	
 	//attack
 	public var swingDist:Float; //Range of ogre's swing attack
@@ -60,6 +61,7 @@ import flixel.util.FlxVelocity;
 		
 		//_brain starts in stun
 		_brain = new FSM(stun);
+		isMove = false;
 		stunLimit = 50;
 		attackLimit = 50;
 		Timer = stunLimit;
@@ -80,6 +82,7 @@ import flixel.util.FlxVelocity;
 		//when timer runs out, switch to move state
 		if (Timer <= 0) {
 			_brain.activeState = move;
+			isMove = true;
 			this.color = FlxColor.BLUE;
 		}
 		else
@@ -99,13 +102,14 @@ import flixel.util.FlxVelocity;
 	
 	public function attack():Void {
 		//If player is still overlapped with ogre, it takes damage
-		if (Timer < attackLimit / .75 && !hitsPlayer) {
+		if (Timer < (attackLimit * .75) && !hitsPlayer) {
 			FlxG.overlap(this, _player, dealDamage);
 		}
 		//when timer runs out, switch to move state
 		if (Timer <= 0) {
 			_brain.activeState = move;
 			hitsPlayer = false;
+			isMove = true;
 			this.color = FlxColor.BLUE;
 		}
 		else
@@ -124,17 +128,17 @@ import flixel.util.FlxVelocity;
 		if (_brain.activeState != stun) {
 			Timer = stunLimit;
 			_brain.activeState = stun;
+			isMove = false;
 			this.color = FlxColor.FUCHSIA;
 		}
 	}
 	
-	//if this function is called in move state, triggers transition to attack sprite-state
+	//triggers transition to attack sprite-state
 	public function startAttack():Void {
-		if(_brain.activeState == move){
-			Timer = attackLimit;
-			_brain.activeState = attack;
-			this.color = FlxColor.RED;
-		}
+		Timer = attackLimit;
+		_brain.activeState = attack;
+		isMove = false;
+		this.color = FlxColor.RED;
 	}
 	
 	

@@ -76,13 +76,13 @@ class OgreTest extends FlxState
 		FlxG.collide(ogre, floor);
 		
 		// check overlapable obejcts
-		FlxG.overlap(player, ogre, enemyDetect);
+		if(ogre.isMove) FlxG.overlap(player, ogre, enemyDetect);
 		FlxG.overlap(projectileGroup, ogre, projectileDetect);
 		
 		updateBarPos();
 		
 		//E button triggers player's projectile attack
-		if (FlxG.keys.justPressed.E) {
+		if (FlxG.keys.justPressed.E && player.isMove) {
 			player.startAttack();
 			if(player.face_left)
 				projectileGroup.add(new Projectile(player.x,player.y,player.x-200,player.y));

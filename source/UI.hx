@@ -120,7 +120,7 @@ class UI extends FlxTypedGroup<FlxSprite>
 	}
 	
 	public function updateHealthBar() : Void{
-		barHealth.health = _player.HP;
+		//barHealth.health = _player.HP;
 		barHealth.percent = (_player.HP / _player.startHP) * 100;
 	}
 	
