@@ -52,13 +52,13 @@ class OgreTest extends FlxState
 		projectileGroup = new FlxGroup();
 		add(projectileGroup);
 		
-		ui = new UI();
+		ui = new UI(player);
 		add(ui);
 		
 		barHealth = new FlxBar(0,0,FlxBar.FILL_LEFT_TO_RIGHT, 250,25);
 		barHealth.createGradientBar([0xEE000000, 0xEE0C0C0], [0xFF00FF00, 0xFFFFFF00, 0xFFFF0000], 1, 180, true, 0xFF000000);
 		updateBarPos();
-		barHealth.y = ogre.y - 10;
+		barHealth.y = ogre.y - 30;
 		barHealth.percent = 100;
 		add(barHealth);
 		
@@ -109,13 +109,7 @@ class OgreTest extends FlxState
 	
 	// player and enemy interaction
 	private function enemyDetect(Object1:FlxObject, Object2:FlxObject):Void {
-		/*if (FlxG.keys.justPressed.F) {
-			var player:HairDresser = cast Object1;
-			var ogre:Ogre = cast Object2;
-			
-			ogre.takeDamage(player.damage);
-			updateHealthBar();
-		}*/
+		ogre.startAttack();
 	}
 	
 	// projectile and enemy interaction

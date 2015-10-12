@@ -42,8 +42,10 @@ class UI extends FlxTypedGroup<FlxSprite>
 	{
 		trace("Yeehaw");
 	}
+	
+	var _player:HairDresser;
 
-	public function new() 
+	public function new(player:HairDresser) 
 	{
 		super();
 		
@@ -86,6 +88,8 @@ class UI extends FlxTypedGroup<FlxSprite>
              spr.scrollFactor.set();
          });
 		 
+		 _player = player;
+		 
 	}
 	
 	override public function update():Void {
@@ -110,13 +114,14 @@ class UI extends FlxTypedGroup<FlxSprite>
 		}
 		
 		updateClockDisplay();
+		updateHealthBar();
 		
 		super.update();
 	}
 	
-	public function updateHealthBar(healthe:Int) : Void{
-		//barHealth.health = healthe;
-		barHealth.percent = healthe;
+	public function updateHealthBar() : Void{
+		barHealth.health = _player.HP;
+		barHealth.percent = (_player.HP / _player.startHP) * 100;
 	}
 	
 	public function updateText(texte:String) : Void {

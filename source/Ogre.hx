@@ -30,8 +30,12 @@ import flixel.util.FlxVelocity;
 	private var _brain:FSM; //FSM that keeps track of current sprite-state
 	private var Timer:Float; //timer used for time-dependent sprite-states
 	private var stunLimit:Float; //length of stun sprite-state
-	private var attakLimit:Float; //length of attack sprite-state
+	private var attackLimit:Float; //length of attack sprite-state
+	
+	//attack
 	public var swingDist:Float; //Range of ogre's swing attack
+	public var damage:Float; //damage dealt by attack
+	public var hitsPlayer:Bool; //becomes true if an attakc connects with the player
 	
 	public var _player:HairDresser;
 	
@@ -57,9 +61,13 @@ import flixel.util.FlxVelocity;
 		//_brain starts in stun
 		_brain = new FSM(stun);
 		stunLimit = 50;
+		attackLimit = 50;
 		Timer = stunLimit;
 		
+		//set attack variables
 		swingDist = 100;
+		damage = 20;
+		hitsPlayer = false;
 		
 		//set HP
 		startHP = 100;
@@ -82,24 +90,34 @@ import flixel.util.FlxVelocity;
 		//move towards player
 		FlxVelocity.moveTowardsPoint(this, movePoint, Std.int(maxSpeed));
 		//if player is within swingDist AND not above ogre, switch to attack state
-		if (Math.abs((this.x + this.centerX) - (_player.x + _player.centerX)) <= swingDist && (_player.y + _player.centerY) >= this.y) {
+		/*if (Math.abs((this.x + this.centerX) - (_player.x + _player.centerX)) <= swingDist && (_player.y + _player.centerY) >= this.y) {
 			Timer = stunLimit;	
 			_brain.activeState = attack;
 			this.color = FlxColor.RED;
-		}
+		}*/
 	}
 	
 	public function attack():Void {
+		//If player is still overlapped with ogre, it takes damage
+		if (Timer < attackLimit / .75 && !hitsPlayer) {
+			FlxG.overlap(this, _player, dealDamage);
+		}
 		//when timer runs out, switch to move state
 		if (Timer <= 0) {
 			_brain.activeState = move;
+			hitsPlayer = false;
 			this.color = FlxColor.BLUE;
 		}
 		else
 			Timer -= 1;
 	}
 	
-	//function for taking damage; switches to stun
+	public function dealDamage(Object1:FlxObject, Object2:FlxObject):Void {
+		_player.takeDamage(damage);
+		hitsPlayer = true;
+	}
+	
+	//takes damage; switches to stun
 	public function takeDamage(damage:Float) {
 		HP -= damage;
 		//if not already stunned, set timer and switch to stun
@@ -107,6 +125,15 @@ import flixel.util.FlxVelocity;
 			Timer = stunLimit;
 			_brain.activeState = stun;
 			this.color = FlxColor.FUCHSIA;
+		}
+	}
+	
+	//if this function is called in move state, triggers transition to attack sprite-state
+	public function startAttack():Void {
+		if(_brain.activeState == move){
+			Timer = attackLimit;
+			_brain.activeState = attack;
+			this.color = FlxColor.RED;
 		}
 	}
 	

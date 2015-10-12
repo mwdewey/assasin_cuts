@@ -31,7 +31,9 @@ class HairDresser extends FlxSprite
 	private var stunLimit:Float; //length of stun sprite-state
 	private var attackLimit:Float; //length of attack sprite-state
 	
-	public var damage:Float; //Not needed unless player has melee attacks
+	//health
+	public var startHP:Float;
+	public var HP:Float;
 	
 	public function new() 
 	{
@@ -66,12 +68,15 @@ class HairDresser extends FlxSprite
 		this.acceleration.y = 1500;
 		this.acceleration.x = 0;
 		
-		//damage = 10;
 		//_brain starts in move
 		_brain = new FSM(move);
 		//set stun, attack times
-		stunLimit = 75;
+		stunLimit = 35;
 		attackLimit = 15;
+		
+		//set HP
+		startHP = 100;
+		HP = startHP;
 	}
 	
 	override public function update():Void
@@ -88,7 +93,12 @@ class HairDresser extends FlxSprite
 	
 	//FSM states
 	public function stun():Void {
-		
+		//when timer runs out, switch to move state
+		if (Timer <= 0) {
+			_brain.activeState = move;
+		}
+		else
+			Timer -= 1;
 	}
 	
 	public function move():Void {
@@ -135,5 +145,15 @@ class HairDresser extends FlxSprite
 	public function startAttack():Void {
 			Timer = attackLimit;
 			_brain.activeState = attack;
+	}
+	
+	//takes damage; switches to stun
+	public function takeDamage(damage:Float) {
+		HP -= damage;
+		//if not already stunned, set timer and switch to stun
+		if (_brain.activeState != stun) {
+			Timer = stunLimit;
+			_brain.activeState = stun;
+		}
 	}
 }

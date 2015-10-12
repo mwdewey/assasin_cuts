@@ -43,7 +43,7 @@ class GameState1 extends FlxState
         super.create();
 		
 		hairDresser = new HairDresser();
-		ui = new UI();
+		ui = new UI(hairDresser);
 		
 		floorGroup = new FlxGroup();
 		for (i in 0...100) floorGroup.add(new StaticObject(i * 64, FlxG.height - 64, "assets/images/GroundTile.png"));
