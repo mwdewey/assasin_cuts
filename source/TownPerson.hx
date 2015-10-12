@@ -7,7 +7,7 @@ import flixel.util.FlxRandom;
 
 class TownPerson extends FlxSprite
 {
-	var walkFrames:Array<Int> = [0, 6, 12, 18];
+	var walkFrames:Array<Array<Int>> = [[0, 6], [12, 18]];
 	var topFrames:Array<Int> = [1, 7, 13];
 	var bottomFrames:Array<Int> = [3, 19];
 	var hairFrames:Array<Int> = [3,4,5,8,9,10,11,14,15,16,17,21,22,23];
@@ -27,8 +27,8 @@ class TownPerson extends FlxSprite
 		//this.makeGraphic(64, 128, FlxColor.AZURE);
 		var resLocation:String = "assets/images/Characters/TownPeople/TownPeople_0.png";
 		this.loadGraphic(resLocation, true, 64, 96);
-		this.animation.add("tap", [0,6,12,18], 8, true);
-		this.animation.play("tap");
+		this.animation.add("idle", walkFrames[FlxRandom.intRanged(0, walkFrames.length-1)], 8, true);
+		this.animation.play("idle");
 		this.setPosition(pos_x, pos_y);
 		
 		spriteGroup = new FlxGroup();
