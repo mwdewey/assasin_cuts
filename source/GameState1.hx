@@ -11,6 +11,8 @@ import flixel.group.FlxGroup;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.FlxObject;
+import flixel.tile.FlxTilemap;
+import openfl.Assets;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -25,6 +27,8 @@ class GameState1 extends FlxState
 	var projectileGroup:FlxGroup;
 	var doorGroup:FlxGroup;
 	var doorCollidableGroup:FlxGroup;
+	
+	var tileMap:FlxTilemap;
 		
 	var hairDresser:HairDresser;
 	var s1:StaticObject;
@@ -74,15 +78,24 @@ class GameState1 extends FlxState
 		townPeopleGroup = new FlxGroup();
 		for (i in 0...25) townPeopleGroup.add((new TownPerson(i * 400-200, 500 - 192)).spriteGroup);
 		
+		
+		tileMap = new FlxTilemap();
+        var mapData:String = Assets.getText("assets/data/Widebrook Stage..csv");
+        var mapTilePath:String = "assets/images/Walls.png";
+        tileMap.loadMap(mapData, mapTilePath, 64,64);
+ 
+		
 		add(tempSprite);
 		add(new Background());
-		add(floorGroup);
+		/*add(floorGroup);
 		add(obsticalGroup);
 		add(enemyGroup);
 		add(projectileGroup);
 		add(doorGroup);
 		add(doorCollidableGroup);
 		add(townPeopleGroup);
+		*/
+		add(tileMap);
 		
 		add(hairDresser);
 		add(ui);
@@ -90,7 +103,7 @@ class GameState1 extends FlxState
 	
 	override public function update():Void
 	{
-		super.update();
+		//super.update();
 		
 		// check if on ground
 		hairDresser.isOnGround = false;
@@ -98,8 +111,9 @@ class GameState1 extends FlxState
 		FlxG.overlap(hairDresser, floorGroup, goundDetect);
 		
 		// move character
-		FlxG.collide(hairDresser, obsticalGroup);
-		FlxG.collide(hairDresser, floorGroup);
+		//FlxG.collide(hairDresser, obsticalGroup);
+		//FlxG.collide(hairDresser, floorGroup);
+		FlxG.collide(hairDresser, tileMap);
 		
 		// update ref
 		Reg.ref_x = FlxG.camera.scroll.x;
@@ -121,6 +135,8 @@ class GameState1 extends FlxState
 			else
 				projectileGroup.add(new Projectile(hairDresser.x,hairDresser.y,hairDresser.x+200,hairDresser.y));
 		}
+		
+		super.update();
 	}
 	
 	// player and solid ground interaction
