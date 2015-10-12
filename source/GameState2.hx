@@ -7,6 +7,7 @@ import flash.events.Event;
 import flash.Lib;
 import flixel.FlxGame;
 import flixel.FlxState;
+import flixel.FlxG;
 
 /**
  * ...
@@ -25,6 +26,7 @@ class GameState2 extends FlxState
 		super.update();
 		
 		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene2()));
+		if (FlxG.keys.justPressed.F5) FlxG.switchState(new CutScene3());
 	}
 	
 }

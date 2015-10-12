@@ -52,7 +52,7 @@ class OgreTest extends FlxState
 		projectileGroup = new FlxGroup();
 		add(projectileGroup);
 		
-		ui = new UI(player);
+		ui = new UI();
 		add(ui);
 		
 		barHealth = new FlxBar(0,0,FlxBar.FILL_LEFT_TO_RIGHT, 250,25);
@@ -80,6 +80,7 @@ class OgreTest extends FlxState
 		FlxG.overlap(projectileGroup, ogre, projectileDetect);
 		
 		updateBarPos();
+		ui.updateHealthBar(player.HP);
 		
 		//E button triggers player's projectile attack
 		if (FlxG.keys.justPressed.E && player.isMove) {

@@ -42,10 +42,9 @@ class UI extends FlxTypedGroup<FlxSprite>
 	{
 		trace("Yeehaw");
 	}
-	
-	var _player:HairDresser;
 
-	public function new(player:HairDresser) 
+
+	public function new() 
 	{
 		super();
 		
@@ -63,7 +62,6 @@ class UI extends FlxTypedGroup<FlxSprite>
 		textTextBox.x = sprTextBox.x + 20;
 		textTextBox.y = sprTextBox.y + 20;
 		textTextBox.alignment = "left";
-		trace(textTextBox.text.length);
 		if (textTextBox.text.length > MAX_LENGTH_OF_TEXT) FlxG.cameras.bgColor = 0xFF000000;
 		sprHair = new FlxSprite(FlxG.width*(1/10)+10, 5, "assets/images/winkydog.png"); 
 		textHair = new FlxText(sprHair.x + sprHair.width + 15, sprHair.y + sprHair.width / 2 - 12, 85, "x00", 20);
@@ -87,8 +85,6 @@ class UI extends FlxTypedGroup<FlxSprite>
 		forEach(function(spr:FlxSprite) {
              spr.scrollFactor.set();
          });
-		 
-		 _player = player;
 		 
 	}
 	
@@ -114,14 +110,13 @@ class UI extends FlxTypedGroup<FlxSprite>
 		}
 		
 		updateClockDisplay();
-		updateHealthBar();
 		
 		super.update();
 	}
 	
-	public function updateHealthBar() : Void{
+	public function updateHealthBar(healthe:Float) : Void{
 		//barHealth.health = _player.HP;
-		barHealth.percent = (_player.HP / _player.startHP) * 100;
+		barHealth.percent = healthe;
 	}
 	
 	public function updateText(texte:String) : Void {
@@ -130,7 +125,7 @@ class UI extends FlxTypedGroup<FlxSprite>
 		goalString = texte;
 		textTextBox.text = "";
 		goalStringIndex = 0;
-		waitframe = frame + texte.length + 100; //This relies upon the fact that we draw one letter per frame
+		waitframe = frame + texte.length + 900; //This relies upon the fact that we draw one letter per frame
 	}
 	
 	private function updateClockDisplay() {
@@ -167,12 +162,11 @@ class UI extends FlxTypedGroup<FlxSprite>
 	}
 	
 	public function displayFullscreenImage(image:String = "assets/images/ford.jpg") {
-		if (sprFullScreen.alpha==0){
 			sprFullScreen.alpha = 1;
 			sprFullScreen.loadGraphic(image);
-		}
-		else {
+	}
+	
+	public function clearFullscreenImage() {
 			sprFullScreen.alpha = 0;
-		}
 	}
 }
