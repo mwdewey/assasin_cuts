@@ -17,20 +17,20 @@ class Background extends FlxTypedGroup<FlxSprite>
 	{
 		super();
 		
-		w = 1024;
-		h = 768;
+		w = 1240;
+		h = 585;
 		
 		b1 = new FlxSprite();
-		b1.loadGraphic("assets/images/background.png", false, w, h);
+		b1.loadGraphic("assets/images/Cloudy.png", false, w, h);
 		
 		b2 = new FlxSprite();
-		b2.loadGraphic("assets/images/background.png", false, w, h);
+		b2.loadGraphic("assets/images/Cloudy.png", false, w, h);
 		
 		b3 = new FlxSprite();
-		b3.loadGraphic("assets/images/background.png", false, w, h);
+		b3.loadGraphic("assets/images/Cloudy.png", false, w, h);
 		
 		b4 = new FlxSprite();
-		b4.loadGraphic("assets/images/background.png", false, w, h);
+		b4.loadGraphic("assets/images/Cloudy.png", false, w, h);
 		
 		add(b1);
 		add(b2);

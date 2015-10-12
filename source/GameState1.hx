@@ -26,6 +26,8 @@ class GameState1 extends FlxState
 	var s2:StaticObject;
 	var s3:StaticObject;
 	var ogre:Ogre;
+	
+	var tempSprite:FlxSprite;
 
 	public function new() 
 	{
@@ -40,11 +42,15 @@ class GameState1 extends FlxState
 		hairDresser = new HairDresser();
 		
 		floorGroup = new FlxGroup();
-		for (i in 0...100) floorGroup.add(new StaticObject(i * 100, FlxG.height - 100, 100, 100));
+		for (i in 0...100) floorGroup.add(new StaticObject(i * 64, FlxG.height - 64, "assets/images/GroundTile.png"));
 		
 		obsticalGroup = new FlxGroup();
-		for (i in 0...25) obsticalGroup.add(new StaticObject(i * 400, 500, 64, 64));
+		for (i in 0...25) obsticalGroup.add(new StaticObject(i * 400, 500, "assets/images/GroundTile.png"));
 		
+		tempSprite = new FlxSprite();
+		tempSprite.loadGraphic("assets/images/Muro Sunset.png", false, 1024,768);
+		
+		add(tempSprite);
 		add(new Background());
 		add(floorGroup);
 		add(obsticalGroup);
@@ -55,20 +61,24 @@ class GameState1 extends FlxState
 	{
 		super.update();
 		
-		//check if on ground
+		// check if on ground
 		hairDresser.isOnGround = false;
 		FlxG.overlap(hairDresser, obsticalGroup,goundDetect);
 		FlxG.overlap(hairDresser, floorGroup, goundDetect);
-		
-		trace(hairDresser.isOnGround);
 		
 		// move character
 		FlxG.collide(hairDresser, obsticalGroup);
 		FlxG.collide(hairDresser, floorGroup);
 		
 		// update ref
-		Reg.ref_x = hairDresser.x;
-		Reg.ref_y = hairDresser.y;
+		Reg.ref_x = FlxG.camera.scroll.x;
+		Reg.ref_y = FlxG.camera.scroll.y;
+		
+		tempSprite.x = FlxG.camera.scroll.x;
+		tempSprite.y = FlxG.camera.scroll.y;
+		
+		// check overlapable obejcts
+		
 		
 		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene1()));
 	}
