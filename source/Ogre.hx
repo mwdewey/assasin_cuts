@@ -1,5 +1,6 @@
 package;
 import flixel.FlxSprite;
+import flixel.group.FlxGroup;
 import flixel.system.scaleModes.FillScaleMode;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -18,6 +19,9 @@ import flixel.util.FlxSpriteUtil;
  
  class Ogre extends FlxSprite  
 {
+	//group that stores ogre sprites
+	 public var spriteList:FlxGroup;
+	 
 	//movement and position
 	public var maxSpeed:Float;
 	public var movePoint:FlxPoint;  //this is the point that the ogre automatically walks towards
@@ -47,7 +51,8 @@ import flixel.util.FlxSpriteUtil;
 		super(X, Y);
 		
 		//Load Ogre art
-		this.loadGraphic("assets/images/Characters/Ogre_0.png", true, 96, 128);
+		spriteList = new FlxGroup();
+		spriteList.add(new FlxSprite(0, 0, "assets/images/Characters/Ogre_0.png"));
 		
 		//define variables
 		drag.x = 450;
