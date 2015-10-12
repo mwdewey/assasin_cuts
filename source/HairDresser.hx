@@ -82,10 +82,9 @@ class HairDresser extends FlxSprite
 	}
 	
 	override public function update():Void
-	{		
-		// friction horizontal movement
-		this.velocity.x *= 0;
-		if (this.velocity.x < 10 && this.velocity.x > -10) this.velocity.x = 0;
+	{	
+		this.velocity.x = 0;
+		
 		_brain.update();
 		
 		super.update();
@@ -131,8 +130,6 @@ class HairDresser extends FlxSprite
 			else animation.play("jump_right");
 		}
 		
-		super.update();
-		FlxG.camera.update();
 	}
 	
 	public function attack():Void {
