@@ -11,6 +11,7 @@ class Projectile extends FlxSprite
 	var pos_y:Float;
 	var aim_x:Float;
 	var aim_y:Float;
+	public var damage:Float;
 
 	public function new(pos_x:Float, pos_y:Float,aim_x:Float, aim_y:Float) 
 	{
@@ -29,6 +30,8 @@ class Projectile extends FlxSprite
 		
 		this.velocity.x = (dX / dMax) * projectileSpeed;
 		this.velocity.y = (dY / dMax) * projectileSpeed;
+		
+		damage = 10;
 	}
 	
 	override public function update():Void

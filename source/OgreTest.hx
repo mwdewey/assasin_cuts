@@ -21,6 +21,7 @@ class OgreTest extends FlxState
 	var player:HairDresser;
 	var ogre:Ogre;
 	var floor:FlxGroup;
+	var projectileGroup:FlxGroup;
 	
 	public function new() 
 	{
@@ -37,6 +38,8 @@ class OgreTest extends FlxState
 		add(player);
 		ogre = new Ogre(600, FlxG.height - 320, player);
 		add(ogre);
+		projectileGroup = new FlxGroup();
+		add(projectileGroup);
 	}
 	
 	override public function update() {
@@ -49,23 +52,40 @@ class OgreTest extends FlxState
 		FlxG.collide(player, floor);
 		FlxG.collide(ogre, floor);
 		
-		/*//damage manager
-		if (FlxG.keys.justPressed.SHIFT) {
-			//when facing left, attack is successful when there is collision on left side of player
-			if (player.face_left && FlxG.collide(ogre, player) && player.centerX > ogre.centerX) {
-				player.isAttack = true;
-				ogre.takeDamage(player.damage);
-			}
-			//also successful if collision on other side when facing right
-			else if (!player.face_left && FlxG.collide(ogre, player) && player.centerX < ogre.centerX) {
-				player.isAttack = true;
-				ogre.takeDamage(player.damage);
-			}
-			
-		}*/
+		// check overlapable obejcts
+		FlxG.overlap(player, ogre, enemyDetect);
+		FlxG.overlap(projectileGroup, ogre, projectileDetect);
+		
+		if (FlxG.keys.justPressed.E) {
+			projectileGroup.add(new Projectile(player.x,player.y,player.x+200,player.y));
+		}
+		
 	}
 	
+	// player and solid ground interaction
+	// detects if player is on ground
 	private function goundDetect(Object1:FlxObject, Object2:FlxObject):Void {
 		player.isOnGround = true;
+	}
+	
+	// player and enemy interaction
+	private function enemyDetect(Object1:FlxObject, Object2:FlxObject):Void {
+		if (FlxG.keys.justPressed.F) {
+			var player:HairDresser = cast Object1;
+			var ogre:Ogre = cast Object2;
+			
+			ogre.takeDamage(player.damage);
+		}
+	}
+	
+	// projectile and enemy interaction
+	private function projectileDetect(Object1:FlxObject, Object2:FlxObject):Void {
+		var p:Projectile = cast Object1;
+		var ogre:Ogre = cast Object2;
+		
+		ogre.takeDamage(p.damage);
+		
+		p.destroy();
+		
 	}
 }
