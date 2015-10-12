@@ -1,5 +1,4 @@
 package;
-
 import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
@@ -12,38 +11,48 @@ import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxCamera;
 import flixel.util.FlxPoint;
-
 using flixel.util.FlxSpriteUtil;
+
+
 
 class HairDresser extends FlxSprite
 {
+	//movement and position
 	public static var MAX_SPEED:Int = 1000;
 	public static var SPEED:Int = 850;
 	public var centerX:Float;
 	public var centerY:Float;
-	
 	public var isOnGround:Bool;
+	public var face_left:Bool = false;
 	
-	private var face_left:Bool = false;
+	//Attack and Control variables
+	public var _brain:FSM; //FSM that keeps track of current sprite-state
+	private var Timer:Float; //timer used for time-dependent sprite-states
+	private var stunLimit:Float; //length of stun sprite-state
+	private var attackLimit:Float; //length of attack sprite-state
+	
+	public var damage:Float; //Not needed unless player has melee attacks
 	
 	public function new() 
 	{
 		super();
 		
+		//player starts in air
 		isOnGround = false;
 		
+		//camera follows this object
 		FlxG.camera.follow(this, FlxCamera.STYLE_PLATFORMER,null,0);
 		FlxG.camera.zoom = 1;
 		
-		//this.makeGraphic(96,192, FlxColor.TRANSPARENT, true);
-		//this.drawRect(0, 0, 96, 192, FlxColor.GREEN);
+		//load hairdresser graphic
 		loadGraphic("assets/images/Characters/Main/Running.png", true, 64, 96);
+		//run animations
 		animation.add("run_right", [5, 7, 9, 11,9,7], 8, true);
 		animation.add("run_left", [4, 6, 8, 10,8,6], 8, true);
-		
+		//jump animations
 		animation.add("jump_left", [8]);
 		animation.add("jump_right", [5]);
-		
+		//idle animations
 		animation.add("idle_left", [0]);
 		animation.add("idle_right", [1]);
 		
@@ -56,6 +65,13 @@ class HairDresser extends FlxSprite
 		// set gravity
 		this.acceleration.y = 1500;
 		this.acceleration.x = 0;
+		
+		//damage = 10;
+		//_brain starts in move
+		_brain = new FSM(move);
+		//set stun, attack times
+		stunLimit = 75;
+		attackLimit = 15;
 	}
 	
 	override public function update():Void
@@ -63,7 +79,19 @@ class HairDresser extends FlxSprite
 		// friction horizontal movement
 		this.velocity.x *= 0;
 		if (this.velocity.x < 10 && this.velocity.x > -10) this.velocity.x = 0;
+		_brain.update();
 		
+		super.update();
+		FlxG.camera.update();
+		
+	}
+	
+	//FSM states
+	public function stun():Void {
+		
+	}
+	
+	public function move():Void {
 		// movement
 		if (isOnGround && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED/1.2;
 		if (FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN)  this.velocity.y = SPEED;
@@ -92,8 +120,20 @@ class HairDresser extends FlxSprite
 		
 		super.update();
 		FlxG.camera.update();
-		
 	}
 	
+	public function attack():Void {
+		//when timer runs out, switch to move state
+		if (Timer <= 0) {
+			_brain.activeState = move;
+		}
+		else
+			Timer -= 1;
+	}
 	
+	//triggers transition to attack sprite-state
+	public function startAttack():Void {
+			Timer = attackLimit;
+			_brain.activeState = attack;
+	}
 }

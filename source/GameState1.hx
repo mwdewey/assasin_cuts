@@ -109,7 +109,10 @@ class GameState1 extends FlxState
 		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene1()));
 		
 		if (FlxG.keys.justPressed.E) {
-			projectileGroup.add(new Projectile(hairDresser.x,hairDresser.y,hairDresser.x+200,hairDresser.y));
+			if(hairDresser.face_left)
+				projectileGroup.add(new Projectile(hairDresser.x,hairDresser.y,hairDresser.x-200,hairDresser.y));
+			else
+				projectileGroup.add(new Projectile(hairDresser.x,hairDresser.y,hairDresser.x+200,hairDresser.y));
 		}
 	}
 	
