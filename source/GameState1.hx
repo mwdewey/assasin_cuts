@@ -22,6 +22,8 @@ class GameState1 extends FlxState
 	var floorList:List<StaticObject>;
 	var enemyGroup:FlxGroup;
 	var projectileGroup:FlxGroup;
+	var doorGroup:FlxGroup;
+	var doorCollidableGroup:FlxGroup;
 		
 	var hairDresser:HairDresser;
 	var s1:StaticObject;
@@ -60,12 +62,23 @@ class GameState1 extends FlxState
 		
 		projectileGroup = new FlxGroup();
 		
+		doorGroup = new FlxGroup();
+		doorCollidableGroup = new FlxGroup();
+		for (i in 0...25) {
+			var d:Door = new Door(i * 400, FlxG.height - 64 - 128 );
+			doorGroup.add(d);
+			doorCollidableGroup.add(d.hitBox);
+		}
+		
 		add(tempSprite);
 		add(new Background());
 		add(floorGroup);
 		add(obsticalGroup);
 		add(enemyGroup);
 		add(projectileGroup);
+		add(doorGroup);
+		add(doorCollidableGroup);
+		
 		add(hairDresser);
 		add(ui);
     }
@@ -89,7 +102,8 @@ class GameState1 extends FlxState
 		
 		// check overlapable obejcts
 		FlxG.overlap(hairDresser, enemyGroup, enemyDetect);
-		FlxG.overlap(projectileGroup,enemyGroup,projectileDetect);
+		FlxG.overlap(projectileGroup, enemyGroup, projectileDetect);
+		FlxG.overlap(hairDresser,doorGroup,doorDetect);
 		
 		
 		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene1()));
@@ -122,6 +136,25 @@ class GameState1 extends FlxState
 		e.makeGraphic(64, 128, FlxColor.CRIMSON);
 		
 		p.destroy();
+		
+	}
+	
+	// hairDresser and door interaction
+	private function doorDetect(Object1:FlxObject, Object2:FlxObject):Void {
+		var p:HairDresser = cast Object1;
+		var d:Door = cast Object2;
+		
+		// check collision with inner hitbox if door is closed
+		if (!d.isOpen) FlxG.collide(p,d.hitBox);
+		
+		if (FlxG.keys.justPressed.SPACE) {
+			if (d.isOpen) {
+				d.closeDoor();
+			}
+			else d.openDoor();
+		}
+		
+		
 		
 	}
 	

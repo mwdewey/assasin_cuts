@@ -90,9 +90,6 @@ class HairDresser extends FlxSprite
 			else animation.play("jump_right");
 		}
 		
-		// jump
-		if (FlxG.keys.justPressed.SPACE && isOnGround) this.velocity.y = -1000;
-		
 		super.update();
 		FlxG.camera.update();
 		
