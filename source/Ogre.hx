@@ -119,8 +119,10 @@ import flixel.util.FlxSpriteUtil;
 	}
 	
 	public function dealDamage(Object1:FlxObject, Object2:FlxObject):Void {
-		_player.takeDamage(damage);
-		hitsPlayer = true;
+		if (!hitsPlayer) {
+			hitsPlayer = true;	
+			_player.takeDamage(damage);
+		}
 	}
 	
 	//takes damage; switches to stun
@@ -153,10 +155,10 @@ import flixel.util.FlxSpriteUtil;
 		super.update();
 	}
 	
-	override public function draw():Void {
+	/*override public function draw():Void {
 		if (velocity.x < 0 ) facing = FlxObject.LEFT;
 		else if (velocity.x > 0) facing = FlxObject.RIGHT;
 		super.draw();
-	}
+	}*/
 	
 }
