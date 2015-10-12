@@ -21,6 +21,7 @@ class GameState1 extends FlxState
 	var obsticalGroup:FlxGroup;
 	var floorList:List<StaticObject>;
 	var enemyGroup:FlxGroup;
+	var townPeopleGroup:FlxGroup;
 	var projectileGroup:FlxGroup;
 	var doorGroup:FlxGroup;
 	var doorCollidableGroup:FlxGroup;
@@ -70,6 +71,9 @@ class GameState1 extends FlxState
 			doorCollidableGroup.add(d.hitBox);
 		}
 		
+		townPeopleGroup = new FlxGroup();
+		for (i in 0...25) townPeopleGroup.add((new TownPerson(i * 400-200, 500 - 192)).spriteGroup);
+		
 		add(tempSprite);
 		add(new Background());
 		add(floorGroup);
@@ -78,6 +82,7 @@ class GameState1 extends FlxState
 		add(projectileGroup);
 		add(doorGroup);
 		add(doorCollidableGroup);
+		add(townPeopleGroup);
 		
 		add(hairDresser);
 		add(ui);

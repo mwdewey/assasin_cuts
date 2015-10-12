@@ -11,7 +11,10 @@ import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxCamera;
 import flixel.util.FlxPoint;
+import flixel.FlxObject;
+
 using flixel.util.FlxSpriteUtil;
+
 
 
 
@@ -105,7 +108,7 @@ class HairDresser extends FlxSprite
 	
 	public function move():Void {
 		// movement
-		if (isOnGround && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED/1.2;
+		if (isOnGround && this.isTouching(FlxObject.FLOOR) && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED;
 		if (FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN)  this.velocity.y = SPEED;
 		if (FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT) this.velocity.x  = -SPEED;
 		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) this.velocity.x = SPEED;
