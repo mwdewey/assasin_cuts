@@ -27,7 +27,8 @@ class GameState3 extends FlxState
 	
 	var floor:FlxGroup;
 	
-	var projectileGroup:FlxGroup;
+	var pProjectiles:FlxGroup;
+	var eProjectiles:FlxGroup;
 	
 	var ui:UI;
 	var barHealth:FlxBar;
@@ -62,8 +63,11 @@ class GameState3 extends FlxState
 		for (i in 0...4) enemies.add(new Enemy2(20+(i*400), FlxG.height - 160));
 		add(enemies);
 		
-		projectileGroup = new FlxGroup();
-		add(projectileGroup);
+		pProjectiles = new FlxGroup();
+		add(pProjectiles);
+		
+		eProjectiles = new FlxGroup();
+		add(eProjectiles);
 		
 		ui = new UI();
 		add(ui);
@@ -91,8 +95,10 @@ class GameState3 extends FlxState
 		
 		// Ogre attacks when it and player overlap
 		if (ogre.isMove) FlxG.overlap(player, ogre, enemyDetect);
-		//Ogre takes damage when overlaps with projectile
-		FlxG.overlap(projectileGroup, ogre, projectileDetect);
+		//Ogre takes damage when overlaps with pProjectile
+		FlxG.overlap(pProjectiles, ogre, pProjectileDetect);
+		//player takes damage when overlaps with eProjectile
+		FlxG.overlap(eProjectiles, player, eProjectileDetect);
 		
 		updateBarPos();
 		ui.updateHealthBar(player.HP);
@@ -100,9 +106,20 @@ class GameState3 extends FlxState
 		//player's projectile attack
 		if (player.charged) {
 			if(player.face_left)
-				projectileGroup.add(new Projectile(player.x,player.y,player.x-200,player.y));
+				pProjectiles.add(new Projectile(player.x,player.y,player.x-200,player.y));
 			else
-				projectileGroup.add(new Projectile(player.x,player.y,player.x+200,player.y));
+				pProjectiles.add(new Projectile(player.x,player.y,player.x+200,player.y));
+		}
+		
+		//Enemy2's projectile attack
+		for (obj in enemies) {
+			
+			var enemy:Enemy2 = cast obj;
+			
+			if (enemy.isThrowing) {
+				eProjectiles.add(new Projectile2(enemy.x, enemy.y, player));
+				enemy.isThrowing = false;
+			}
 		}
 		
 		super.update();
@@ -136,13 +153,23 @@ class GameState3 extends FlxState
 	}
 	
 	// projectile and enemy interaction
-	private function projectileDetect(Object1:FlxObject, Object2:FlxObject):Void {
+	private function pProjectileDetect(Object1:FlxObject, Object2:FlxObject):Void {
 		var p:Projectile = cast Object1;
 		var ogre:Ogre = cast Object2;
 		
 		ogre.takeDamage(p.damage);
 		updateHealthBar();
 		ogreDeath();
+		
+		p.destroy();
+	}
+	
+	// projectile and player interaction
+	private function eProjectileDetect(Object1:FlxObject, Object2:FlxObject):Void {
+		var p:Projectile2 = cast Object1;
+		var player:HairDresser = cast Object2;
+		
+		player.takeDamage(p.damage);
 		
 		p.destroy();
 	}
