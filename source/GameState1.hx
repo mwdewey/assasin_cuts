@@ -8,11 +8,13 @@ import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.group.FlxGroup;
+import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.FlxObject;
 import flixel.tile.FlxTilemap;
 import openfl.Assets;
+import flixel.FlxBasic;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -88,14 +90,14 @@ class GameState1 extends FlxState
 		add(tempSprite);
 		add(new Background());
 		add(projectileGroup);
-		/*add(floorGroup);
+		add(floorGroup);
 		add(obsticalGroup);
 		add(enemyGroup);
 		add(doorGroup);
 		add(doorCollidableGroup);
 		add(townPeopleGroup);
-		*/
-		add(tileMap);
+		
+		//add(tileMap);
 		
 		add(hairDresser.spriteGroup);
 		add(ui);
@@ -103,24 +105,25 @@ class GameState1 extends FlxState
 	
 	override public function update():Void
 	{
-		//super.update();
+		super.update();
 		
 		// check if on ground
 		hairDresser.isOnGround = false;
-		FlxG.overlap(hairDresser, obsticalGroup,goundDetect);
-		FlxG.overlap(hairDresser, floorGroup, goundDetect);
+		FlxG.overlap(hairDresser, obsticalGroup, goundDetect);
+		FlxG.collide(hairDresser, floorGroup, goundDetect);
+		//FlxG.overlap(hairDresser, tileMap,goundDetect);
 		
 		// move character
-		//FlxG.collide(hairDresser, obsticalGroup);
-		//FlxG.collide(hairDresser, floorGroup);
-		FlxG.collide(hairDresser, tileMap);
+		FlxG.collide(hairDresser, obsticalGroup);
+		FlxG.collide(hairDresser, floorGroup);
+		//FlxG.collide(hairDresser, tileMap);
 		
 		// update ref
 		Reg.ref_x = FlxG.camera.scroll.x;
 		Reg.ref_y = FlxG.camera.scroll.y;
 		
 		// check overlapable obejcts
-		FlxG.overlap(hairDresser, enemyGroup, enemyDetect);
+		FlxG.overlap(hairDresser, townPeopleGroup, townspersonDetect);
 		FlxG.overlap(projectileGroup, enemyGroup, projectileDetect);
 		FlxG.overlap(hairDresser,doorGroup,doorDetect);
 		
@@ -136,7 +139,6 @@ class GameState1 extends FlxState
 				projectileGroup.add(new Projectile(hairDresser.x,hairDresser.y,hairDresser.x+200,hairDresser.y));
 		}
 		
-		super.update();
 	}
 	
 	// player and solid ground interaction
@@ -145,12 +147,15 @@ class GameState1 extends FlxState
 		hairDresser.isOnGround = true;
 	}
 	
-	// player and enemy interaction
-	private function enemyDetect(Object1:FlxObject, Object2:FlxObject):Void {
-		if(FlxG.keys.justPressed.F){
-			var spriteObject:FlxSprite = cast Object2;
+	// player and townsperson interaction
+	private function townspersonDetect(Object1:FlxObject, Object2:FlxObject):Void {
+		if (FlxG.keys.justPressed.SPACE) {
+			if(Type.getClass(Object2) == TownPerson){
+				var townPersonObject:TownPerson = cast Object2;
 			
-			spriteObject.makeGraphic(64,128, FlxColor.CRIMSON);
+				if (!townPersonObject.isCut) townPersonObject.cutHair();
+			}
+			
 		}
 	}
 	
