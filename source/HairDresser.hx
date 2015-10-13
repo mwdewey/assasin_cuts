@@ -177,7 +177,7 @@ class HairDresser extends FlxSprite
 		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) this.velocity.x = SPEED;
 		
 		
-		if (FlxG.keys.pressed.E) {
+		if (FlxG.keys.pressed.SPACE) {
 			chargetimer += FlxG.elapsed;
 			if (face_left) {
 				attack_animation.flipX = true;
@@ -195,7 +195,7 @@ class HairDresser extends FlxSprite
 			attack_animation.animation.play("charge");
 			
 		}
-		else if (FlxG.keys.justReleased.E) {
+		else if (FlxG.keys.justReleased.SPACE) {
 			if (chargetimer >= chargetime) {
 				
 				charged = true;

@@ -54,6 +54,12 @@ class GameState1 extends FlxState
 		hairDresser = new HairDresser();
 		ui = new UI();
 		
+		// set time to play
+		ui.TIMER_LENGTH = 60;
+		
+		// prevScore is score at start of level
+		Reg.prevScore = Reg.score;
+		
 		floorGroup = new FlxGroup();
 		for (i in 0...100) floorGroup.add(new StaticObject(i * 64, FlxG.height - 64, "assets/images/GroundTile.png"));
 		
@@ -84,11 +90,6 @@ class GameState1 extends FlxState
 		townPeopleGroup = new FlxGroup();
 		for (i in 0...25) townPeopleGroup.add((new TownPerson(i * 400-200, 500 - 192)).spriteGroup);
 		
-		
-		tileMap = new FlxTilemap();
-        var mapData:String = Assets.getText("assets/data/Widebrook Stage..csv");
-        var mapTilePath:String = "assets/images/Walls.png";
-        tileMap.loadMap(mapData, mapTilePath, 64,64);
  
 		
 		add(tempSprite);
@@ -141,6 +142,19 @@ class GameState1 extends FlxState
 				projectileGroup.add(new Projectile(hairDresser.x,hairDresser.y,hairDresser.x-200,hairDresser.y));
 			else
 				projectileGroup.add(new Projectile(hairDresser.x,hairDresser.y,hairDresser.x+200,hairDresser.y));
+		}
+		
+		// update score
+		// if score changed, update with new value
+		if (Reg.score != ui.hairCount) ui.updateHairCount(Reg.score);
+		
+		// if time runs out, switch to next stage
+		if (ui.getRemainingTime() <= 0) {
+			FlxG.camera.fade(FlxColor.BLACK, .5, false,
+			function() {
+			FlxG.switchState(new CutScene2());
+			});
+			
 		}
 		
 	}
