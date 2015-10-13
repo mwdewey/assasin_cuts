@@ -7,11 +7,15 @@ import flash.Lib;
 import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.FlxSprite;
+import flixel.group.FlxGroup;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxCamera;
 import flixel.util.FlxPoint;
+import flixel.FlxObject;
+
 using flixel.util.FlxSpriteUtil;
+
 
 
 
@@ -30,8 +34,24 @@ class HairDresser extends FlxSprite
 	private var Timer:Float; //timer used for time-dependent sprite-states
 	private var stunLimit:Float; //length of stun sprite-state
 	private var attackLimit:Float; //length of attack sprite-state
+	public var isMove:Bool; //checks if in move state
+	public var charged:Bool = false; //whether the player charged up the attack
+	public var damage:Float; //damage dealt by melee attack
+	public var isAttack:Bool; //is true when basic_attack animation is running
 	
-	public var damage:Float; //Not needed unless player has melee attacks
+	//timer for charge attack
+	private var chargetimer:Float = 0;
+	private var chargetime:Float = 0.5;
+	
+	
+	//attack_animation_sprite
+	public var spriteGroup:FlxGroup;
+	var attack_animation:FlxSprite;
+	
+	
+	//health
+	public var startHP:Float;
+	public var HP:Float;
 	
 	public function new() 
 	{
@@ -56,6 +76,18 @@ class HairDresser extends FlxSprite
 		animation.add("idle_left", [0]);
 		animation.add("idle_right", [1]);
 		
+		//load attack animation
+		attack_animation = new FlxSprite();
+		attack_animation.loadGraphic("assets/images/Characters/Main/Attack.png", true, 96, 96);
+		attack_animation.animation.add("basic_attack", [1, 2, 3, 4], 12, false);
+		attack_animation.animation.add("charge", [0]);
+		attack_animation.animation.add("release", [1, 2, 3, 4, 4, 4], 12, false);
+		
+		//adding attack_animation to the group
+		spriteGroup = new FlxGroup();
+		spriteGroup.add(this);
+		spriteGroup.add(attack_animation);
+		
 		this.maxVelocity.set(MAX_SPEED);
 		
 		//set the center x and y coordinates of hairDresser
@@ -66,66 +98,136 @@ class HairDresser extends FlxSprite
 		this.acceleration.y = 1500;
 		this.acceleration.x = 0;
 		
-		//damage = 10;
 		//_brain starts in move
 		_brain = new FSM(move);
 		//set stun, attack times
-		stunLimit = 75;
+		stunLimit = 35;
 		attackLimit = 15;
+		isMove = true;
+		
+		//set HP
+		startHP = 100;
+		HP = startHP;
+		
+		damage = 10;
+		isAttack = false;
 	}
 	
 	override public function update():Void
-	{		
-		// friction horizontal movement
-		this.velocity.x *= 0;
-		if (this.velocity.x < 10 && this.velocity.x > -10) this.velocity.x = 0;
+	{	
+		this.velocity.x = 0;
+		
 		_brain.update();
 		
 		super.update();
 		FlxG.camera.update();
 		
+		if (attack_animation.animation.finished) {
+			this.alpha = 1;
+			attack_animation.alpha = 0;
+		}
+		else {
+			this.alpha = 0;
+			attack_animation.alpha = 1;
+		}
+		
 	}
 	
 	//FSM states
 	public function stun():Void {
-		
+		if (face_left) animation.play("idle_left");
+		else animation.play("idle_right");
+		//when timer runs out, switch to move state
+		if (Timer <= 0) {
+			_brain.activeState = move;
+			isMove = true;
+		}
+		else
+			Timer -= 1;
 	}
 	
 	public function move():Void {
+		//setting child position to parent
+		attack_animation.setPosition(this.x, this.y);
+		
 		// movement
-		if (isOnGround && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED/1.2;
+		//if (isOnGround && this.isTouching(FlxObject.FLOOR) && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED;
+		if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)  this.velocity.y = -SPEED;
 		if (FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN)  this.velocity.y = SPEED;
 		if (FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT) this.velocity.x  = -SPEED;
 		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) this.velocity.x = SPEED;
 		
-		// animation control
-		if (this.velocity.x > 0) { 
-			face_left = false; 
-			if (isOnGround) animation.play("run_right");
-			else animation.play("jump_right");
+		
+		if (FlxG.keys.pressed.E) {
+			chargetimer += FlxG.elapsed;
+			if (face_left) {
+				attack_animation.flipX = true;
 			}
-		else if (this.velocity.x < 0) { 
-			face_left = true; 
-			if (isOnGround) animation.play("run_left");
-			else animation.play("jump_left");
+			else {
+				attack_animation.flipX = false;
 			}
-		else if (face_left) {
-			if (isOnGround) animation.play("idle_left");
-			else animation.play("jump_left");
+			attack_animation.animation.play("charge");
+			
+		}
+		else if (FlxG.keys.justReleased.E) {
+			if (chargetimer >= chargetime) {
+				charged = true;
+				if (face_left) {
+					attack_animation.flipX = true;
+				}
+				else {
+					attack_animation.flipX = false;
+				}
+				attack_animation.animation.play("release");
+			}
+			else {
+				charged = false;
+				if (face_left) {
+					attack_animation.flipX = true;
+				}
+				else {
+					attack_animation.flipX = false;
+				}
+				attack_animation.animation.play("basic_attack");
+				isAttack = true;
+			}
+			chargetimer = 0;
 		}
 		else {
-			if (isOnGround) animation.play("idle_right");
-			else animation.play("jump_right");
+			//reset charged variable
+			charged = false;
+			
+			// animation control
+			if (this.velocity.x > 0) { 
+				face_left = false; 
+				if (isOnGround) animation.play("run_right");
+				else animation.play("jump_right");
+				}
+			else if (this.velocity.x < 0) { 
+				face_left = true; 
+				if (isOnGround) animation.play("run_left");
+				else animation.play("jump_left");
+				}
+			else if (face_left) {
+				if (isOnGround) animation.play("idle_left");
+				else animation.play("jump_left");
+			}
+			else {
+				if (isOnGround) animation.play("idle_right");
+				else animation.play("jump_right");
+			}
 		}
+		//if basic_attack or any non-looping animation is finished,
+		//set isAttack equal to false
+		if (animation.finished) isAttack = false;
 		
-		super.update();
-		FlxG.camera.update();
 	}
 	
-	public function attack():Void {
+	/*public function attack():Void {
 		//when timer runs out, switch to move state
 		if (Timer <= 0) {
 			_brain.activeState = move;
+			isMove = true;
 		}
 		else
 			Timer -= 1;
@@ -135,5 +237,18 @@ class HairDresser extends FlxSprite
 	public function startAttack():Void {
 			Timer = attackLimit;
 			_brain.activeState = attack;
+			isMove = false;
+	}*/
+	
+	//takes damage; switches to stun
+	public function takeDamage(damage:Float) {
+		HP -= damage;
+		trace(HP);
+		//if not already stunned, set timer and switch to stun
+		if (_brain.activeState != stun) {
+			Timer = stunLimit;
+			_brain.activeState = stun;
+			isMove = false;
+		}
 	}
 }

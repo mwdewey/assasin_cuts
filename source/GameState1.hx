@@ -8,9 +8,13 @@ import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.group.FlxGroup;
+import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.FlxObject;
+import flixel.tile.FlxTilemap;
+import openfl.Assets;
+import flixel.FlxBasic;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -21,9 +25,12 @@ class GameState1 extends FlxState
 	var obsticalGroup:FlxGroup;
 	var floorList:List<StaticObject>;
 	var enemyGroup:FlxGroup;
+	var townPeopleGroup:FlxGroup;
 	var projectileGroup:FlxGroup;
 	var doorGroup:FlxGroup;
 	var doorCollidableGroup:FlxGroup;
+	
+	var tileMap:FlxTilemap;
 		
 	var hairDresser:HairDresser;
 	var s1:StaticObject;
@@ -58,28 +65,45 @@ class GameState1 extends FlxState
 		tempSprite.scrollFactor.set();
 		
 		enemyGroup = new FlxGroup();
-		for (i in 0...25) enemyGroup.add(new Enemy1(i * 400, 500 - 192));
+		for (i in 0...25) {
+			//var n_enemy:Enemy2 = new Enemy2(i * 400, 500 - 192);
+			enemyGroup.add(new Enemy2(i * 400, 500 - 192).spriteGroup);
+		}
+		
 		
 		projectileGroup = new FlxGroup();
 		
 		doorGroup = new FlxGroup();
 		doorCollidableGroup = new FlxGroup();
 		for (i in 0...25) {
-			var d:Door = new Door(i * 400, FlxG.height - 64 - 128 );
+			var d:Door = new Door(i * 400, FlxG.height - 64 - 128);
 			doorGroup.add(d);
 			doorCollidableGroup.add(d.hitBox);
 		}
 		
+		townPeopleGroup = new FlxGroup();
+		for (i in 0...25) townPeopleGroup.add((new TownPerson(i * 400-200, 500 - 192)).spriteGroup);
+		
+		
+		tileMap = new FlxTilemap();
+        var mapData:String = Assets.getText("assets/data/Widebrook Stage..csv");
+        var mapTilePath:String = "assets/images/Walls.png";
+        tileMap.loadMap(mapData, mapTilePath, 64,64);
+ 
+		
 		add(tempSprite);
 		add(new Background());
+		add(projectileGroup);
 		add(floorGroup);
 		add(obsticalGroup);
 		add(enemyGroup);
-		add(projectileGroup);
 		add(doorGroup);
 		add(doorCollidableGroup);
+		add(townPeopleGroup);
 		
-		add(hairDresser);
+		//add(tileMap);
+		
+		add(hairDresser.spriteGroup);
 		add(ui);
     }
 	
@@ -89,19 +113,21 @@ class GameState1 extends FlxState
 		
 		// check if on ground
 		hairDresser.isOnGround = false;
-		FlxG.overlap(hairDresser, obsticalGroup,goundDetect);
-		FlxG.overlap(hairDresser, floorGroup, goundDetect);
+		FlxG.overlap(hairDresser, obsticalGroup, goundDetect);
+		FlxG.collide(hairDresser, floorGroup, goundDetect);
+		//FlxG.overlap(hairDresser, tileMap,goundDetect);
 		
 		// move character
 		FlxG.collide(hairDresser, obsticalGroup);
 		FlxG.collide(hairDresser, floorGroup);
+		//FlxG.collide(hairDresser, tileMap);
 		
 		// update ref
 		Reg.ref_x = FlxG.camera.scroll.x;
 		Reg.ref_y = FlxG.camera.scroll.y;
 		
 		// check overlapable obejcts
-		FlxG.overlap(hairDresser, enemyGroup, enemyDetect);
+		FlxG.overlap(hairDresser, townPeopleGroup, townspersonDetect);
 		FlxG.overlap(projectileGroup, enemyGroup, projectileDetect);
 		FlxG.overlap(hairDresser,doorGroup,doorDetect);
 		
@@ -110,12 +136,13 @@ class GameState1 extends FlxState
 		else if (FlxG.keys.justPressed.F5) FlxG.switchState(new CutScene2());
 
 		
-		if (FlxG.keys.justPressed.E) {
+		if (hairDresser.charged) {
 			if(hairDresser.face_left)
 				projectileGroup.add(new Projectile(hairDresser.x,hairDresser.y,hairDresser.x-200,hairDresser.y));
 			else
 				projectileGroup.add(new Projectile(hairDresser.x,hairDresser.y,hairDresser.x+200,hairDresser.y));
 		}
+		
 	}
 	
 	// player and solid ground interaction
@@ -124,14 +151,19 @@ class GameState1 extends FlxState
 		hairDresser.isOnGround = true;
 	}
 	
-	// player and enemy interaction
-	private function enemyDetect(Object1:FlxObject, Object2:FlxObject):Void {
-		if(FlxG.keys.justPressed.F){
-			var spriteObject:FlxSprite = cast Object2;
+	// player and townsperson interaction
+	private function townspersonDetect(Object1:FlxObject, Object2:FlxObject):Void {
+		if (FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.E) {
+			if(Type.getClass(Object2) == TownPerson){
+				var townPersonObject:TownPerson = cast Object2;
 			
-			spriteObject.makeGraphic(64,128, FlxColor.CRIMSON);
+				if (!townPersonObject.isCut) townPersonObject.cutHair();
+			}
+			
 		}
 	}
+	
+	// player and enemy interaction --- melee
 	
 	// projectile and enemy interaction
 	private function projectileDetect(Object1:FlxObject, Object2:FlxObject):Void {

@@ -12,6 +12,8 @@ import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.FlxObject;
 import flixel.ui.FlxBar;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxSpriteUtil;
 
 
 
@@ -44,9 +46,9 @@ class OgreTest extends FlxState
 		add(floor);
 		
 		player = new HairDresser();
-		add(player);
+		add(player.spriteGroup);
 		
-		ogre = new Ogre(600, FlxG.height - 320, player);
+		ogre = new Ogre(600, FlxG.height - 210, player);
 		add(ogre);
 		
 		projectileGroup = new FlxGroup();
@@ -58,14 +60,13 @@ class OgreTest extends FlxState
 		barHealth = new FlxBar(0,0,FlxBar.FILL_LEFT_TO_RIGHT, 250,25);
 		barHealth.createGradientBar([0xEE000000, 0xEE0C0C0], [0xFF00FF00, 0xFFFFFF00, 0xFFFF0000], 1, 180, true, 0xFF000000);
 		updateBarPos();
-		barHealth.y = ogre.y - 10;
+		barHealth.y = ogre.y - 30;
 		barHealth.percent = 100;
 		add(barHealth);
 		
 	}
 	
 	override public function update() {
-		super.update();
 		
 		// check if on ground
 		player.isOnGround = false;
@@ -73,23 +74,24 @@ class OgreTest extends FlxState
 		
 		//check collisions
 		FlxG.collide(player, floor);
-		FlxG.collide(ogre, floor);
 		
-		// check overlapable obejcts
-		FlxG.overlap(player, ogre, enemyDetect);
+		// Ogre attacks when it and player overlap
+		if (ogre.isMove) FlxG.overlap(player, ogre, enemyDetect);
+		//Ogre takes damage when overlaps with projectile
 		FlxG.overlap(projectileGroup, ogre, projectileDetect);
 		
 		updateBarPos();
+		ui.updateHealthBar(player.HP);
 		
-		//E button triggers player's projectile attack
-		if (FlxG.keys.justPressed.E) {
-			player.startAttack();
+		//player's projectile attack
+		if (player.charged) {
 			if(player.face_left)
 				projectileGroup.add(new Projectile(player.x,player.y,player.x-200,player.y));
 			else
 				projectileGroup.add(new Projectile(player.x,player.y,player.x+200,player.y));
 		}
 		
+		super.update();
 	}
 	
 	public function updateBarPos() {
@@ -109,13 +111,14 @@ class OgreTest extends FlxState
 	
 	// player and enemy interaction
 	private function enemyDetect(Object1:FlxObject, Object2:FlxObject):Void {
-		/*if (FlxG.keys.justPressed.F) {
-			var player:HairDresser = cast Object1;
-			var ogre:Ogre = cast Object2;
-			
+		if (player.isAttack) {
+			trace("yes?");
 			ogre.takeDamage(player.damage);
 			updateHealthBar();
-		}*/
+			ogreDeath();
+			player.isAttack = false;
+		}
+		//ogre.startAttack();
 	}
 	
 	// projectile and enemy interaction
@@ -125,8 +128,26 @@ class OgreTest extends FlxState
 		
 		ogre.takeDamage(p.damage);
 		updateHealthBar();
+		ogreDeath();
 		
 		p.destroy();
-		
 	}
+	
+	//if this damage brings HP at or below zero, destroy it
+	public function ogreDeath():Void {
+		if (ogre.HP <= 0) {
+			FlxSpriteUtil.fadeOut(ogre, 0.5, false, ogreDestroy);
+			FlxSpriteUtil.fadeOut(barHealth, 0.5, false, barDestroy);
+		}
+	}
+	
+	//destroy ogre
+	public function ogreDestroy(t:FlxTween):Void {
+		ogre.destroy();
+	}
+	//destroy barHealth
+	public function barDestroy(t:FlxTween):Void {
+		barHealth.destroy();
+	}
+	
 }
