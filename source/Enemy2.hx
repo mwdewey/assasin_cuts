@@ -1,9 +1,7 @@
 package;
 
-/**
- * ...
- * @author ...
- */
+
+
 class Enemy2
 {
 
