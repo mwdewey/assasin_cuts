@@ -156,10 +156,8 @@ class GameState1 extends FlxState
 		if (FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.E) {
 			if(Type.getClass(Object2) == TownPerson){
 				var townPersonObject:TownPerson = cast Object2;
-			
 				if (!townPersonObject.isCut) townPersonObject.cutHair();
 			}
-			
 		}
 	}
 	

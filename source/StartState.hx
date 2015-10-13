@@ -39,7 +39,7 @@ class StartState extends FlxState
 	
 	override public function update():Void
 	{
-		if (FlxG.keys.justPressed.SPACE) FlxG.switchState(new OgreTest());
+		if (FlxG.keys.justPressed.SPACE) FlxG.switchState(new GameState1());
 		
 		super.update();
 	}	
