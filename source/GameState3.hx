@@ -49,7 +49,7 @@ class GameState3 extends FlxState
 		add(background);
 		
 		floor = new FlxGroup();
-		for(i in 0...40) floor.add(new StaticObject(i*64, FlxG.height-64, "assets/images/GroundTile.png"));
+		for(i in 0...20) floor.add(new StaticObject(i*64, FlxG.height-64, "assets/images/GroundTile.png"));
 		add(floor);
 		
 		player = new HairDresser();
@@ -59,7 +59,7 @@ class GameState3 extends FlxState
 		add(ogre);
 		
 		enemies = new FlxGroup();
-		for (i in 0...4) enemies.add(new Enemy2());
+		for (i in 0...4) enemies.add(new Enemy2(20+(i*400), FlxG.height - 160));
 		add(enemies);
 		
 		projectileGroup = new FlxGroup();
@@ -78,6 +78,9 @@ class GameState3 extends FlxState
 	}
 	
 	override public function update() {
+		
+		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene3()));
+		else if (FlxG.keys.justPressed.F5) FlxG.switchState(new EndState());
 		
 		// check if on ground
 		player.isOnGround = false;
