@@ -191,6 +191,9 @@ class HairDresser extends FlxSprite
 				attack_animation.flipX = false;
 			}
 			
+			this.velocity.x /= 2;
+			this.velocity.y /= 2;
+			
 			if (chargetimer >= chargetime) {
 				//play the charged effect
 				charged_effect.animation.play("shine");

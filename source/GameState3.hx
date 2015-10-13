@@ -60,7 +60,7 @@ class GameState3 extends FlxState
 		add(ogre);
 		
 		enemies = new FlxGroup();
-		for (i in 0...4) enemies.add(new Enemy2(20+(i*400), FlxG.height - 160));
+		for (i in 0...2) enemies.add(new Enemy2(20+(i*400), FlxG.height - 160));
 		add(enemies);
 		
 		pProjectiles = new FlxGroup();
