@@ -61,10 +61,10 @@ class TownPerson extends FlxSprite
 		bottom_sprite.animation.play("idle");
 		
 		sparkle_sprite = new FlxSprite();
-		/*sparkle_sprite.loadGraphic("assets/images/Characters/Main/sparkle.png", true, 96, 96);
-		sparkle_sprite.setPosition(pos_x, pos_y);
-		sparkle_sprite.animation.add("sparkle", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 28, true);
-		sparkle_sprite.alpha = 0;*/
+		sparkle_sprite.loadGraphic("assets/images/Characters/TownPeople/sparkle.png", true, 128, 65);
+		sparkle_sprite.setPosition(pos_x-36, pos_y - 18);
+		sparkle_sprite.animation.add("sparkle", [0, 1], 12, true);
+		sparkle_sprite.alpha = 0;
 		
 		smokeSprite = new FlxSprite();
 		smokeSprite.loadGraphic("assets/images/Characters/Main/smoke.png", true, 96, 96);
