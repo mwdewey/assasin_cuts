@@ -51,8 +51,15 @@ import flixel.util.FlxSpriteUtil;
 		super(X, Y);
 		
 		//Load Ogre art
-		spriteList = new FlxGroup();
-		spriteList.add(new FlxSprite(0, 0, "assets/images/Characters/Ogre_0.png"));
+		loadGraphic("assets/images/Characters/Ogre/Ogre.png", true, 160, 160);
+		setFacingFlip(FlxObject.RIGHT, false, false);
+		setFacingFlip(FlxObject.LEFT, true, false);
+		//run animations
+		animation.add("run_right", [0,1,2,1], 8, true);
+		//attack animations
+		animation.add("hammer_right", [3, 4, 5, 5, 5], 6, false);
+		//idle animations
+		animation.add("idle_right", [1]);
 		
 		//define variables
 		drag.x = 450;
@@ -86,11 +93,11 @@ import flixel.util.FlxSpriteUtil;
 	
 	//FSM states
 	public function stun():Void {
+		animation.play("idle_right");
 		//when timer runs out, switch to move state
 		if (Timer <= 0) {
 			_brain.activeState = move;
 			isMove = true;
-			this.color = FlxColor.BLUE;
 		}
 		else
 			Timer -= 1;
@@ -99,28 +106,31 @@ import flixel.util.FlxSpriteUtil;
 	public function move():Void {
 		//move towards player
 		FlxVelocity.moveTowardsPoint(this, movePoint, Std.int(maxSpeed));
-		//if player is within swingDist AND not above ogre, switch to attack state
-		/*if (Math.abs((this.x + this.centerX) - (_player.x + _player.centerX)) <= swingDist && (_player.y + _player.centerY) >= this.y) {
-			Timer = stunLimit;	
-			_brain.activeState = attack;
-			this.color = FlxColor.RED;
-		}*/
+		if (this.velocity.x > 0) { 
+			facing = FlxObject.RIGHT; 
+			animation.play("run_right");
+		}
+		else if (this.velocity.x < 0) { 
+			facing = FlxObject.LEFT; 
+			animation.play("run_right");
+		}
+		else {
+			animation.play("idle_right");
+		}
 	}
 	
 	public function attack():Void {
-		//If player is still overlapped with ogre, it takes damage
-		if (Timer < (attackLimit * .75) && !hitsPlayer) {
-			FlxG.overlap(this, _player, dealDamage);
-		}
-		//when timer runs out, switch to move state
-		if (Timer <= 0) {
+		//when animation is finished, switch to move state
+		if (animation.finished) {
 			_brain.activeState = move;
 			hitsPlayer = false;
 			isMove = true;
-			this.color = FlxColor.BLUE;
 		}
-		else
-			Timer -= 1;
+		animation.play("hammer_right");
+		//If player is still overlapped with ogre, it takes damage
+		if (animation.curAnim.curFrame == 1) {
+			FlxG.overlap(this, _player, dealDamage);
+		}
 	}
 	
 	public function dealDamage(Object1:FlxObject, Object2:FlxObject):Void {
@@ -137,8 +147,9 @@ import flixel.util.FlxSpriteUtil;
 		if (_brain.activeState != stun) {
 			Timer = stunLimit;
 			_brain.activeState = stun;
+			//halt abruptly
+			velocity.x = 0;
 			isMove = false;
-			this.color = FlxColor.FUCHSIA;
 		}
 	}
 	
@@ -147,7 +158,6 @@ import flixel.util.FlxSpriteUtil;
 		Timer = attackLimit;
 		_brain.activeState = attack;
 		isMove = false;
-		this.color = FlxColor.RED;
 	}
 	
 	
@@ -159,11 +169,4 @@ import flixel.util.FlxSpriteUtil;
 		
 		super.update();
 	}
-	
-	/*override public function draw():Void {
-		if (velocity.x < 0 ) facing = FlxObject.LEFT;
-		else if (velocity.x > 0) facing = FlxObject.RIGHT;
-		super.draw();
-	}*/
-	
 }

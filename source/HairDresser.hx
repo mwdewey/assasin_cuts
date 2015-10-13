@@ -97,6 +97,8 @@ class HairDresser extends FlxSprite
 	
 	//FSM states
 	public function stun():Void {
+		if (face_left) animation.play("idle_left");
+		else animation.play("idle_right");
 		//when timer runs out, switch to move state
 		if (Timer <= 0) {
 			_brain.activeState = move;
