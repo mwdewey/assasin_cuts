@@ -22,10 +22,18 @@ class GameState3 extends FlxState
 		
 	}
 	
+	override public function create():Void
+    {
+        super.create();
+		
+		FlxG.sound.playMusic(AssetPaths.Level3__wav, 1, true);
+	}
+	
 	override public function update() {
 		super.update();
 		
 		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene3()));
+		else if (FlxG.keys.justPressed.F5) FlxG.switchState(new EndState());
 	}
 	
 }

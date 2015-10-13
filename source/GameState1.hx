@@ -90,6 +90,14 @@ class GameState1 extends FlxState
 		townPeopleGroup = new FlxGroup();
 		for (i in 0...25) townPeopleGroup.add((new TownPerson(i * 400-200, 500 - 192)).spriteGroup);
 		
+		
+		tileMap = new FlxTilemap();
+        var mapData:String = Assets.getText("assets/data/Widebrook Stage..csv");
+        var mapTilePath:String = "assets/images/Walls.png";
+        tileMap.loadMap(mapData, mapTilePath, 64, 64);
+		
+		FlxG.sound.playMusic(AssetPaths.Level1__wav, 1, true);
+
  
 		
 		add(tempSprite);

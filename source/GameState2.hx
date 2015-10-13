@@ -22,6 +22,13 @@ class GameState2 extends FlxState
 		
 	}
 	
+	override public function create():Void
+    {
+        super.create();
+		
+		FlxG.sound.playMusic(AssetPaths.Level2__wav, 1, true);
+	}
+	
 	override public function update() {
 		super.update();
 		
