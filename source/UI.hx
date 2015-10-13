@@ -57,6 +57,8 @@ class UI extends FlxTypedGroup<FlxSprite>
 		sprTextBox.y = (4 / 5) * FlxG.height;
 		sprTextBox.alpha = 0;
 		textTextBox = new FlxText(0, (2 / 3) * FlxG.height, (4 / 5) * FlxG.width, "", 20/*, BOOL use imbedded fonts)*/); 
+		textTextBox.systemFont = "Courier New";
+		textTextBox.bold = true;
 		textTextBox.color = 0xFF000000;
 		textTextBox.fieldWidth = sprTextBox.width - 40;
 		textTextBox.x = sprTextBox.x + 20;

@@ -71,14 +71,18 @@ class GameState1 extends FlxState
 		tempSprite.scrollFactor.set();
 		
 		enemyGroup = new FlxGroup();
-		for (i in 0...25) enemyGroup.add(new Enemy1(i * 400, 500 - 192));
+		for (i in 0...25) {
+			//var n_enemy:Enemy2 = new Enemy2(i * 400, 500 - 192);
+			enemyGroup.add(new Enemy2(i * 400, 500 - 192).spriteGroup);
+		}
+		
 		
 		projectileGroup = new FlxGroup();
 		
 		doorGroup = new FlxGroup();
 		doorCollidableGroup = new FlxGroup();
 		for (i in 0...25) {
-			var d:Door = new Door(i * 400, FlxG.height - 64 - 128 );
+			var d:Door = new Door(i * 400, FlxG.height - 64 - 128);
 			doorGroup.add(d);
 			doorCollidableGroup.add(d.hitBox);
 		}
@@ -86,11 +90,6 @@ class GameState1 extends FlxState
 		townPeopleGroup = new FlxGroup();
 		for (i in 0...25) townPeopleGroup.add((new TownPerson(i * 400-200, 500 - 192)).spriteGroup);
 		
-		
-		tileMap = new FlxTilemap();
-        var mapData:String = Assets.getText("assets/data/Widebrook Stage..csv");
-        var mapTilePath:String = "assets/images/Walls.png";
-        tileMap.loadMap(mapData, mapTilePath, 64,64);
  
 		
 		add(tempSprite);

@@ -36,6 +36,8 @@ class HairDresser extends FlxSprite
 	private var attackLimit:Float; //length of attack sprite-state
 	public var isMove:Bool; //checks if in move state
 	public var charged:Bool = false; //whether the player charged up the attack
+	public var damage:Float; //damage dealt by melee attack
+	public var isAttack:Bool; //is true when basic_attack animation is running
 	
 	//timer for charge attack
 	private var chargetimer:Float = 0;
@@ -106,6 +108,9 @@ class HairDresser extends FlxSprite
 		//set HP
 		startHP = 100;
 		HP = startHP;
+		
+		damage = 10;
+		isAttack = false;
 	}
 	
 	override public function update():Void
@@ -184,6 +189,7 @@ class HairDresser extends FlxSprite
 					attack_animation.flipX = false;
 				}
 				attack_animation.animation.play("basic_attack");
+				isAttack = true;
 			}
 			chargetimer = 0;
 		}
@@ -211,10 +217,13 @@ class HairDresser extends FlxSprite
 				else animation.play("jump_right");
 			}
 		}
+		//if basic_attack or any non-looping animation is finished,
+		//set isAttack equal to false
+		if (animation.finished) isAttack = false;
 		
 	}
 	
-	public function attack():Void {
+	/*public function attack():Void {
 		//when timer runs out, switch to move state
 		if (Timer <= 0) {
 			_brain.activeState = move;
@@ -229,7 +238,7 @@ class HairDresser extends FlxSprite
 			Timer = attackLimit;
 			_brain.activeState = attack;
 			isMove = false;
-	}
+	}*/
 	
 	//takes damage; switches to stun
 	public function takeDamage(damage:Float) {

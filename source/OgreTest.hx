@@ -46,9 +46,9 @@ class OgreTest extends FlxState
 		add(floor);
 		
 		player = new HairDresser();
-		add(player);
+		add(player.spriteGroup);
 		
-		ogre = new Ogre(600, FlxG.height - 224, player);
+		ogre = new Ogre(600, FlxG.height - 210, player);
 		add(ogre);
 		
 		projectileGroup = new FlxGroup();
@@ -67,7 +67,6 @@ class OgreTest extends FlxState
 	}
 	
 	override public function update() {
-		super.update();
 		
 		// check if on ground
 		player.isOnGround = false;
@@ -75,24 +74,24 @@ class OgreTest extends FlxState
 		
 		//check collisions
 		FlxG.collide(player, floor);
-		FlxG.collide(ogre, floor);
 		
-		// check overlapable obejcts
-		if(ogre.isMove) FlxG.overlap(player, ogre, enemyDetect);
+		// Ogre attacks when it and player overlap
+		if (ogre.isMove) FlxG.overlap(player, ogre, enemyDetect);
+		//Ogre takes damage when overlaps with projectile
 		FlxG.overlap(projectileGroup, ogre, projectileDetect);
 		
 		updateBarPos();
 		ui.updateHealthBar(player.HP);
 		
-		//E button triggers player's projectile attack
-		if (FlxG.keys.justPressed.SPACE && player.isMove) {
-			player.startAttack();
+		//player's projectile attack
+		if (player.charged) {
 			if(player.face_left)
 				projectileGroup.add(new Projectile(player.x,player.y,player.x-200,player.y));
 			else
 				projectileGroup.add(new Projectile(player.x,player.y,player.x+200,player.y));
 		}
 		
+		super.update();
 	}
 	
 	public function updateBarPos() {
@@ -112,7 +111,14 @@ class OgreTest extends FlxState
 	
 	// player and enemy interaction
 	private function enemyDetect(Object1:FlxObject, Object2:FlxObject):Void {
-		ogre.startAttack();
+		if (player.isAttack) {
+			trace("yes?");
+			ogre.takeDamage(player.damage);
+			updateHealthBar();
+			ogreDeath();
+			player.isAttack = false;
+		}
+		//ogre.startAttack();
 	}
 	
 	// projectile and enemy interaction
@@ -122,13 +128,17 @@ class OgreTest extends FlxState
 		
 		ogre.takeDamage(p.damage);
 		updateHealthBar();
-		//if this damage brings HP at or below zero, destroy it
+		ogreDeath();
+		
+		p.destroy();
+	}
+	
+	//if this damage brings HP at or below zero, destroy it
+	public function ogreDeath():Void {
 		if (ogre.HP <= 0) {
 			FlxSpriteUtil.fadeOut(ogre, 0.5, false, ogreDestroy);
 			FlxSpriteUtil.fadeOut(barHealth, 0.5, false, barDestroy);
 		}
-		
-		p.destroy();
 	}
 	
 	//destroy ogre
