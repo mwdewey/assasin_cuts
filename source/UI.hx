@@ -25,6 +25,8 @@ class UI extends FlxTypedGroup<FlxSprite>
 	
 	var sprHair:FlxSprite;
 	var healthicon:FlxSprite;
+	var healthicon_half:FlxSprite;
+	var healthicon_low:FlxSprite;
 	var textHair:FlxText;
 	var textTime:FlxText;
 	var timerClock:FlxTimer;
@@ -67,7 +69,9 @@ class UI extends FlxTypedGroup<FlxSprite>
 		textTextBox.alignment = "left";
 		if (textTextBox.text.length > MAX_LENGTH_OF_TEXT) FlxG.cameras.bgColor = 0xFF000000;
 		sprHair = new FlxSprite(FlxG.width * (1 / 10) + 10, 5, "assets/images/items/score.png"); 
-		healthicon = new FlxSprite(FlxG.width * (7 / 10), 5, "assets/images/items/health.png");
+		healthicon = new FlxSprite(FlxG.width * (7 / 10) - 10, 5, "assets/images/items/health.png");
+		healthicon_half = new FlxSprite(FlxG.width * (7 / 10) - 10, 5, "assets/images/items/health_half.png");
+		healthicon_low = new FlxSprite(FlxG.width * (7 / 10) - 10, 5, "assets/images/items/health_low.png");
 		textHair = new FlxText(sprHair.x + sprHair.width + 15, sprHair.y + sprHair.width / 2 - 12, 85, "x00", 20);
 		textHair.color = 0xFF000000;
 		textTime = new FlxText(5, 5, 85, "5:00", 20);
@@ -80,11 +84,17 @@ class UI extends FlxTypedGroup<FlxSprite>
 		add(barHealth);
 		add(sprHair);
 		add(healthicon);
+		add(healthicon_half);
+		add(healthicon_low);
 		add(textTime);
 		add(textHair);
 		add(sprFullScreen);
 		add(sprTextBox);
 		add(textTextBox);
+		
+		healthicon.alpha = 1;
+		healthicon_half.alpha = 0;
+		healthicon_low.alpha = 0;
 		
 		//prevent any scrolling onscreen
 		forEach(function(spr:FlxSprite) {
@@ -122,6 +132,21 @@ class UI extends FlxTypedGroup<FlxSprite>
 	public function updateHealthBar(healthe:Float) : Void{
 		//barHealth.health = _player.HP;
 		barHealth.percent = healthe;
+		if (barHealth.percent > 50 && barHealth.percent < 100) {
+			healthicon.alpha = 1;
+			healthicon_half.alpha = 0;
+			healthicon_low.alpha = 0;
+		}
+		else if (barHealth.percent > 25 && barHealth.percent <= 50) {
+			healthicon.alpha = 0;
+			healthicon_half.alpha = 1;
+			healthicon_low.alpha = 0;	
+		}
+		else if (barHealth.percent <= 25) {
+			healthicon.alpha = 0;
+			healthicon_half.alpha = 0;
+			healthicon_low.alpha = 1;	
+		}
 	}
 	
 	public function updateText(texte:String) : Void {
