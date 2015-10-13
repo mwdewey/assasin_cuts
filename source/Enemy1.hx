@@ -14,6 +14,8 @@ class Enemy1 extends FlxSprite
 	var w:Int;
 	var h:Int;
 	
+	public var isFiring:Bool = false;
+	
 	public var spriteGroup:FlxGroup;
 	
 	//bullets
@@ -31,8 +33,8 @@ class Enemy1 extends FlxSprite
 		//this.makeGraphic(64, 128, FlxColor.AZURE);
 		this.loadGraphic("assets/images/Characters/Enemy/enemy0.png", true, 64, 96);
 		this.animation.add("walk", [2,3,4,3], 8, true);
-		this.animation.add("fire", [1, 0], 8, false);
-		this.animation.add("idle", [2], 1, true);
+		this.animation.add("fire", [0, 1, 0, 0], 8, false);
+		this.animation.add("idle", [2]);
 		
 		
 		//make spriteGroup
@@ -41,7 +43,6 @@ class Enemy1 extends FlxSprite
 		
 		spriteGroup.add(bullet_group);
 		spriteGroup.add(this);
-		
 		
 		this.animation.play("walk");
 		
@@ -57,20 +58,15 @@ class Enemy1 extends FlxSprite
 			this.animation.play("fire");
 		//add another bullet
 			//add animaiton
-			bullet = new FlxSprite();
-			bullet.loadGraphic("assets/images/Characters/Enemy/bullet.png", true, 32, 32);
-			bullet.animation.add("move", [0, 1, 2, 3, 4, 5], 8, true);
-			bullet.animation.play("move");
+			isFiring = true;
 			
-			//set postiion and velocity
-			bullet.velocity.x = -750;
-			
-			bullet_group.add(bullet);
 			//reset time
-			firetime = 0;
+			firetimer = 0;
 		}
 		else {
-			firetime += FlxG.elapsed;
+			isFiring = false;
+			this.animation.play("walk");
+			firetimer += FlxG.elapsed;
 		}
 		
 	}
