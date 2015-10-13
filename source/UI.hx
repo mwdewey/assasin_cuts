@@ -24,6 +24,7 @@ class UI extends FlxTypedGroup<FlxSprite>
 	var textTextBox:FlxText;
 	
 	var sprHair:FlxSprite;
+	var healthicon:FlxSprite;
 	var textHair:FlxText;
 	var textTime:FlxText;
 	var timerClock:FlxTimer;
@@ -63,7 +64,8 @@ class UI extends FlxTypedGroup<FlxSprite>
 		textTextBox.y = sprTextBox.y + 20;
 		textTextBox.alignment = "left";
 		if (textTextBox.text.length > MAX_LENGTH_OF_TEXT) FlxG.cameras.bgColor = 0xFF000000;
-		sprHair = new FlxSprite(FlxG.width*(1/10)+10, 5, "assets/images/winkydog.png"); 
+		sprHair = new FlxSprite(FlxG.width * (1 / 10) + 10, 5, "assets/images/items/score.png"); 
+		healthicon = new FlxSprite(FlxG.width * (7 / 10), 5, "assets/images/items/health.png");
 		textHair = new FlxText(sprHair.x + sprHair.width + 15, sprHair.y + sprHair.width / 2 - 12, 85, "x00", 20);
 		textHair.color = 0xFF000000;
 		textTime = new FlxText(5, 5, 85, "5:00", 20);
@@ -75,6 +77,7 @@ class UI extends FlxTypedGroup<FlxSprite>
 		//add(sprHealth);
 		add(barHealth);
 		add(sprHair);
+		add(healthicon);
 		add(textTime);
 		add(textHair);
 		add(sprFullScreen);
