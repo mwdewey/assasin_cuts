@@ -87,17 +87,17 @@ class GameState1 extends FlxState
 		
 		add(tempSprite);
 		add(new Background());
+		add(projectileGroup);
 		/*add(floorGroup);
 		add(obsticalGroup);
 		add(enemyGroup);
-		add(projectileGroup);
 		add(doorGroup);
 		add(doorCollidableGroup);
 		add(townPeopleGroup);
 		*/
 		add(tileMap);
 		
-		add(hairDresser);
+		add(hairDresser.spriteGroup);
 		add(ui);
     }
 	
@@ -129,7 +129,7 @@ class GameState1 extends FlxState
 		else if (FlxG.keys.justPressed.F5) FlxG.switchState(new CutScene2());
 
 		
-		if (FlxG.keys.justPressed.E) {
+		if (hairDresser.charged) {
 			if(hairDresser.face_left)
 				projectileGroup.add(new Projectile(hairDresser.x,hairDresser.y,hairDresser.x-200,hairDresser.y));
 			else
