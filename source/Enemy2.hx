@@ -63,7 +63,7 @@ class Enemy2 extends FlxSprite
 			
 			//set position and velocity
 			projectile.setPosition(this.x, this.y);
-			projectile.velocity.x = -1000;
+			projectile.velocity.x = -500;
 			
 			projectile_group.add(projectile);
 			

@@ -63,7 +63,7 @@ class Enemy1 extends FlxSprite
 			bullet.animation.play("move");
 			
 			//set postiion and velocity
-			bullet.velocity.x = -1000;
+			bullet.velocity.x = -750;
 			
 			bullet_group.add(bullet);
 			//reset time
