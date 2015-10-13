@@ -167,7 +167,12 @@ class HairDresser extends FlxSprite
 	public function move():Void {
 		//setting child position to parent
 		attack_animation.setPosition(this.x, this.y);
-		charged_effect.setPosition(this.x, this.y);
+		if (face_left) {
+			charged_effect.setPosition(this.x + 25, this.y);
+		}
+		else{
+			charged_effect.setPosition(this.x, this.y);
+		}
 		
 		// movement
 		//if (isOnGround && this.isTouching(FlxObject.FLOOR) && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED;
