@@ -88,7 +88,9 @@ class GameState1 extends FlxState
 		tileMap = new FlxTilemap();
         var mapData:String = Assets.getText("assets/data/Widebrook Stage..csv");
         var mapTilePath:String = "assets/images/Walls.png";
-        tileMap.loadMap(mapData, mapTilePath, 64,64);
+        tileMap.loadMap(mapData, mapTilePath, 64, 64);
+		
+		FlxG.sound.playMusic(AssetPaths.Level1__wav, 1, true);
  
 		
 		add(tempSprite);
