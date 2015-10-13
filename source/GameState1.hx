@@ -153,7 +153,7 @@ class GameState1 extends FlxState
 	
 	// player and townsperson interaction
 	private function townspersonDetect(Object1:FlxObject, Object2:FlxObject):Void {
-		if (FlxG.keys.justPressed.SPACE) {
+		if (FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.E) {
 			if(Type.getClass(Object2) == TownPerson){
 				var townPersonObject:TownPerson = cast Object2;
 			
@@ -162,6 +162,8 @@ class GameState1 extends FlxState
 			
 		}
 	}
+	
+	// player and enemy interaction --- melee
 	
 	// projectile and enemy interaction
 	private function projectileDetect(Object1:FlxObject, Object2:FlxObject):Void {
