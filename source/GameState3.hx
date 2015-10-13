@@ -79,8 +79,9 @@ class GameState3 extends FlxState
 		barHealth.percent = 100;
 		add(barHealth);
 		
+		FlxG.sound.playMusic(AssetPaths.Level3__wav, 1, true);
 	}
-	
+
 	override public function update() {
 		
 		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene3()));

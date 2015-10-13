@@ -27,4 +27,9 @@ class EndState extends FlxState
 		super();
 	}
 	
+	public override function create() {
+		super.create();
+		
+		FlxG.sound.pause();
+	}
 }

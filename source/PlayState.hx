@@ -13,6 +13,7 @@ import flixel.util.FlxMath;
 class PlayState extends FlxState
 {
 	private var ui:UI;
+	private var sound:Sound;
 	private var text:String = "";
 	private var health:Int = 100;
 	
@@ -22,7 +23,10 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		ui = new UI();
+		sound = new Sound();
+		
 		add(ui);
+		add(sound);
 		
 		super.create();
 	}
@@ -50,6 +54,7 @@ class PlayState extends FlxState
 		
 		if (FlxG.keys.pressed.A) {
 			ui.updateText("Harrison Ford: Hello whale");
+			sound.scissors();
 		}
 		
 		if (FlxG.keys.pressed.B) {

@@ -66,6 +66,8 @@ class CutScene3 extends FlxState
 		
 		ui.displayFullscreenImage(backgrounds[whichBackground]);
 		
+		FlxG.sound.pause();
+		
     }
 	
 	override public function update():Void

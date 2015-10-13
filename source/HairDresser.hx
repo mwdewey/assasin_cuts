@@ -48,6 +48,9 @@ class HairDresser extends FlxSprite
 	public var spriteGroup:FlxGroup;
 	var attack_animation:FlxSprite;
 	
+	//charged effect sprite
+	var charged_effect:FlxSprite;
+	
 	
 	//health
 	public var startHP:Float;
@@ -87,6 +90,12 @@ class HairDresser extends FlxSprite
 		spriteGroup = new FlxGroup();
 		spriteGroup.add(this);
 		spriteGroup.add(attack_animation);
+		
+		//adding charged_effect sprite
+		charged_effect = new FlxSprite();
+		charged_effect.loadGraphic("assets/images/Characters/Main/charged.png", true, 64, 64);
+		charged_effect.animation.add("shine", [0, 1, 2], 8, false);
+		spriteGroup.add(charged_effect);
 		
 		this.maxVelocity.set(MAX_SPEED);
 		
@@ -131,6 +140,15 @@ class HairDresser extends FlxSprite
 			attack_animation.alpha = 1;
 		}
 		
+		//charged_effect
+		if (charged) {
+			
+		}
+		
+		if (charged_effect.animation.finished) {
+			charged_effect.alpha = 0;
+		}
+		
 	}
 	
 	//FSM states
@@ -149,6 +167,12 @@ class HairDresser extends FlxSprite
 	public function move():Void {
 		//setting child position to parent
 		attack_animation.setPosition(this.x, this.y);
+		if (face_left) {
+			charged_effect.setPosition(this.x + 25, this.y);
+		}
+		else{
+			charged_effect.setPosition(this.x, this.y);
+		}
 		
 		// movement
 		//if (isOnGround && this.isTouching(FlxObject.FLOOR) && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED;
@@ -158,7 +182,7 @@ class HairDresser extends FlxSprite
 		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) this.velocity.x = SPEED;
 		
 		
-		if (FlxG.keys.pressed.E) {
+		if (FlxG.keys.pressed.SPACE) {
 			chargetimer += FlxG.elapsed;
 			if (face_left) {
 				attack_animation.flipX = true;
@@ -166,12 +190,21 @@ class HairDresser extends FlxSprite
 			else {
 				attack_animation.flipX = false;
 			}
+			
+			if (chargetimer >= chargetime) {
+				//play the charged effect
+				charged_effect.animation.play("shine");
+				charged_effect.alpha = 1;
+			}
+			
 			attack_animation.animation.play("charge");
 			
 		}
-		else if (FlxG.keys.justReleased.E) {
+		else if (FlxG.keys.justReleased.SPACE) {
 			if (chargetimer >= chargetime) {
+				
 				charged = true;
+				
 				if (face_left) {
 					attack_animation.flipX = true;
 				}
