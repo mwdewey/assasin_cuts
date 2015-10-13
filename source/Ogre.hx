@@ -88,6 +88,8 @@ import flixel.util.FlxSpriteUtil;
 		//set HP
 		startHP = 100;
 		HP = startHP;
+	
+		setPosition(X, Y);
 	}
 	
 	
