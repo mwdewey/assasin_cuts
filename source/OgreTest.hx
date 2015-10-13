@@ -48,7 +48,7 @@ class OgreTest extends FlxState
 		player = new HairDresser();
 		add(player);
 		
-		ogre = new Ogre(600, FlxG.height - 192, player);
+		ogre = new Ogre(600, FlxG.height - 224, player);
 		add(ogre);
 		
 		projectileGroup = new FlxGroup();

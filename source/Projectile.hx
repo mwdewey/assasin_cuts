@@ -17,8 +17,9 @@ class Projectile extends FlxSprite
 	{
 		super();
 		
-		//this.loadGraphic(path,false,64,64);
-		this.makeGraphic(64,64, FlxColor.GRAY);
+		this.loadGraphic("assets/images/Characters/Main/magic_effect.png", true, 96, 96);
+		animation.add("move", [0, 2, 4, 1, 3, 5], 8, false);
+		//this.makeGraphic(64,64, FlxColor.GRAY);
 		
 		// set init position
 		this.setPosition(pos_x, pos_y);
@@ -32,11 +33,14 @@ class Projectile extends FlxSprite
 		this.velocity.y = (dY / dMax) * projectileSpeed;
 		
 		damage = 10;
+		
+		animation.play("move");
 	}
 	
 	override public function update():Void
 	{
 		super.update();
+		
 		
 	}
 	
