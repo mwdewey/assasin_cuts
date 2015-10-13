@@ -24,6 +24,7 @@ class TownPerson extends FlxSprite
 	var smokeSprite:FlxSprite;
 	var isPoof:Bool;
 	public var isCut:Bool;
+	public static var value:Int = 100; // score added if hair is cut
 
 	public function new(pos_x:Int, pos_y:Int) 
 	{
@@ -91,6 +92,9 @@ class TownPerson extends FlxSprite
 	public function cutHair() {
 		// hair is now cut
 		isCut = true;
+		
+		// add points to score
+		Reg.score += value;
 		
 		// change hair to different style
 		hairIndex = FlxRandom.intRanged(0, hairFrames.length - 1,[hairIndex]);

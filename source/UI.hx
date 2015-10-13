@@ -31,12 +31,12 @@ class UI extends FlxTypedGroup<FlxSprite>
 	
 	var goalString:String = "";
 	var goalStringIndex:Int = 0;
-	var hairCount = 0;
+	public var hairCount = 0;
 	
 	var sprFullScreen:FlxSprite;
 	
 	var MAX_LENGTH_OF_TEXT:Int = 240;
-	var TIMER_LENGTH:Int = 0 * 60 + 30 * 1;
+	public var TIMER_LENGTH:Int = 0 * 60 + 30 * 1;
 	
 	private function myCallback(Timer:FlxTimer):Void
 	{
@@ -145,6 +145,10 @@ class UI extends FlxTypedGroup<FlxSprite>
 		/*var x:Int = 20; //<-- 10 means ten percent of time left
 		if (timerClock.progress >= (1 - .01 * x) )
 			textTime.color = 0xFFFF0000;*/
+	}
+	
+	public function getRemainingTime():Int {
+		return Std.int(TIMER_LENGTH - timerClock.progress * TIMER_LENGTH);
 	}
 	
 	public function updateHairCount(haire:Int) : Void {
