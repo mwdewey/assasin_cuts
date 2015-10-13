@@ -7,6 +7,7 @@ import flash.Lib;
 import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.FlxSprite;
+import flixel.group.FlxGroup;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxCamera;
@@ -34,6 +35,17 @@ class HairDresser extends FlxSprite
 	private var stunLimit:Float; //length of stun sprite-state
 	private var attackLimit:Float; //length of attack sprite-state
 	public var isMove:Bool; //checks if in move state
+	public var charged:Bool = false; //whether the player charged up the attack
+	
+	//timer for charge attack
+	private var chargetimer:Float = 0;
+	private var chargetime:Float = 0.5;
+	
+	
+	//attack_animation_sprite
+	public var spriteGroup:FlxGroup;
+	var attack_animation:FlxSprite;
+	
 	
 	//health
 	public var startHP:Float;
@@ -61,6 +73,18 @@ class HairDresser extends FlxSprite
 		//idle animations
 		animation.add("idle_left", [0]);
 		animation.add("idle_right", [1]);
+		
+		//load attack animation
+		attack_animation = new FlxSprite();
+		attack_animation.loadGraphic("assets/images/Characters/Main/Attack.png", true, 96, 96);
+		attack_animation.animation.add("basic_attack", [1, 2, 3, 4], 12, false);
+		attack_animation.animation.add("charge", [0]);
+		attack_animation.animation.add("release", [1, 2, 3, 4, 4, 4], 12, false);
+		
+		//adding attack_animation to the group
+		spriteGroup = new FlxGroup();
+		spriteGroup.add(this);
+		spriteGroup.add(attack_animation);
 		
 		this.maxVelocity.set(MAX_SPEED);
 		
@@ -93,6 +117,15 @@ class HairDresser extends FlxSprite
 		super.update();
 		FlxG.camera.update();
 		
+		if (attack_animation.animation.finished) {
+			this.alpha = 1;
+			attack_animation.alpha = 0;
+		}
+		else {
+			this.alpha = 0;
+			attack_animation.alpha = 1;
+		}
+		
 	}
 	
 	//FSM states
@@ -109,6 +142,9 @@ class HairDresser extends FlxSprite
 	}
 	
 	public function move():Void {
+		//setting child position to parent
+		attack_animation.setPosition(this.x, this.y);
+		
 		// movement
 		//if (isOnGround && this.isTouching(FlxObject.FLOOR) && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED;
 		if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)  this.velocity.y = -SPEED;
@@ -116,24 +152,64 @@ class HairDresser extends FlxSprite
 		if (FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT) this.velocity.x  = -SPEED;
 		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) this.velocity.x = SPEED;
 		
-		// animation control
-		if (this.velocity.x > 0) { 
-			face_left = false; 
-			if (isOnGround) animation.play("run_right");
-			else animation.play("jump_right");
+		
+		if (FlxG.keys.pressed.E) {
+			chargetimer += FlxG.elapsed;
+			if (face_left) {
+				attack_animation.flipX = true;
 			}
-		else if (this.velocity.x < 0) { 
-			face_left = true; 
-			if (isOnGround) animation.play("run_left");
-			else animation.play("jump_left");
+			else {
+				attack_animation.flipX = false;
 			}
-		else if (face_left) {
-			if (isOnGround) animation.play("idle_left");
-			else animation.play("jump_left");
+			attack_animation.animation.play("charge");
+			
+		}
+		else if (FlxG.keys.justReleased.E) {
+			if (chargetimer >= chargetime) {
+				charged = true;
+				if (face_left) {
+					attack_animation.flipX = true;
+				}
+				else {
+					attack_animation.flipX = false;
+				}
+				attack_animation.animation.play("release");
+			}
+			else {
+				charged = false;
+				if (face_left) {
+					attack_animation.flipX = true;
+				}
+				else {
+					attack_animation.flipX = false;
+				}
+				attack_animation.animation.play("basic_attack");
+			}
+			chargetimer = 0;
 		}
 		else {
-			if (isOnGround) animation.play("idle_right");
-			else animation.play("jump_right");
+			//reset charged variable
+			charged = false;
+			
+			// animation control
+			if (this.velocity.x > 0) { 
+				face_left = false; 
+				if (isOnGround) animation.play("run_right");
+				else animation.play("jump_right");
+				}
+			else if (this.velocity.x < 0) { 
+				face_left = true; 
+				if (isOnGround) animation.play("run_left");
+				else animation.play("jump_left");
+				}
+			else if (face_left) {
+				if (isOnGround) animation.play("idle_left");
+				else animation.play("jump_left");
+			}
+			else {
+				if (isOnGround) animation.play("idle_right");
+				else animation.play("jump_right");
+			}
 		}
 		
 	}
