@@ -189,7 +189,7 @@ class HairDresser extends FlxSprite
 			if (chargetimer >= chargetime) {
 				//play the charged effect
 				charged_effect.animation.play("shine");
-				charged_effect.alpha = 1;	a
+				charged_effect.alpha = 1;
 			}
 			
 			attack_animation.animation.play("charge");
