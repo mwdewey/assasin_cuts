@@ -40,7 +40,7 @@ class StartState extends FlxState
 	override public function update():Void
 	{
 		if (FlxG.keys.justPressed.SPACE) FlxG.switchState(new CutScene1());
-		
+
 		super.update();
 	}	
 	

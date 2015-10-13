@@ -54,6 +54,12 @@ class GameState1 extends FlxState
 		hairDresser = new HairDresser();
 		ui = new UI();
 		
+		// set time to play
+		ui.TIMER_LENGTH = 60;
+		
+		// prevScore is score at start of level
+		Reg.prevScore = Reg.score;
+		
 		floorGroup = new FlxGroup();
 		for (i in 0...100) floorGroup.add(new StaticObject(i * 64, FlxG.height - 64, "assets/images/GroundTile.png"));
 		
@@ -91,6 +97,7 @@ class GameState1 extends FlxState
         tileMap.loadMap(mapData, mapTilePath, 64, 64);
 		
 		FlxG.sound.playMusic(AssetPaths.Level1__wav, 1, true);
+
  
 		
 		add(tempSprite);
@@ -145,6 +152,19 @@ class GameState1 extends FlxState
 				projectileGroup.add(new Projectile(hairDresser.x,hairDresser.y,hairDresser.x+200,hairDresser.y));
 		}
 		
+		// update score
+		// if score changed, update with new value
+		if (Reg.score != ui.hairCount) ui.updateHairCount(Reg.score);
+		
+		// if time runs out, switch to next stage
+		if (ui.getRemainingTime() <= 0) {
+			FlxG.camera.fade(FlxColor.BLACK, .5, false,
+			function() {
+			FlxG.switchState(new CutScene2());
+			});
+			
+		}
+		
 	}
 	
 	// player and solid ground interaction
@@ -158,10 +178,8 @@ class GameState1 extends FlxState
 		if (FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.E) {
 			if(Type.getClass(Object2) == TownPerson){
 				var townPersonObject:TownPerson = cast Object2;
-			
 				if (!townPersonObject.isCut) townPersonObject.cutHair();
 			}
-			
 		}
 	}
 	
