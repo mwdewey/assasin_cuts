@@ -39,7 +39,12 @@ class StartState extends FlxState
 	
 	override public function update():Void
 	{
+<<<<<<< HEAD
 		if (FlxG.keys.justPressed.SPACE) FlxG.switchState(new GameState3());
+=======
+		
+		if (FlxG.keys.justPressed.SPACE) FlxG.switchState(new CutScene1());
+>>>>>>> c559c4f1ccc9db0b7822f3b70d5c33c4d1ee0b6e
 		super.update();
 	}	
 	
