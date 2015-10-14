@@ -36,7 +36,7 @@ class GameState1 extends FlxState
 	var ogre:Ogre;
 	var ui:UI;
 	
-	var tempSprite:FlxSprite;
+	var sound:Sound;
 
 	public function new() 
 	{
@@ -49,6 +49,9 @@ class GameState1 extends FlxState
         super.create();
 		
 		FlxG.camera.setBounds(0, 0, 100 * 32, 100 * 32, false);
+		//FlxG.sound.playMusic(AssetPaths.Level1__wav, 1, true);
+		
+		sound = SoundFactory.getInstance();
 		
 		hairDresser = new HairDresser();
 		hairDresser.y = 32*90;
@@ -56,7 +59,7 @@ class GameState1 extends FlxState
 		
 		ui = new UI();
 		// set time to play
-		ui.setTimer(60);
+		ui.setTimer(600);
 		
 		// prevScore is score at start of level
 		// when reset occures, score is then prev score
@@ -96,9 +99,6 @@ class GameState1 extends FlxState
 		
 		// scenery
 		sceneGroup.loadMap(Assets.getText("assets/data/level1_grass.csv"), "assets/images/Levels/tilemap.png", 32, 32);
-		
-		
-		
 		
 		add(new Background());
 		add(floorGroup);
@@ -168,6 +168,7 @@ class GameState1 extends FlxState
 		
 		// do door interaction
 		if (FlxG.keys.justPressed.SPACE) {
+			sound.dooropen();
 			if (d.isOpen) {
 				d.closeDoor();
 			}

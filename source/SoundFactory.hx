@@ -6,12 +6,12 @@ package;
  */
 class SoundFactory
 {
-	var sound:Sound;
+	private static var sound:Sound;
 	
 	public static function getInstance():Sound{
-		if (this.sound == null) {
-			this.sound = new Sound();
+		if (sound == null) {
+			sound = new Sound();
 		}
-		return this.sound;
+		return sound;
 	}
 }
