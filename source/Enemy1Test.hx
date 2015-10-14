@@ -109,7 +109,6 @@ class Enemy1Test extends FlxState
 		FlxG.collide(player, floor);
 		
 		// Ogre attacks when it and player overlap
-		if (ogre.isMove) FlxG.overlap(player, ogre, enemyDetect);
 		//Ogre takes damage when overlaps with pProjectile
 		FlxG.overlap(pProjectiles, ogre, pProjectileDetect);
 		//player takes damage when overlaps with eProjectile
@@ -182,16 +181,6 @@ class Enemy1Test extends FlxState
 		}
 	}
 	
-	// player and enemy interaction
-	private function enemyDetect(Object1:FlxObject, Object2:FlxObject):Void {
-		if (player.isAttack) {
-			ogre.takeDamage(player.damage);
-			updateHealthBar();
-			ogreDeath();
-			player.isAttack = false;
-		}
-		ogre.startAttack();
-	}
 	
 	// update projectiles: if too far from player, destroy it
 	private function projectileUpdate(Object:FlxObject):Void {
@@ -207,7 +196,7 @@ class Enemy1Test extends FlxState
 		var p:Projectile = cast Object1;
 		var ogre:Ogre = cast Object2;
 		
-		ogre.takeDamage(p.damage);
+
 		updateHealthBar();
 		ogreDeath();
 		

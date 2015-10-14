@@ -51,6 +51,9 @@ import flixel.tweens.FlxEase;
 	
 	public var _player:HairDresser;
 	
+	private var sound = SoundFactory.getInstance();
+	private var sound_recent:Int = 0;
+	
 	
 	public function new(X:Float=0, Y:Float=0, player:HairDresser) {
 		super(X, Y);
@@ -160,6 +163,11 @@ import flixel.tweens.FlxEase;
 	}
 	
 	public function attack():Void {
+		if (sound_recent==0) {
+			sound.clubthud();
+			sound_recent = 30;
+		}
+		 
 		//when animation is finished, switch to move state
 		if (Timer <= 0) {
 			_brain.activeState = move;
@@ -168,10 +176,12 @@ import flixel.tweens.FlxEase;
 		}
 		else Timer -= 1;
 		animation.play("hammer_right");
+		 
 		//If player is still overlapped with ogre, it takes damage
 		if (animation.curAnim.curFrame == 1) {
 			FlxG.overlap(this, _player, dealDamage);
 		}
+		
 	}
 	
 	public function dealDamage(Object1:FlxObject, Object2:FlxObject):Void {
@@ -219,6 +229,8 @@ import flixel.tweens.FlxEase;
 		
 		//update FSM
 		_brain.update();
+		
+		if (sound_recent > 0) sound_recent--;
 		
 		super.update();
 	}

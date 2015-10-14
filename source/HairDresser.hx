@@ -225,6 +225,7 @@ class HairDresser extends FlxSprite
 					attack_animation.flipX = false;
 				}
 				attack_animation.animation.play("release");
+				sound.swoosh();
 			}
 			else {
 				charged = false;
@@ -282,6 +283,7 @@ class HairDresser extends FlxSprite
 			Timer = stunLimit;
 			_brain.activeState = stun;
 			isMove = false;
+			sound.elliehurt();
 		}
 	}
 	
