@@ -100,7 +100,7 @@ import flixel.tweens.FlxEase;
 		
 		//set attack variables
 		swingDist = 200;
-		damage = 10;
+		damage = 20;
 		hitsPlayer = false;
 		
 		//set HP

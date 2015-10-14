@@ -141,7 +141,7 @@ class GameState1 extends FlxState
 		FlxG.overlap(hairDresser, doorGroup, doorDetect);
 		
 		//update projectiles
-		for (obj in pProjectiles) {
+		for (obj in projectileGroup) {
 			var p:Projectile = cast obj;
 			projectileUpdate(p);
 		}

@@ -245,7 +245,7 @@ class GameState3 extends FlxState
 	//destroy player
 	public function playerDestroy(t:FlxTween):Void {
 		player.destroy();
-		//FlxG.switchState(new RestartState(new CutScene3()));
+		FlxG.switchState(new RestartState(new CutScene3()));
 	}
 	
 }
