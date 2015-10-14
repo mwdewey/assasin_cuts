@@ -25,6 +25,7 @@ class GameState2 extends FlxState
 	var floorGroup:FlxTilemap;
 	var wallGroup:FlxTilemap;
 	var sceneGroup:FlxTilemap;
+	var enemyGroup:FlxGroup;
 		
 	var hairDresser:HairDresser;
 	var ui:UI;
@@ -61,6 +62,7 @@ class GameState2 extends FlxState
 		floorGroup = new FlxTilemap();
 		wallGroup = new FlxTilemap();
 		sceneGroup = new FlxTilemap();
+		enemyGroup = new FlxGroup();
 		
 		// floor
         floorGroup.loadMap(Assets.getText("assets/data/level2_floor.csv"), "assets/images/Levels/tilemap.png", 32, 32);
@@ -71,10 +73,19 @@ class GameState2 extends FlxState
 		// scenery
 		//sceneGroup.loadMap(Assets.getText("assets/data/level2_grass.csv"), "assets/images/Levels/tilemap.png", 32, 32);
 		
+		// enemies
+		var refs:Array<PositionRef> =  TileMapLoader.load(100, 100, 32, 32, "assets/data/level2_enemy.csv");
+		for (ref in refs) {
+			if(ref.index != -1){
+				enemyGroup.add(new Enemy1(ref.x,ref.y));
+			}
+		}
+		
 		add(new Background());
 		add(floorGroup);
 		add(sceneGroup);
 		add(wallGroup);
+		add(enemyGroup);
 		
 		add(hairDresser.spriteGroup);
 		add(ui);
