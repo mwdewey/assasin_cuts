@@ -30,9 +30,6 @@ class GameState1 extends FlxState
 	var sceneGroup:FlxTilemap;
 		
 	var hairDresser:HairDresser;
-	var s1:StaticObject;
-	var s2:StaticObject;
-	var s3:StaticObject;
 	var ogre:Ogre;
 	var ui:UI;
 	
@@ -59,7 +56,7 @@ class GameState1 extends FlxState
 		
 		ui = new UI();
 		// set time to play
-		ui.setTimer(600);
+		ui.setTimer(10);
 		
 		// prevScore is score at start of level
 		// when reset occures, score is then prev score
@@ -134,6 +131,9 @@ class GameState1 extends FlxState
 		
 		// if time runs out, switch to next stage
 		if (ui.getRemainingTime() <= 0) {
+			Reg.hair_x = hairDresser.x;
+			Reg.hair_y = hairDresser.y;
+			
 			FlxG.camera.fade(FlxColor.BLACK, .5, false,
 			function() {
 			FlxG.switchState(new CutScene2());
