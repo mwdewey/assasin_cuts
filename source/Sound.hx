@@ -42,7 +42,6 @@ class Sound extends FlxTypedGroup<FlxSound>
 	public function new() 
 	{
 		super();
-		
 		boomeRang = FlxG.sound.load(AssetPaths.boomerang__wav);	
 		clubThud = FlxG.sound.load(AssetPaths.clubthud__wav);
 		doorOpen = FlxG.sound.load(AssetPaths.dooropen__wav);

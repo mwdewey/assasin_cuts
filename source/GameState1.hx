@@ -22,7 +22,7 @@ class GameState1 extends FlxState
 	{
 		
 	var floorGroup:FlxGroup;
-	var obsticalGroup:FlxGroup;
+	var wallGroup:FlxGroup;
 	var floorList:List<StaticObject>;
 	var enemyGroup:FlxGroup;
 	var townPeopleGroup:FlxGroup;
@@ -52,30 +52,22 @@ class GameState1 extends FlxState
         super.create();
 		
 		hairDresser = new HairDresser();
-		ui = new UI();
+		hairDresser.y = FlxG.height - hairDresser.height;
+		hairDresser.x = 32;
 		
+		ui = new UI();
 		// set time to play
-		ui.TIMER_LENGTH = 60;
+		ui.setTimer(600);
 		
 		// prevScore is score at start of level
+		// when reset occures, score is then prev score
 		Reg.prevScore = Reg.score;
 		
 		floorGroup = new FlxGroup();
-		for (i in 0...100) floorGroup.add(new StaticObject(i * 64, FlxG.height - 64, "assets/images/GroundTile.png"));
+		for (i in 0...100) floorGroup.add(new StaticObject(i * 32, FlxG.height, AssetPaths.dirt_0__png));
+		for (i in 0...10)  floorGroup.add(new StaticObject(i * 32, FlxG.height, AssetPaths.dirt_0__png));
 		
-		obsticalGroup = new FlxGroup();
-		for (i in 0...25) obsticalGroup.add(new StaticObject(i * 400, 500, "assets/images/GroundTile.png"));
-		
-		tempSprite = new FlxSprite();
-		tempSprite.loadGraphic("assets/images/Muro Sunset.png", false, 1024, 768);
-		tempSprite.scrollFactor.set();
-		
-		enemyGroup = new FlxGroup();
-		for (i in 0...25) {
-			//var n_enemy:Enemy2 = new Enemy2(i * 400, 500 - 192);
-			enemyGroup.add(new Enemy2(i * 400, 500 - 192).spriteGroup);
-		}
-		
+		wallGroup = new FlxGroup();
 		
 		projectileGroup = new FlxGroup();
 		
@@ -83,34 +75,23 @@ class GameState1 extends FlxState
 		doorCollidableGroup = new FlxGroup();
 		for (i in 0...25) {
 			var d:Door = new Door(i * 400, FlxG.height - 64 - 128);
-			doorGroup.add(d);
-			doorCollidableGroup.add(d.hitBox);
+			//doorGroup.add(d);
+			//doorCollidableGroup.add(d.hitBox);
 		}
 		
 		townPeopleGroup = new FlxGroup();
 		for (i in 0...25) townPeopleGroup.add((new TownPerson(i * 400-200, 500 - 192)).spriteGroup);
 		
-		
-		tileMap = new FlxTilemap();
-        var mapData:String = Assets.getText("assets/data/Widebrook Stage..csv");
-        var mapTilePath:String = "assets/images/Walls.png";
-        tileMap.loadMap(mapData, mapTilePath, 64, 64);
-		
-		FlxG.sound.playMusic(AssetPaths.Level1__wav, 1, true);
+		FlxG.sound.playMusic("assets/music/Level1.wav", 1, true);
 
- 
-		
 		add(tempSprite);
 		add(new Background());
 		add(projectileGroup);
 		add(floorGroup);
-		add(obsticalGroup);
-		add(enemyGroup);
+		add(wallGroup);
 		add(doorGroup);
 		add(doorCollidableGroup);
 		add(townPeopleGroup);
-		
-		//add(tileMap);
 		
 		add(hairDresser.spriteGroup);
 		add(ui);
@@ -122,28 +103,15 @@ class GameState1 extends FlxState
 		
 		// check if on ground
 		hairDresser.isOnGround = false;
-		FlxG.overlap(hairDresser, obsticalGroup, goundDetect);
 		FlxG.collide(hairDresser, floorGroup, goundDetect);
-		//FlxG.overlap(hairDresser, tileMap,goundDetect);
 		
 		// move character
-		FlxG.collide(hairDresser, obsticalGroup);
+		FlxG.collide(hairDresser, wallGroup);
 		FlxG.collide(hairDresser, floorGroup);
-		//FlxG.collide(hairDresser, tileMap);
-		
-		// update ref
-		Reg.ref_x = FlxG.camera.scroll.x;
-		Reg.ref_y = FlxG.camera.scroll.y;
 		
 		// check overlapable obejcts
 		FlxG.overlap(hairDresser, townPeopleGroup, townspersonDetect);
-		FlxG.overlap(projectileGroup, enemyGroup, projectileDetect);
-		FlxG.overlap(hairDresser,doorGroup,doorDetect);
-		
-		
-		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene1()));
-		else if (FlxG.keys.justPressed.F5) FlxG.switchState(new CutScene2());
-
+		FlxG.overlap(hairDresser, doorGroup, doorDetect);
 		
 		if (hairDresser.charged) {
 			if(hairDresser.face_left)
@@ -183,19 +151,6 @@ class GameState1 extends FlxState
 		}
 	}
 	
-	// player and enemy interaction --- melee
-	
-	// projectile and enemy interaction
-	private function projectileDetect(Object1:FlxObject, Object2:FlxObject):Void {
-		var p:Projectile = cast Object1;
-		var e:Enemy1 = cast Object2;
-		
-		e.makeGraphic(64, 128, FlxColor.CRIMSON);
-		
-		p.destroy();
-		
-	}
-	
 	// hairDresser and door interaction
 	private function doorDetect(Object1:FlxObject, Object2:FlxObject):Void {
 		var p:HairDresser = cast Object1;
@@ -204,6 +159,7 @@ class GameState1 extends FlxState
 		// check collision with inner hitbox if door is closed
 		if (!d.isOpen) FlxG.collide(p,d.hitBox);
 		
+		// do door interaction
 		if (FlxG.keys.justPressed.SPACE) {
 			if (d.isOpen) {
 				d.closeDoor();

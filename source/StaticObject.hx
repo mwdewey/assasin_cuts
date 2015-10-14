@@ -17,15 +17,12 @@ class StaticObject extends FlxSprite
 {
 	var pos_x:Int;
 	var pos_y:Int;
-	
-	var w:Int;
-	var h:Int;
 
 	public function new(pos_x:Int, pos_y:Int, path:String) 
 	{
 		super();
 		
-		this.loadGraphic(path,false,64,64);
+		this.loadGraphic(path,false,32,32);
 		
 		this.setPosition(pos_x,pos_y);
 		this.immovable = true;

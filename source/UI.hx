@@ -39,12 +39,6 @@ class UI extends FlxTypedGroup<FlxSprite>
 	var MAX_LENGTH_OF_TEXT:Int = 240;
 	public var TIMER_LENGTH:Int = 0 * 60 + 30 * 1;
 	
-	private function myCallback(Timer:FlxTimer):Void
-	{
-		trace("Yeehaw");
-	}
-
-
 	public function new() 
 	{
 		super();
@@ -72,7 +66,7 @@ class UI extends FlxTypedGroup<FlxSprite>
 		textHair.color = 0xFF000000;
 		textTime = new FlxText(5, 5, 85, "5:00", 20);
 		textTime.color = 0xFF000000;
-		timerClock = new FlxTimer(TIMER_LENGTH, myCallback, 1);
+		timerClock = new FlxTimer(TIMER_LENGTH, null, 1);
 		sprFullScreen = new FlxSprite(0, 0, "assets/images/racoon.jpg");
 		sprFullScreen.alpha = 0;
 		
@@ -133,6 +127,11 @@ class UI extends FlxTypedGroup<FlxSprite>
 		waitframe = frame + texte.length + 900; //This relies upon the fact that we draw one letter per frame
 	}
 	
+	public function setTimer(duration:Int) {
+		TIMER_LENGTH = duration;
+		timerClock = new FlxTimer(duration, null, 1);
+	}
+	
 	private function updateClockDisplay() {
 		var seconds_left:Int = Std.int(TIMER_LENGTH - timerClock.progress * TIMER_LENGTH);
 		var min:String = Std.string(Std.int(seconds_left / 60));
@@ -153,7 +152,7 @@ class UI extends FlxTypedGroup<FlxSprite>
 	}
 	
 	public function getRemainingTime():Int {
-		return Std.int(TIMER_LENGTH - timerClock.progress * TIMER_LENGTH);
+		return Std.int(TIMER_LENGTH - timerClock.progress);
 	}
 	
 	public function updateHairCount(haire:Int) : Void {

@@ -7,7 +7,8 @@ import flixel.util.FlxRandom;
 
 class TownPerson extends FlxSprite
 {
-	var walkFrames:Array<Array<Int>> = [[0, 6], [12, 18]];
+	var walkFrames:Array<Array<Int>> = [[0, 6], [18, 12]];
+	var walkIndex:Int;
 	var topFrames:Array<Int> = [1, 7, 13];
 	var bottomFrames:Array<Int> = [3, 19];
 	var hairFrames:Array<Int> = [3, 4, 5, 8, 9, 10, 11, 14, 15, 16, 17, 21, 22, 23];
@@ -33,7 +34,8 @@ class TownPerson extends FlxSprite
 		//this.makeGraphic(64, 128, FlxColor.AZURE);
 		var resLocation:String = "assets/images/Characters/TownPeople/TownPeople_0.png";
 		this.loadGraphic(resLocation, true, 64, 96);
-		this.animation.add("idle", walkFrames[FlxRandom.intRanged(0, walkFrames.length-1)], 8, true);
+		walkIndex = FlxRandom.intRanged(0, walkFrames.length - 1);
+		this.animation.add("idle", walkFrames[walkIndex], 8, true);
 		this.animation.play("idle");
 		this.setPosition(pos_x, pos_y);
 		isCut = false;
@@ -100,6 +102,10 @@ class TownPerson extends FlxSprite
 		hairIndex = FlxRandom.intRanged(0, hairFrames.length - 1,[hairIndex]);
 		hair_sprite.animation.add("idle2", [hairFrames[hairIndex]], 1, true);
 		hair_sprite.animation.play("idle2");
+		
+		// stop foot from tapping
+		this.animation.add("idleEnd", [walkFrames[walkIndex][0]], 1, true);
+		this.animation.play("idleEnd");
 		
 		// do poof animation
 		startPoof();
