@@ -58,6 +58,10 @@ class GameState3 extends FlxState
 		background.scrollFactor.set();
 		add(background);
 		
+		scenary = new FlxTilemap();
+		scenary.loadMap(Assets.getText("assets/data/level3_scenary.csv"), "assets/images/Levels/tilemap.png", 32, 32);
+		add(scenary);
+		
 		floor = new FlxTilemap();
 		floor.loadMap(Assets.getText("assets/data/level3_floor.csv"), "assets/images/Levels/tilemap.png", 32, 32);
 		//for(i in 0...40) floor.add(new StaticObject(i*32, FlxG.height-32, "assets/images/GroundTile.png"));
@@ -67,9 +71,7 @@ class GameState3 extends FlxState
 		obstacles.loadMap(Assets.getText("assets/data/level3_obstacle.csv"), "assets/images/Levels/tilemap.png", 32, 32);
 		add(obstacles);
 		
-		scenary = new FlxTilemap();
-		scenary.loadMap(Assets.getText("assets/data/level3_scenary.csv"), "assets/images/Levels/tilemap.png", 32, 32);
-		add(scenary);
+		
 		
 		player = new HairDresser();
 		add(player.spriteGroup);
