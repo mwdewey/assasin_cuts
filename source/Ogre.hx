@@ -58,7 +58,7 @@ import flixel.tweens.FlxEase;
 		//run animations
 		animation.add("run_right", [0,1,2,1], 8, true);
 		//attack animations
-		animation.add("hammer_right", [3, 4, 5, 5, 5], 6, false);
+		animation.add("hammer_right", [3, 4, 5, 5, 5, 5], 6, false);
 		//idle animations
 		animation.add("idle_right", [1]);
 		
@@ -83,7 +83,7 @@ import flixel.tweens.FlxEase;
 		
 		//set attack variables
 		swingDist = 100;
-		damage = 20;
+		damage = 10;
 		hitsPlayer = false;
 		
 		//set HP
@@ -109,7 +109,7 @@ import flixel.tweens.FlxEase;
 	public function move():Void {
 		//move towards player
 		FlxVelocity.moveTowardsPoint(this, movePoint, Std.int(maxSpeed));
-		if (this.velocity.x > 0) { 
+		if (this.velocity.x > 0) {
 			facing = FlxObject.RIGHT; 
 			animation.play("run_right");
 		}
@@ -138,7 +138,13 @@ import flixel.tweens.FlxEase;
 	
 	public function dealDamage(Object1:FlxObject, Object2:FlxObject):Void {
 		if (!hitsPlayer) {
-			hitsPlayer = true;	
+			hitsPlayer = true;
+			var direction:Int;
+			//passes int value to player specifying recoil direction. 1=left, 2=right
+			if (this.facing == FlxObject.LEFT) direction = -1;
+			else direction = 1;
+			trace(direction);
+			_player.setPosition(this.x + (direction * 100), this.y);
 			_player.takeDamage(damage);
 		}
 	}
@@ -173,15 +179,4 @@ import flixel.tweens.FlxEase;
 		super.update();
 	}
 	
-	//fades when kill is called
-	override public function kill():Void
-	{
-		alive = false;
-		FlxTween.tween(this, { alpha:0, y:y - 16 }, .5, { ease:FlxEase.circOut, complete:finishKill } );
-	}
-
-	private function finishKill(_):Void
-	{
-		exists = false;
-	}
 }
