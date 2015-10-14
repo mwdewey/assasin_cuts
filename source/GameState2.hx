@@ -15,6 +15,7 @@ import flixel.FlxObject;
 import flixel.tile.FlxTilemap;
 import openfl.Assets;
 import flixel.FlxBasic;
+import flixel.tweens.FlxTween;
 import sys.io.File;
 
 using flixel.util.FlxSpriteUtil;
@@ -26,6 +27,7 @@ class GameState2 extends FlxState
 	var wallGroup:FlxTilemap;
 	var sceneGroup:FlxTilemap;
 	var enemyGroup:FlxGroup;
+	var eProjectiles:FlxGroup;
 		
 	var hairDresser:HairDresser;
 	var ui:UI;
@@ -63,6 +65,7 @@ class GameState2 extends FlxState
 		wallGroup = new FlxTilemap();
 		sceneGroup = new FlxTilemap();
 		enemyGroup = new FlxGroup();
+		eProjectiles = new FlxGroup();
 		
 		// floor
         floorGroup.loadMap(Assets.getText("assets/data/level2_floor.csv"), "assets/images/Levels/tilemap.png", 32, 32);
@@ -86,6 +89,7 @@ class GameState2 extends FlxState
 		add(sceneGroup);
 		add(wallGroup);
 		add(enemyGroup);
+		add(eProjectiles);
 		
 		add(hairDresser.spriteGroup);
 		add(ui);
@@ -112,6 +116,19 @@ class GameState2 extends FlxState
 			
 		}
 		
+		if (Reg.score != ui.hairCount) ui.updateHairCount(Reg.score);
+		
+		for (obj in enemyGroup) {
+			var enemy:Enemy1 = cast obj;
+			enemy.shootAtEllie(hairDresser, eProjectiles);
+			enemy.updateEnemyFacing(hairDresser);
+			enemy.detectContact(hairDresser, enemyGroup);
+			if (enemy.detectDeath(enemyGroup)) Reg.score+=100;
+		}
+		
+		FlxG.overlap(eProjectiles, hairDresser, eProjectileDetect);
+		
+		
 	}
 	
 	// player and solid ground interaction
@@ -120,4 +137,29 @@ class GameState2 extends FlxState
 		hairDresser.isOnGround = true;
 	}
 	
+	//destroy player
+	public function playerDestroy(t:FlxTween):Void {
+		hairDresser.kill();
+		//FlxG.switchState(new RestartState(new CutScene3()));
+	}
+	
+	public function playerDeath():Void {
+		if (hairDresser.HP <= 0) {
+			FlxSpriteUtil.fadeOut(hairDresser, 0.5, false, playerDestroy);
+		}
+	}
+	
+	private function eProjectileDetect(Object1:FlxObject, Object2:FlxObject):Void {
+		var p:Projectile2 = cast Object1;
+		var player:HairDresser = cast Object2;
+		//shifts player position during stun
+		var direction:Int;
+		if (p.velocity.x < 0) direction = -1;
+		else direction = 1;
+		player.setPosition(player.x + (direction * 10), player.y);
+		ui.updateHealthBar(player.takeDamage(p.damage));
+		playerDeath();
+		
+		p.destroy();
+	}
 }

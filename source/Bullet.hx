@@ -14,6 +14,7 @@ class Bullet extends FlxSprite
 	var aim_x:Float;
 	var aim_y:Float;
 	public var damage:Float;
+	private var lifetime:Int = 100;
 
 	public function new(pos_x:Float, pos_y:Float,player:HairDresser) 
 	{
@@ -41,6 +42,11 @@ class Bullet extends FlxSprite
 	override public function update():Void
 	{
 		super.update();
+		
+		lifetime--;
+		if (lifetime <= 0) {
+			destroy();
+		}
 		
 		
 	}

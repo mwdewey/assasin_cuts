@@ -61,6 +61,7 @@ class HairDresser extends FlxSprite
 	//health
 	public var startHP:Float;
 	public var HP:Float;
+	public var godMode:Bool=false;
 	
 	public function new() 
 	{
@@ -154,6 +155,14 @@ class HairDresser extends FlxSprite
 		
 		if (charged_effect.animation.finished) {
 			charged_effect.alpha = 0;
+		}
+		
+		if (godMode) {
+			HP = 100;
+		}
+		
+		if (FlxG.keys.justReleased.P) {
+			HP = 100;
 		}
 		
 		
@@ -274,7 +283,7 @@ class HairDresser extends FlxSprite
 	}
 	
 	//takes damage; switches to stun
-	public function takeDamage(damage:Float) {
+	public function takeDamage(damage:Float):Float {
 		HP -= damage;
 		trace(HP);
 		//if not already stunned, set timer and switch to stun
@@ -285,6 +294,7 @@ class HairDresser extends FlxSprite
 			isMove = false;
 			sound.elliehurt();
 		}
+		return HP;
 	}
 	
 }

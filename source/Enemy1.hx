@@ -185,13 +185,15 @@ class Enemy1 extends FlxSprite
 	
 	}
 	
-	public function detectDeath(enemies:FlxGroup) {
+	public function detectDeath(enemies:FlxGroup):Bool {
 		if (health <= 0) {
 			//sound.enemydie();
 			this.destroy();
 			enemies.remove(this);
+			return true;
 			
 		}
+		return false;
 		
 	}
 	
