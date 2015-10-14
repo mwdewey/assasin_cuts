@@ -114,7 +114,7 @@ class Enemy1 extends FlxSprite
 			if (FlxMath.distanceBetween(this, player) < 50 && this.surprised<30) this.surprised = 0;
 			
 			if (this.isFiring) {
-				var newP:Bullet = new Bullet(this.x, this.y - 10, player);
+				var newP:Bullet = new Bullet(this.x, this.y + 20, player);
 				sound.enemyshoot();
 				if (this.flipX) {
 					newP.flipX = true;
@@ -187,6 +187,7 @@ class Enemy1 extends FlxSprite
 	
 	public function detectDeath(enemies:FlxGroup) {
 		if (health <= 0) {
+			//sound.enemydie();
 			this.destroy();
 			enemies.remove(this);
 			
