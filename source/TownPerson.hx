@@ -88,6 +88,15 @@ class TownPerson extends FlxSprite
 		smokeSprite.alpha = 0;
 		isPoof = false;
 		
+		if (FlxRandom.intRanged(0, 3) > 1.5) {
+			this.flipX = true;
+			this.hair_sprite.flipX = true;
+			this.top_sprite1.flipX = true;
+			this.top_sprite2.flipX = true;
+			this.top_sprite3.flipX = true;
+			this.bottom_sprite.flipX = true;
+		}
+		
 		spriteGroup.add(this);
 		spriteGroup.add(top_sprite1);
 		spriteGroup.add(top_sprite2);

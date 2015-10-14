@@ -25,8 +25,8 @@ using flixel.util.FlxSpriteUtil;
 class HairDresser extends FlxSprite
 {
 	//movement and position
-	public static var MAX_SPEED:Int = 1000;
-	public static var SPEED:Int = 850;
+	public static var MAX_SPEED:Int = 750;
+	public static var SPEED:Int = 600;
 	public var centerX:Float;
 	public var centerY:Float;
 	public var isOnGround:Bool;
@@ -111,7 +111,7 @@ class HairDresser extends FlxSprite
 		centerY = this.height / 2;
 		
 		// set gravity
-		this.acceleration.y = 1500;
+		this.acceleration.y = 2000;
 		this.acceleration.x = 0;
 		
 		//_brain starts in move
@@ -192,7 +192,7 @@ class HairDresser extends FlxSprite
 		}
 		
 		// movement
-		if (isOnGround && this.isTouching(FlxObject.FLOOR) && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED;
+		if (isOnGround && this.isTouching(FlxObject.FLOOR) && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED - 300;
 		//if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP) {  this.velocity.y = -SPEED;}
 		if (FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN)  this.velocity.y = SPEED;
 		if (FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT) this.velocity.x  = -SPEED;
