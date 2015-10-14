@@ -11,10 +11,9 @@ import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 
-using flixel.util.FlxSpriteUtil;
-
-class StaticObject extends FlxSprite
+class SceneObject extends FlxSprite
 {
+
 	var pos_x:Int;
 	var pos_y:Int;
 
@@ -33,7 +32,5 @@ class StaticObject extends FlxSprite
 		super.update();
 		
 	}
-	
-	
 	
 }

@@ -24,6 +24,7 @@ class GameState3 extends FlxState
 {
 	var player:HairDresser;
 	var ogre:Ogre;
+	var hammer:Hammer;
 	var enemies:FlxGroup;
 	//var enemies_1:FlxGroup;
 	
@@ -52,22 +53,20 @@ class GameState3 extends FlxState
 		add(background);
 		
 		floor = new FlxGroup();
-		for(i in 0...20) floor.add(new StaticObject(i*64, FlxG.height-64, "assets/images/GroundTile.png"));
+		for(i in 0...40) floor.add(new StaticObject(i*32, FlxG.height-32, "assets/images/GroundTile.png"));
 		add(floor);
 		
 		player = new HairDresser();
 		add(player.spriteGroup);
 		
-		ogre = new Ogre(600, FlxG.height - 210, player);
+		ogre = new Ogre(600, FlxG.height - 255, player);
 		add(ogre);
+		hammer = ogre._hammer;
+		add(hammer);
 		
 		enemies = new FlxGroup();
 		for (i in 0...2) enemies.add(new Enemy2(20+(i*800), FlxG.height - 160));
 		add(enemies);
-		
-		/*enemies_1 = new FlxGroup();
-		for (i in 0...2) enemies_1.add(new Enemy1(820+(i*400), FlxG.height - 160));
-		add(enemies_1);*/
 		
 		pProjectiles = new FlxGroup();
 		add(pProjectiles);
@@ -99,9 +98,12 @@ class GameState3 extends FlxState
 		
 		//check collisions
 		FlxG.collide(player, floor);
+		FlxG.collide(ogre, floor);
 		
-		// Ogre attacks when it and player overlap
-		if (ogre.isMove) FlxG.overlap(player, ogre, enemyDetect);
+		// Ogre attacks when player and _hammer overlap
+		if(ogre.isMove) FlxG.overlap(player, ogre._hammer, ogreAttack);
+		//player can attack when player and ogre overlap
+		FlxG.overlap(player, ogre, playerAttack);
 		//Ogre takes damage when overlaps with pProjectile
 		FlxG.overlap(pProjectiles, ogre, pProjectileDetect);
 		//player takes damage when overlaps with eProjectile
@@ -169,14 +171,16 @@ class GameState3 extends FlxState
 	}
 	
 	// player and enemy interaction
-	private function enemyDetect(Object1:FlxObject, Object2:FlxObject):Void {
+	private function ogreAttack(Object1:FlxObject, Object2:FlxObject):Void {
+		ogre.startAttack();
+	}
+	private function playerAttack(Object1:FlxObject, Object2:FlxObject):Void {
 		if (player.isAttack) {
-			ogre.takeDamage(player.damage);
+			ogre.takeDamage(player.damage, false);
 			updateHealthBar();
 			ogreDeath();
 			player.isAttack = false;
 		}
-		ogre.startAttack();
 	}
 	
 	// update projectiles: if too far from player, destroy it
@@ -193,7 +197,7 @@ class GameState3 extends FlxState
 		var p:Projectile = cast Object1;
 		var ogre:Ogre = cast Object2;
 		
-		ogre.takeDamage(p.damage);
+		ogre.takeDamage(p.damage, true);
 		updateHealthBar();
 		ogreDeath();
 		
@@ -241,7 +245,7 @@ class GameState3 extends FlxState
 	//destroy player
 	public function playerDestroy(t:FlxTween):Void {
 		player.destroy();
-		//FlxG.switchState(new RestartState(new CutScene3()));
+		FlxG.switchState(new RestartState(new CutScene3()));
 	}
 	
 }

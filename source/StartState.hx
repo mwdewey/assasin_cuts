@@ -30,7 +30,7 @@ class StartState extends FlxState
 		super.create();
 		
 		FlxG.mouse.visible = false;
-		FlxG.worldBounds.setSize(100000, 1000);
+		FlxG.worldBounds.setSize(5000, 5000);
 		
 		labelTest = new FlxText(0, FlxG.height / 2, FlxG.width, "Press SPACE to start");
 		labelTest.setFormat(null, 40, FlxColor.WHITE, "center");
@@ -38,9 +38,8 @@ class StartState extends FlxState
     }
 	
 	override public function update():Void
-	{		
-		if (FlxG.keys.justPressed.SPACE) FlxG.switchState(new Enemy1Test());
-
+	{
+		if (FlxG.keys.justPressed.SPACE) FlxG.switchState(new GameState3());
 		super.update();
 	}	
 	
