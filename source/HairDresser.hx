@@ -54,6 +54,9 @@ class HairDresser extends FlxSprite
 	//charged effect sprite
 	var charged_effect:FlxSprite;
 	
+	//sound
+	private var sound = SoundFactory.getInstance();
+	
 	
 	//health
 	public var startHP:Float;
@@ -137,6 +140,7 @@ class HairDresser extends FlxSprite
 		if (attack_animation.animation.finished) {
 			this.alpha = 1;
 			attack_animation.alpha = 0;
+			isAttack = false; 
 		}
 		else {
 			this.alpha = 0;
@@ -151,6 +155,7 @@ class HairDresser extends FlxSprite
 		if (charged_effect.animation.finished) {
 			charged_effect.alpha = 0;
 		}
+		
 		
 	}
 	
@@ -178,6 +183,8 @@ class HairDresser extends FlxSprite
 		}
 		
 		// movement
+		//if (isOnGround && this.isTouching(FlxObject.FLOOR) && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED;
+		if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP) {  this.velocity.y = -SPEED;}
 		if (isOnGround && this.isTouching(FlxObject.FLOOR) && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED;
 		//if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)  this.velocity.y = -SPEED;
 		if (FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN)  this.velocity.y = SPEED;
@@ -229,6 +236,9 @@ class HairDresser extends FlxSprite
 				}
 				attack_animation.animation.play("basic_attack");
 				isAttack = true;
+				
+				sound.scissors();
+				
 			}
 			chargetimer = 0;
 		}
@@ -258,7 +268,7 @@ class HairDresser extends FlxSprite
 		}
 		//if basic_attack or any non-looping animation is finished,
 		//set isAttack equal to false
-		if (animation.finished) isAttack = false;
+		if (animation.finished) { isAttack = false; trace("isAttack=false");}
 		
 	}
 	

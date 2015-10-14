@@ -8,7 +8,6 @@ import flixel.FlxState;
 import flixel.FlxG;
 import flixel.FlxSubState;
 import flixel.group.FlxGroup;
-import flixel.tile.FlxTilemap;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.FlxObject;
@@ -16,31 +15,31 @@ import flixel.ui.FlxBar;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxTimer;
-//import openfl.display.Tilemap;
-import openfl.Assets;
-
+import flixel.util.FlxMath;
 
 /**
  * ...
- * @author Robert
+ * @author Robert, modifier Kevin 
  */
-class GameState3 extends FlxState 
+class Enemy1Test extends FlxState 
 {
 	var player:HairDresser;
 	var ogre:Ogre;
-	var hammer:Hammer;
 	var enemies:FlxGroup;
 	//var enemies_1:FlxGroup;
 	
-	var floor:FlxTilemap;
+	var floor:FlxGroup;
 	
 	var pProjectiles:FlxGroup;
 	var eProjectiles:FlxGroup;
 	
 	var ui:UI;
 	var barHealth:FlxBar;
+	var sound:Sound;
 	
 	var background:FlxSprite;
+	
+	var frame:Int = 0;
 	
 	
 	public function new() 
@@ -56,22 +55,23 @@ class GameState3 extends FlxState
 		background.scrollFactor.set();
 		add(background);
 		
-		floor = new FlxTilemap();
-		floor.loadMap(Assets.getText("assets/data/level3_floor.csv"), "assets/images/Levels/tilemap.png", 32, 32);
-		//for(i in 0...40) floor.add(new StaticObject(i*32, FlxG.height-32, "assets/images/GroundTile.png"));
+		floor = new FlxGroup();
+		for(i in 0...20) floor.add(new StaticObject(i*64, FlxG.height-64, "assets/images/GroundTile.png"));
 		add(floor);
 		
 		player = new HairDresser();
 		add(player.spriteGroup);
 		
-		ogre = new Ogre(600, FlxG.height - 255, player);
-		add(ogre);
-		hammer = ogre._hammer;
-		add(hammer);
+		ogre = new Ogre(600, FlxG.height - 210, player);
+		//add(ogre);
 		
 		enemies = new FlxGroup();
-		for (i in 0...2) enemies.add(new Enemy2(20+(i*800), FlxG.height - 160));
+		for (i in 0...2) enemies.add(new Enemy1(20+(i*800), FlxG.height - 160));
 		add(enemies);
+		
+		/*enemies_1 = new FlxGroup();
+		for (i in 0...2) enemies_1.add(new Enemy1(820+(i*400), FlxG.height - 160));
+		add(enemies_1);*/
 		
 		pProjectiles = new FlxGroup();
 		add(pProjectiles);
@@ -82,17 +82,21 @@ class GameState3 extends FlxState
 		ui = new UI();
 		add(ui);
 		
+		sound = new Sound();
+		add(sound);
+		
 		barHealth = new FlxBar(0,0,FlxBar.FILL_LEFT_TO_RIGHT, 250,25);
-		barHealth.createGradientBar([0xEE000000, 0xEE0C0C0], [0xFF00FF00, 0xFFFFFF00, 0xFFFF0000], 1, 180, true, 0xFF000000);
+		barHealth.createGradientBar([0xEE000000, 0xEE0C0C0], [0xFF5B0000, 0xFFFF0000], 1, 180, true, 0xFF000000);
 		updateBarPos();
 		barHealth.y = ogre.y - 30;
 		barHealth.percent = 100;
-		add(barHealth);
+		//add(barHealth);
 		
-		FlxG.sound.playMusic(AssetPaths.Level3__wav, 1, true);
+		FlxG.sound.playMusic(AssetPaths.Level2__wav, 1, true);
 	}
 
 	override public function update() {
+		frame++;
 		
 		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene3()));
 		else if (FlxG.keys.justPressed.F5) FlxG.switchState(new EndState());
@@ -103,12 +107,9 @@ class GameState3 extends FlxState
 		
 		//check collisions
 		FlxG.collide(player, floor);
-		FlxG.collide(ogre, floor);
 		
-		// Ogre attacks when player and _hammer overlap
-		if(ogre.isMove) FlxG.overlap(player, ogre._hammer, ogreAttack);
-		//player can attack when player and ogre overlap
-		FlxG.overlap(player, ogre, playerAttack);
+		// Ogre attacks when it and player overlap
+		if (ogre.isMove) FlxG.overlap(player, ogre, enemyDetect);
 		//Ogre takes damage when overlaps with pProjectile
 		FlxG.overlap(pProjectiles, ogre, pProjectileDetect);
 		//player takes damage when overlaps with eProjectile
@@ -125,30 +126,16 @@ class GameState3 extends FlxState
 				pProjectiles.add(new Projectile(player.x,player.y,player.x+200,player.y));
 		}
 		
-		//Enemy2's projectile attack
+		//updateEnemyFacing();
+		
+		//Enemy1's projectile attack
 		for (obj in enemies) {
 			
-			var enemy:Enemy2 = cast obj;
-			//change which way he's facing based on player's position
-			if (enemy.x < player.x) {
-					enemy.flipX = true;
-				}
-				else {
-					enemy.flipX = false;
-				}
-			
-			if (enemy.isThrowing) {
-				var newP:Projectile2 = new Projectile2(enemy.x, enemy.y, player);
-				if (enemy.flipX) {
-					newP.flipX = true;
-				}
-				else {
-					newP.flipX = false;
-				}
-				eProjectiles.add(newP);
-				
-				enemy.isThrowing = false;
-			}
+			var enemy:Enemy1 = cast obj;
+			enemy.shootAtEllie(player, eProjectiles);
+			enemy.updateEnemyFacing(player);
+			enemy.detectContact(player, enemies);
+			enemy.detectDeath(enemies);
 		}
 		
 		//update projectiles
@@ -157,7 +144,10 @@ class GameState3 extends FlxState
 			projectileUpdate(p);
 		}
 		
+		
+		
 		super.update();
+		
 	}
 	
 	public function updateBarPos() {
@@ -175,17 +165,32 @@ class GameState3 extends FlxState
 		player.isOnGround = true;
 	}
 	
-	// player and enemy interaction
-	private function ogreAttack(Object1:FlxObject, Object2:FlxObject):Void {
-		ogre.startAttack();
+	private function updateEnemyFacing() {
+		//Enemy1's projectile attack
+		for (obj in enemies) {
+			
+			var enemy:Enemy1 = cast obj;
+			if (enemy.facing == FlxObject.LEFT && player.x<enemy.x) {
+				enemy.facingPlayer = true;
+			}
+			else if (enemy.facing == FlxObject.RIGHT && player.x > enemy.x) {
+				enemy.facingPlayer = true;
+			}
+			else {
+				enemy.facingPlayer = false;
+			}
+		}
 	}
-	private function playerAttack(Object1:FlxObject, Object2:FlxObject):Void {
+	
+	// player and enemy interaction
+	private function enemyDetect(Object1:FlxObject, Object2:FlxObject):Void {
 		if (player.isAttack) {
-			ogre.takeDamage(player.damage, false);
+			ogre.takeDamage(player.damage);
 			updateHealthBar();
 			ogreDeath();
 			player.isAttack = false;
 		}
+		ogre.startAttack();
 	}
 	
 	// update projectiles: if too far from player, destroy it
@@ -202,7 +207,7 @@ class GameState3 extends FlxState
 		var p:Projectile = cast Object1;
 		var ogre:Ogre = cast Object2;
 		
-		ogre.takeDamage(p.damage, true);
+		ogre.takeDamage(p.damage);
 		updateHealthBar();
 		ogreDeath();
 		
@@ -250,7 +255,7 @@ class GameState3 extends FlxState
 	//destroy player
 	public function playerDestroy(t:FlxTween):Void {
 		player.destroy();
-		FlxG.switchState(new RestartState(new CutScene3()));
+		//FlxG.switchState(new RestartState(new CutScene3()));
 	}
 	
 }

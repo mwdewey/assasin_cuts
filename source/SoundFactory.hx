@@ -6,6 +6,7 @@ package;
  */
 class SoundFactory
 {
+
 	private static var sound:Sound;
 	
 	public static function getInstance():Sound{
