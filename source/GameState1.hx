@@ -15,6 +15,7 @@ import flixel.FlxObject;
 import flixel.tile.FlxTilemap;
 import openfl.Assets;
 import flixel.FlxBasic;
+import sys.io.File;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -23,15 +24,10 @@ class GameState1 extends FlxState
 		
 	var floorGroup:FlxGroup;
 	var wallGroup:FlxGroup;
-	var floorList:List<StaticObject>;
-	var enemyGroup:FlxGroup;
 	var townPeopleGroup:FlxGroup;
-	var projectileGroup:FlxGroup;
 	var doorGroup:FlxGroup;
 	var doorCollidableGroup:FlxGroup;
 	var sceneGroup:FlxGroup;
-	
-	var tileMap:FlxTilemap;
 		
 	var hairDresser:HairDresser;
 	var s1:StaticObject;
@@ -70,17 +66,27 @@ class GameState1 extends FlxState
 		doorCollidableGroup = new FlxGroup();
 		townPeopleGroup = new FlxGroup();
 		sceneGroup = new FlxGroup();
+		var d:Door;
 		
-		for (i in 0...100) floorGroup.add(new StaticObject(i * 32, FlxG.height, AssetPaths.dirt_0__png));
-		for (i in 0...21)  wallGroup.add(new StaticObject(0, -i * 32 + FlxG.height - 32, AssetPaths.wall_0__png));
+		// read in level data
+		File.
+		
+		/*
+		for (i in 0...99) floorGroup.add(new StaticObject(i * 32, FlxG.height, AssetPaths.dirt_0__png));
+		for (i in 0...21) wallGroup.add(new StaticObject(0, -i * 32 + FlxG.height - 32, AssetPaths.wall_0__png));
 		for (i in 0...12) floorGroup.add(new StaticObject(i * 32, FlxG.height - 32 * 7, AssetPaths.wall_0__png));
-		for (i in 0...12) floorGroup.add(new StaticObject(i * 32+32*18, FlxG.height - 32 * 7, AssetPaths.wall_0__png));
+		for (i in 0...12) floorGroup.add(new StaticObject(i * 32 + 32 * 18, FlxG.height - 32 * 7, AssetPaths.wall_0__png));
+		for (i in 0...12) floorGroup.add(new StaticObject(i * 32 + 32 * 18, FlxG.height - 32 * 14, AssetPaths.wall_0__png));
 		for (i in 0...12) floorGroup.add(new StaticObject(i * 32, FlxG.height - 32 * 14, AssetPaths.wall_0__png));
 		for (i in 0...30) floorGroup.add(new StaticObject(i * 32, FlxG.height - 32 * 21, AssetPaths.wall_0__png));
-		for (i in 0...2)  wallGroup.add(new StaticObject(32*11, i * 32 + FlxG.height -128 - 64, AssetPaths.wall_0__png));
+		for (i in 0...2)  wallGroup.add(new StaticObject(32 * 11, i * 32 + FlxG.height - 32 * 6, AssetPaths.wall_0__png));
+		for (i in 0...2)  wallGroup.add(new StaticObject(32 * 11, i * 32 + FlxG.height - 32 * 13, AssetPaths.wall_0__png));
+		for (i in 0...2)  wallGroup.add(new StaticObject(32 * 11, i * 32 + FlxG.height - 32 * 20, AssetPaths.wall_0__png));
 		
-		var d:Door = new Door(32*10, FlxG.height - 128); doorGroup.add(d); doorCollidableGroup.add(d.hitBox);
-		
+		d = new Door(32 * 10, FlxG.height - 32 * 4); doorGroup.add(d); doorCollidableGroup.add(d.hitBox);
+		d = new Door(32 * 10, FlxG.height - 32 * 11); doorGroup.add(d); doorCollidableGroup.add(d.hitBox);
+		d = new Door(32 * 10, FlxG.height - 32 * 18); doorGroup.add(d); doorCollidableGroup.add(d.hitBox);
+		*/
 		//for (i in 0...25) townPeopleGroup.add((new TownPerson(i * 400-200, 500 - 192)).spriteGroup);
 		
 		add(new Background());
