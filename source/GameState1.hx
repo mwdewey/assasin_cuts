@@ -51,12 +51,12 @@ class GameState1 extends FlxState
 		FlxG.camera.setBounds(0, 0, 100 * 32, 100 * 32, false);
 		
 		hairDresser = new HairDresser();
-		hairDresser.y = FlxG.height-hairDresser.height;
-		hairDresser.x = 32;
+		hairDresser.y = 32*90;
+		hairDresser.x = 32*33;
 		
 		ui = new UI();
 		// set time to play
-		ui.setTimer(600);
+		ui.setTimer(90);
 		
 		// prevScore is score at start of level
 		// when reset occures, score is then prev score
