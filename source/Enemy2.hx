@@ -15,6 +15,7 @@ class Enemy2 extends FlxSprite
 	var h:Int;
 	
 	public var isThrowing:Bool;
+	private var startThrow:Bool = false; //for tracking the end of animation
 	
 	public var spriteGroup:FlxGroup;
 	
@@ -23,7 +24,7 @@ class Enemy2 extends FlxSprite
 	var projectile:FlxSprite;
 	
 	//throw timer
-	private var throwtime:Float = 2; //throw stuff every n seconds
+	private var throwtime:Float = 4; //throw stuff every n seconds
 	private var throwtimer:Float = 0;
 
 	public function new(pos_x:Int, pos_y:Int) 
@@ -32,9 +33,9 @@ class Enemy2 extends FlxSprite
 		
 		//this.makeGraphic(64, 128, FlxColor.AZURE);
 		this.loadGraphic("assets/images/Characters/Enemy/enemy1.png", true, 64, 96);
-		this.animation.add("throw", [1,2,3,4,4,4], 8, false);
+		this.animation.add("throw", [1,2,3], 8, false);
 		this.animation.add("idle", [5]);
-		this.animation.add("idle_attack", [0]);
+		this.animation.add("idle_throw", [4, 4, 4], 8, false);
 		
 		//make spriteGroup
 		projectile_group = new FlxGroup();
@@ -42,9 +43,7 @@ class Enemy2 extends FlxSprite
 		
 		spriteGroup.add(projectile_group);
 		spriteGroup.add(this);	
-		
-		this.animation.play("throw");
-		
+				
 		this.setPosition(pos_x, pos_y);
 		
 		isThrowing = false;
@@ -54,18 +53,29 @@ class Enemy2 extends FlxSprite
 	{
 		super.update();
 		
-		if (throwtimer >= throwtime) {
-			//play the throw animation
-			this.animation.play("throw");
-			
-		//add a new projectile to the group
-		isThrowing = true;
-			
-		//reset the timer
-		throwtimer = 0;
+		if(startThrow == true){
+			if(this.animation.finished){
+				isThrowing = true;
+				startThrow = false;
+				this.animation.play("idle_throw");
+			}
 		}
-		else {
-			throwtimer += FlxG.elapsed;
+		else{
+			if (throwtimer >= throwtime) {
+				//play the throw animation
+				this.animation.play("throw");
+				
+				startThrow = true;
+			
+				//reset the timer
+				throwtimer = 0;
+			}
+			else {
+				throwtimer += FlxG.elapsed;
+				if(this.animation.finished){
+					this.animation.play("idle");
+				}
+			}
 		}
 	}
 	

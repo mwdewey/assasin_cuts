@@ -138,7 +138,13 @@ class GameState1 extends FlxState
 		// check overlapable obejcts
 		FlxG.overlap(hairDresser, townPeopleGroup, townspersonDetect);
 		FlxG.overlap(projectileGroup, enemyGroup, projectileDetect);
-		FlxG.overlap(hairDresser,doorGroup,doorDetect);
+		FlxG.overlap(hairDresser, doorGroup, doorDetect);
+		
+		//update projectiles
+		for (obj in pProjectiles) {
+			var p:Projectile = cast obj;
+			projectileUpdate(p);
+		}
 		
 		
 		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene1()));
@@ -184,6 +190,15 @@ class GameState1 extends FlxState
 	}
 	
 	// player and enemy interaction --- melee
+	
+	// update projectiles: if too far from player, destroy it
+	private function projectileUpdate(Object:FlxObject):Void {
+		var p:Projectile = cast Object;
+		
+		if ( (p.startpoint_x - p.x) * (p.startpoint_x - p.x) > 90000) {
+			p.destroy();
+		}
+	}
 	
 	// projectile and enemy interaction
 	private function projectileDetect(Object1:FlxObject, Object2:FlxObject):Void {
