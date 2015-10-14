@@ -14,6 +14,7 @@ import flixel.FlxObject;
 import flixel.ui.FlxBar;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSpriteUtil;
+import flixel.util.FlxTimer;
 
 /**
  * ...
@@ -61,7 +62,7 @@ class GameState3 extends FlxState
 		add(ogre);
 		
 		enemies = new FlxGroup();
-		for (i in 0...2) enemies.add(new Enemy2(20+(i*400), FlxG.height - 160));
+		for (i in 0...2) enemies.add(new Enemy2(20+(i*800), FlxG.height - 160));
 		add(enemies);
 		
 		/*enemies_1 = new FlxGroup();
@@ -128,17 +129,6 @@ class GameState3 extends FlxState
 			}
 		}
 		
-		//Enemy1's bullet attack
-		/*for (obj in enemies_1) {
-			
-			var enemy_1:Enemy1 = cast obj;
-			
-			if (enemy_1.isFiring) {
-				eProjectiles.add(new Bullet(enemy_1.x, enemy_1.y, player));
-				enemy_1.isFiring = false;
-			}
-		}*/
-		
 		super.update();
 	}
 	
@@ -160,7 +150,6 @@ class GameState3 extends FlxState
 	// player and enemy interaction
 	private function enemyDetect(Object1:FlxObject, Object2:FlxObject):Void {
 		if (player.isAttack) {
-			trace("yes?");
 			ogre.takeDamage(player.damage);
 			updateHealthBar();
 			ogreDeath();
@@ -185,7 +174,11 @@ class GameState3 extends FlxState
 	private function eProjectileDetect(Object1:FlxObject, Object2:FlxObject):Void {
 		var p:Projectile2 = cast Object1;
 		var player:HairDresser = cast Object2;
-		
+		//shifts player position during stun
+		var direction:Int;
+		if (p.velocity.x < 0) direction = -1;
+		else direction = 1;
+		player.setPosition(player.x + (direction * 10), player.y);
 		player.takeDamage(p.damage);
 		playerDeath();
 		
@@ -202,9 +195,7 @@ class GameState3 extends FlxState
 	
 	public function playerDeath():Void {
 		if (player.HP <= 0) {
-			player.kill();
-			
-			FlxG.switchState(new RestartState(new CutScene3()));
+			FlxSpriteUtil.fadeOut(player, 0.5, false, playerDestroy);
 		}
 	}
 	
@@ -215,6 +206,12 @@ class GameState3 extends FlxState
 	//destroy barHealth
 	public function barDestroy(t:FlxTween):Void {
 		barHealth.destroy();
+		FlxG.switchState(new EndState());
+	}
+	//destroy player
+	public function playerDestroy(t:FlxTween):Void {
+		player.destroy();
+		//FlxG.switchState(new RestartState(new CutScene3()));
 	}
 	
 }

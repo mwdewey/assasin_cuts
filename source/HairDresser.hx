@@ -15,6 +15,7 @@ import flixel.FlxCamera;
 import flixel.util.FlxPoint;
 import flixel.FlxObject;
 import flixel.tweens.FlxEase;
+import flixel.util.FlxVelocity;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -66,7 +67,7 @@ class HairDresser extends FlxSprite
 		isOnGround = false;
 		
 		//camera follows this object
-		FlxG.camera.follow(this, FlxCamera.STYLE_PLATFORMER,null,0);
+		FlxG.camera.follow(this, FlxCamera.STYLE_PLATFORMER,null,2);
 		FlxG.camera.zoom = 1;
 		
 		//load hairdresser graphic
@@ -112,7 +113,7 @@ class HairDresser extends FlxSprite
 		//_brain starts in move
 		_brain = new FSM(move);
 		//set stun, attack times
-		stunLimit = 35;
+		stunLimit = 20;
 		attackLimit = 15;
 		isMove = true;
 		
@@ -261,44 +262,17 @@ class HairDresser extends FlxSprite
 		
 	}
 	
-	/*public function attack():Void {
-		//when timer runs out, switch to move state
-		if (Timer <= 0) {
-			_brain.activeState = move;
-			isMove = true;
-		}
-		else
-			Timer -= 1;
-	}
-	
-	//triggers transition to attack sprite-state
-	public function startAttack():Void {
-			Timer = attackLimit;
-			_brain.activeState = attack;
-			isMove = false;
-	}*/
-	
 	//takes damage; switches to stun
 	public function takeDamage(damage:Float) {
 		HP -= damage;
 		trace(HP);
 		//if not already stunned, set timer and switch to stun
 		if (_brain.activeState != stun) {
+			animation.pause;
 			Timer = stunLimit;
 			_brain.activeState = stun;
 			isMove = false;
 		}
 	}
 	
-	//fades when kill is called
-	override public function kill():Void
-	{
-		alive = false;
-		FlxTween.tween(this, { alpha:0, y:y - 16 }, .5, { ease:FlxEase.circOut, complete:finishKill } );
-	}
-
-	private function finishKill(_):Void
-	{
-		exists = false;
-	}
 }
