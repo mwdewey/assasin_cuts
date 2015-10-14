@@ -46,7 +46,7 @@ class GameState1 extends FlxState
         super.create();
 		
 		FlxG.camera.setBounds(0, 0, 100 * 32, 100 * 32, false);
-		//FlxG.sound.playMusic(AssetPaths.Level1__wav, 1, true);
+		FlxG.sound.playMusic(AssetPaths.Level1__wav, 1, true);
 		
 		sound = SoundFactory.getInstance();
 		
@@ -56,7 +56,7 @@ class GameState1 extends FlxState
 		
 		ui = new UI();
 		// set time to play
-		ui.setTimer(10);
+		ui.setTimer(60);
 		
 		// prevScore is score at start of level
 		// when reset occures, score is then prev score

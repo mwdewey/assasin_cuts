@@ -157,6 +157,11 @@ class UI extends FlxTypedGroup<FlxSprite>
 		timerClock = new FlxTimer(duration, null, 1);
 	}
 	
+	public function destroyTimer() {
+			timerClock.destroy();
+			this.remove(textTime);
+	}
+	
 	private function updateClockDisplay() {
 		var seconds_left:Int = Std.int(TIMER_LENGTH - timerClock.progress * TIMER_LENGTH);
 		var min:String = Std.string(Std.int(seconds_left / 60));
