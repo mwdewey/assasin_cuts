@@ -39,7 +39,6 @@ class TiledGameState extends FlxState
         var mapTilePath:String = "assets/images/Levels/tilemap.png";
         tileMap.loadMap(mapData, mapTilePath, 32, 32);
 		
-		
         add(tileMap);
 		add(hairDresser);
 		

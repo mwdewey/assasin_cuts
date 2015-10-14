@@ -22,12 +22,14 @@ using flixel.util.FlxSpriteUtil;
 class GameState1 extends FlxState
 	{
 		
+	var tileMap:FlxTilemap;
+
 	var floorGroup:FlxGroup;
 	var wallGroup:FlxGroup;
 	var townPeopleGroup:FlxGroup;
 	var doorGroup:FlxGroup;
 	var doorCollidableGroup:FlxGroup;
-	var sceneGroup:FlxGroup;
+	var sceneGroup:FlxTilemap;
 		
 	var hairDresser:HairDresser;
 	var s1:StaticObject;
@@ -48,6 +50,8 @@ class GameState1 extends FlxState
     {
         super.create();
 		
+		FlxG.camera.setBounds(0, 0, 100 * 32, 100 * 32, false);
+		
 		hairDresser = new HairDresser();
 		hairDresser.y = FlxG.height-hairDresser.height;
 		hairDresser.x = 32;
@@ -65,32 +69,40 @@ class GameState1 extends FlxState
 		doorGroup = new FlxGroup();
 		doorCollidableGroup = new FlxGroup();
 		townPeopleGroup = new FlxGroup();
-		sceneGroup = new FlxGroup();
+		sceneGroup = new FlxTilemap();
 		var d:Door;
 		
-		// read in level data
-		File.
+		// main collidable map
+		tileMap = new FlxTilemap();
+        tileMap.loadMap(Assets.getText("assets/data/level1_ground.csv"), "assets/images/Levels/tilemap.png", 32, 32);
 		
-		/*
-		for (i in 0...99) floorGroup.add(new StaticObject(i * 32, FlxG.height, AssetPaths.dirt_0__png));
-		for (i in 0...21) wallGroup.add(new StaticObject(0, -i * 32 + FlxG.height - 32, AssetPaths.wall_0__png));
-		for (i in 0...12) floorGroup.add(new StaticObject(i * 32, FlxG.height - 32 * 7, AssetPaths.wall_0__png));
-		for (i in 0...12) floorGroup.add(new StaticObject(i * 32 + 32 * 18, FlxG.height - 32 * 7, AssetPaths.wall_0__png));
-		for (i in 0...12) floorGroup.add(new StaticObject(i * 32 + 32 * 18, FlxG.height - 32 * 14, AssetPaths.wall_0__png));
-		for (i in 0...12) floorGroup.add(new StaticObject(i * 32, FlxG.height - 32 * 14, AssetPaths.wall_0__png));
-		for (i in 0...30) floorGroup.add(new StaticObject(i * 32, FlxG.height - 32 * 21, AssetPaths.wall_0__png));
-		for (i in 0...2)  wallGroup.add(new StaticObject(32 * 11, i * 32 + FlxG.height - 32 * 6, AssetPaths.wall_0__png));
-		for (i in 0...2)  wallGroup.add(new StaticObject(32 * 11, i * 32 + FlxG.height - 32 * 13, AssetPaths.wall_0__png));
-		for (i in 0...2)  wallGroup.add(new StaticObject(32 * 11, i * 32 + FlxG.height - 32 * 20, AssetPaths.wall_0__png));
+		// doors
+		var refs:Array<PositionRef> =  TileMapLoader.load(100, 100, 32, 32, "assets/data/level1_door.csv");
+		for (ref in refs) {
+			if(ref.index != -1){
+				d = new Door(ref.x,ref.y); 
+				doorGroup.add(d); 
+				doorCollidableGroup.add(d.hitBox);
+			}
+		}
 		
-		d = new Door(32 * 10, FlxG.height - 32 * 4); doorGroup.add(d); doorCollidableGroup.add(d.hitBox);
-		d = new Door(32 * 10, FlxG.height - 32 * 11); doorGroup.add(d); doorCollidableGroup.add(d.hitBox);
-		d = new Door(32 * 10, FlxG.height - 32 * 18); doorGroup.add(d); doorCollidableGroup.add(d.hitBox);
-		*/
-		//for (i in 0...25) townPeopleGroup.add((new TownPerson(i * 400-200, 500 - 192)).spriteGroup);
+		// townspeople
+		refs =  TileMapLoader.load(100, 100, 32, 32, "assets/data/level1_people.csv");
+		for (ref in refs) {
+			if(ref.index != -1){
+				townPeopleGroup.add((new TownPerson(ref.x, ref.y)).spriteGroup);
+			}
+		}
+		
+		// scenery
+		sceneGroup.loadMap(Assets.getText("assets/data/level1_grass.csv"), "assets/images/Levels/tilemap.png", 32, 32);
+		
+		
+		
 		
 		add(new Background());
 		add(floorGroup);
+		add(tileMap);
 		add(sceneGroup);
 		add(wallGroup);
 		add(doorGroup);
@@ -112,6 +124,7 @@ class GameState1 extends FlxState
 		// move character
 		FlxG.collide(hairDresser, wallGroup);
 		FlxG.collide(hairDresser, floorGroup);
+		FlxG.collide(hairDresser, tileMap);
 		
 		// check overlapable obejcts
 		FlxG.overlap(hairDresser, townPeopleGroup, townspersonDetect);
