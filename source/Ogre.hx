@@ -221,6 +221,7 @@ import flixel.tweens.FlxEase;
 	override public function update():Void {
 		//update movePoint with player's position
 		movePoint.x = _player.x;
+		movePoint.y = _player.y;
 		//update _hammer's position
 		if (facing == FlxObject.LEFT) _hammer.x = this.x;
 		else _hammer.x = this.x + 80;

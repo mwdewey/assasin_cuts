@@ -33,6 +33,7 @@ class GameState3 extends FlxState
 	//var enemies_1:FlxGroup;
 	
 	var floor:FlxTilemap;
+	var obstacles:FlxTilemap;
 	
 	var pProjectiles:FlxGroup;
 	var eProjectiles:FlxGroup;
@@ -61,8 +62,14 @@ class GameState3 extends FlxState
 		//for(i in 0...40) floor.add(new StaticObject(i*32, FlxG.height-32, "assets/images/GroundTile.png"));
 		add(floor);
 		
+		obstacles = new FlxTilemap();
+		obstacles.loadMap(Assets.getText("assets/data/level3_obstacle.csv"), "assets/images/Levels/tilemap.png", 32, 32);
+		//for(i in 0...40) floor.add(new StaticObject(i*32, FlxG.height-32, "assets/images/GroundTile.png"));
+		add(obstacles);
+		
 		player = new HairDresser();
 		add(player.spriteGroup);
+		
 		
 		ogre = new Ogre(600, FlxG.height - 255, player);
 		add(ogre);
