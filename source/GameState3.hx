@@ -121,9 +121,17 @@ class GameState3 extends FlxState
 		for (obj in enemies) {
 			
 			var enemy:Enemy2 = cast obj;
+			//change which way he's facing based on player's position
+			if (enemy.x < player.x) {
+					enemy.flipX = true;
+				}
+				else {
+					enemy.flipX = false;
+				}
 			
 			if (enemy.isThrowing) {
 				eProjectiles.add(new Projectile2(enemy.x, enemy.y, player));
+				
 				enemy.isThrowing = false;
 			}
 		}
@@ -180,7 +188,7 @@ class GameState3 extends FlxState
 	private function projectileUpdate(Object:FlxObject):Void {
 		var p:Projectile = cast Object;
 		
-		if ( (p.startpoint_x - p.x) * (p.startpoint_x - p.x) > 90000) {
+		if ( (p.startpoint_x - p.x) * (p.startpoint_x - p.x) > 99999) {
 			p.destroy();
 		}
 	}

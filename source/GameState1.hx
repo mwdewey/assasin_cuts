@@ -138,7 +138,13 @@ class GameState1 extends FlxState
 		// check overlapable obejcts
 		FlxG.overlap(hairDresser, townPeopleGroup, townspersonDetect);
 		FlxG.overlap(projectileGroup, enemyGroup, projectileDetect);
-		FlxG.overlap(hairDresser,doorGroup,doorDetect);
+		FlxG.overlap(hairDresser, doorGroup, doorDetect);
+		
+		//update projectiles
+		for (obj in pProjectiles) {
+			var p:Projectile = cast obj;
+			projectileUpdate(p);
+		}
 		
 		
 		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene1()));
