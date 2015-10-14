@@ -268,7 +268,7 @@ class HairDresser extends FlxSprite
 		trace(HP);
 		//if not already stunned, set timer and switch to stun
 		if (_brain.activeState != stun) {
-			animation.pause;
+			//animation.pause;
 			Timer = stunLimit;
 			_brain.activeState = stun;
 			isMove = false;

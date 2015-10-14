@@ -33,7 +33,7 @@ class Projectile2 extends FlxSprite
 		this.velocity.x = (dX / dMax) * projectileSpeed;
 		this.velocity.y = (dY / dMax) * projectileSpeed;
 		
-		damage = 5;
+		damage = 10;
 		
 		animation.play("move");
 	}

@@ -56,7 +56,7 @@ class GameState1 extends FlxState
 		
 		ui = new UI();
 		// set time to play
-		ui.setTimer(90);
+		ui.setTimer(60);
 		
 		// prevScore is score at start of level
 		// when reset occures, score is then prev score
