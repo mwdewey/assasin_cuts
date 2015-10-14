@@ -52,7 +52,7 @@ class GameState3 extends FlxState
 	
 	override public function create() {
 		super.create();
-		
+		FlxG.camera.setBounds(0, 0, 100 * 32, 100 * 32, false);
 		background = new FlxSprite();
 		background.loadGraphic("assets/images/Muro Sunset.png", false, 1024, 768);
 		background.scrollFactor.set();
@@ -71,14 +71,11 @@ class GameState3 extends FlxState
 		obstacles.loadMap(Assets.getText("assets/data/level3_obstacle.csv"), "assets/images/Levels/tilemap.png", 32, 32);
 		add(obstacles);
 		
-		
-		
 		player = new HairDresser();
 		add(player.spriteGroup);
 		
 		player.x = 20*32;
 		player.y = 30*32;
-		
 		
 		ogre = new Ogre(16*32, 25*32, player);
 		add(ogre);
@@ -86,7 +83,10 @@ class GameState3 extends FlxState
 		add(hammer);
 		
 		enemies = new FlxGroup();
-		for (i in 0...2) enemies.add(new Enemy2(20+(i*800), FlxG.height - 160));
+		enemies.add(new Enemy2(10 * 32, 20 * 32) );
+		enemies.add(new Enemy2(43 * 32, 19 * 32));
+		enemies.add(new Enemy2(61 * 32, 19 * 32));
+		
 		add(enemies);
 		
 		pProjectiles = new FlxGroup();
