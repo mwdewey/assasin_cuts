@@ -6,6 +6,7 @@ import flash.events.Event;
 import flash.Lib;
 import flixel.FlxGame;
 import flixel.FlxState;
+import flixel.tweens.FlxTween;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.util.FlxColor;
@@ -13,6 +14,7 @@ import flixel.FlxG;
 import flixel.FlxCamera;
 import flixel.util.FlxPoint;
 import flixel.FlxObject;
+import flixel.tweens.FlxEase;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -175,8 +177,8 @@ class HairDresser extends FlxSprite
 		}
 		
 		// movement
-		//if (isOnGround && this.isTouching(FlxObject.FLOOR) && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED;
-		if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)  this.velocity.y = -SPEED;
+		if (isOnGround && this.isTouching(FlxObject.FLOOR) && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED;
+		//if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)  this.velocity.y = -SPEED;
 		if (FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN)  this.velocity.y = SPEED;
 		if (FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT) this.velocity.x  = -SPEED;
 		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) this.velocity.x = SPEED;
@@ -190,6 +192,9 @@ class HairDresser extends FlxSprite
 			else {
 				attack_animation.flipX = false;
 			}
+			
+			this.velocity.x /= 2;
+			this.velocity.y /= 2;
 			
 			if (chargetimer >= chargetime) {
 				//play the charged effect
@@ -283,5 +288,17 @@ class HairDresser extends FlxSprite
 			_brain.activeState = stun;
 			isMove = false;
 		}
+	}
+	
+	//fades when kill is called
+	override public function kill():Void
+	{
+		alive = false;
+		FlxTween.tween(this, { alpha:0, y:y - 16 }, .5, { ease:FlxEase.circOut, complete:finishKill } );
+	}
+
+	private function finishKill(_):Void
+	{
+		exists = false;
 	}
 }

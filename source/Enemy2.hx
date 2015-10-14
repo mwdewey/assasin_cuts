@@ -14,6 +14,8 @@ class Enemy2 extends FlxSprite
 	var w:Int;
 	var h:Int;
 	
+	public var isThrowing:Bool;
+	
 	public var spriteGroup:FlxGroup;
 	
 	//Projectiles
@@ -43,7 +45,9 @@ class Enemy2 extends FlxSprite
 		
 		this.animation.play("throw");
 		
-		this.setPosition(pos_x,pos_y);
+		this.setPosition(pos_x, pos_y);
+		
+		isThrowing = false;
 	}
 	
 	override public function update():Void
@@ -55,20 +59,10 @@ class Enemy2 extends FlxSprite
 			this.animation.play("throw");
 			
 		//add a new projectile to the group
-			//add animation
-			projectile = new FlxSprite();
-			projectile.loadGraphic("assets/images/Characters/Enemy/projectile.png", true, 64, 64);
-			projectile.animation.add("move", [0, 1], 16, true);
-			projectile.animation.play("move");
+		isThrowing = true;
 			
-			//set position and velocity
-			projectile.setPosition(this.x, this.y);
-			projectile.velocity.x = -500;
-			
-			projectile_group.add(projectile);
-			
-			//reset the timer
-			throwtimer = 0;
+		//reset the timer
+		throwtimer = 0;
 		}
 		else {
 			throwtimer += FlxG.elapsed;

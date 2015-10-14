@@ -36,6 +36,8 @@ class RestartState extends FlxState
 		restartLabel.setFormat(null, 40, FlxColor.WHITE, "center");
 		add(restartLabel);
 		
+		FlxG.sound.pause();
+		
     }
 	
 	override public function update():Void

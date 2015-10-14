@@ -29,6 +29,7 @@ class GameState1 extends FlxState
 	var projectileGroup:FlxGroup;
 	var doorGroup:FlxGroup;
 	var doorCollidableGroup:FlxGroup;
+	var sceneGroup:FlxGroup;
 	
 	var tileMap:FlxTilemap;
 		
@@ -52,7 +53,7 @@ class GameState1 extends FlxState
         super.create();
 		
 		hairDresser = new HairDresser();
-		hairDresser.y = FlxG.height - hairDresser.height;
+		hairDresser.y = FlxG.height-hairDresser.height;
 		hairDresser.x = 32;
 		
 		ui = new UI();
@@ -64,30 +65,27 @@ class GameState1 extends FlxState
 		Reg.prevScore = Reg.score;
 		
 		floorGroup = new FlxGroup();
-		for (i in 0...100) floorGroup.add(new StaticObject(i * 32, FlxG.height, AssetPaths.dirt_0__png));
-		for (i in 0...10)  floorGroup.add(new StaticObject(i * 32, FlxG.height, AssetPaths.dirt_0__png));
-		
 		wallGroup = new FlxGroup();
-		
-		projectileGroup = new FlxGroup();
-		
 		doorGroup = new FlxGroup();
 		doorCollidableGroup = new FlxGroup();
-		for (i in 0...25) {
-			var d:Door = new Door(i * 400, FlxG.height - 64 - 128);
-			//doorGroup.add(d);
-			//doorCollidableGroup.add(d.hitBox);
-		}
-		
 		townPeopleGroup = new FlxGroup();
-		for (i in 0...25) townPeopleGroup.add((new TownPerson(i * 400-200, 500 - 192)).spriteGroup);
+		sceneGroup = new FlxGroup();
 		
-		FlxG.sound.playMusic("assets/music/Level1.wav", 1, true);
-
-		add(tempSprite);
+		for (i in 0...100) floorGroup.add(new StaticObject(i * 32, FlxG.height, AssetPaths.dirt_0__png));
+		for (i in 0...21)  wallGroup.add(new StaticObject(0, -i * 32 + FlxG.height - 32, AssetPaths.wall_0__png));
+		for (i in 0...12) floorGroup.add(new StaticObject(i * 32, FlxG.height - 32 * 7, AssetPaths.wall_0__png));
+		for (i in 0...12) floorGroup.add(new StaticObject(i * 32+32*18, FlxG.height - 32 * 7, AssetPaths.wall_0__png));
+		for (i in 0...12) floorGroup.add(new StaticObject(i * 32, FlxG.height - 32 * 14, AssetPaths.wall_0__png));
+		for (i in 0...30) floorGroup.add(new StaticObject(i * 32, FlxG.height - 32 * 21, AssetPaths.wall_0__png));
+		for (i in 0...2)  wallGroup.add(new StaticObject(32*11, i * 32 + FlxG.height -128 - 64, AssetPaths.wall_0__png));
+		
+		var d:Door = new Door(32*10, FlxG.height - 128); doorGroup.add(d); doorCollidableGroup.add(d.hitBox);
+		
+		//for (i in 0...25) townPeopleGroup.add((new TownPerson(i * 400-200, 500 - 192)).spriteGroup);
+		
 		add(new Background());
-		add(projectileGroup);
 		add(floorGroup);
+		add(sceneGroup);
 		add(wallGroup);
 		add(doorGroup);
 		add(doorCollidableGroup);
@@ -112,13 +110,6 @@ class GameState1 extends FlxState
 		// check overlapable obejcts
 		FlxG.overlap(hairDresser, townPeopleGroup, townspersonDetect);
 		FlxG.overlap(hairDresser, doorGroup, doorDetect);
-		
-		if (hairDresser.charged) {
-			if(hairDresser.face_left)
-				projectileGroup.add(new Projectile(hairDresser.x,hairDresser.y,hairDresser.x-200,hairDresser.y));
-			else
-				projectileGroup.add(new Projectile(hairDresser.x,hairDresser.y,hairDresser.x+200,hairDresser.y));
-		}
 		
 		// update score
 		// if score changed, update with new value
@@ -150,7 +141,6 @@ class GameState1 extends FlxState
 			}
 		}
 	}
-	
 	// hairDresser and door interaction
 	private function doorDetect(Object1:FlxObject, Object2:FlxObject):Void {
 		var p:HairDresser = cast Object1;
