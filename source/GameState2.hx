@@ -93,8 +93,8 @@ class GameState2 extends FlxState
 		endState.y = (100 - 13) * 32;
 		
 		add(new Background());
-		add(floorGroup);
 		add(sceneGroup);
+		add(floorGroup);
 		add(wallGroup);
 		add(enemyGroup);
 		add(eProjectiles);
