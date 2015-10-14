@@ -171,6 +171,7 @@ class GameState3 extends FlxState
 		var player:HairDresser = cast Object2;
 		
 		player.takeDamage(p.damage);
+		playerDeath();
 		
 		p.destroy();
 	}
@@ -183,9 +184,17 @@ class GameState3 extends FlxState
 		}
 	}
 	
+	public function playerDeath():Void {
+		if (player.HP <= 0) {
+			player.kill();
+			
+			FlxG.switchState(new RestartState(new CutScene3()));
+		}
+	}
+	
 	//destroy ogre
 	public function ogreDestroy(t:FlxTween):Void {
-		ogre.destroy();
+		ogre.kill();
 	}
 	//destroy barHealth
 	public function barDestroy(t:FlxTween):Void {

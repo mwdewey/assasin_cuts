@@ -6,6 +6,7 @@ import flash.events.Event;
 import flash.Lib;
 import flixel.FlxGame;
 import flixel.FlxState;
+import flixel.tweens.FlxTween;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.util.FlxColor;
@@ -13,6 +14,7 @@ import flixel.FlxG;
 import flixel.FlxCamera;
 import flixel.util.FlxPoint;
 import flixel.FlxObject;
+import flixel.tweens.FlxEase;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -283,5 +285,17 @@ class HairDresser extends FlxSprite
 			_brain.activeState = stun;
 			isMove = false;
 		}
+	}
+	
+	//fades when kill is called
+	override public function kill():Void
+	{
+		alive = false;
+		FlxTween.tween(this, { alpha:0, y:y - 16 }, .5, { ease:FlxEase.circOut, complete:finishKill } );
+	}
+
+	private function finishKill(_):Void
+	{
+		exists = false;
 	}
 }

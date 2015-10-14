@@ -9,6 +9,7 @@ import flixel.FlxObject;
 import flixel.util.FlxPoint;
 import flixel.util.FlxVelocity;
 import flixel.util.FlxSpriteUtil;
+import flixel.tweens.FlxEase;
 
 
 /**
@@ -170,5 +171,17 @@ import flixel.util.FlxSpriteUtil;
 		_brain.update();
 		
 		super.update();
+	}
+	
+	//fades when kill is called
+	override public function kill():Void
+	{
+		alive = false;
+		FlxTween.tween(this, { alpha:0, y:y - 16 }, .5, { ease:FlxEase.circOut, complete:finishKill } );
+	}
+
+	private function finishKill(_):Void
+	{
+		exists = false;
 	}
 }
