@@ -152,7 +152,7 @@ class GameState2 extends FlxState
 	//destroy player
 	public function playerDestroy(t:FlxTween):Void {
 		hairDresser.kill();
-		//FlxG.switchState(new RestartState(new CutScene3()));
+		FlxG.switchState(new RestartState(new CutScene3()));
 	}
 	
 	public function playerDeath():Void {

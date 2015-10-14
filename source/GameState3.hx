@@ -74,8 +74,11 @@ class GameState3 extends FlxState
 		player = new HairDresser();
 		add(player.spriteGroup);
 		
+		player.x = 20*32;
+		player.y = 30*32;
 		
-		ogre = new Ogre(16*32, 36*32, player);
+		
+		ogre = new Ogre(16*32, 25*32, player);
 		add(ogre);
 		hammer = ogre._hammer;
 		add(hammer);
@@ -92,6 +95,7 @@ class GameState3 extends FlxState
 		
 		ui = new UI();
 		add(ui);
+		ui.destroyTimer();
 		
 		barHealth = new FlxBar(0,0,FlxBar.FILL_LEFT_TO_RIGHT, 250,25);
 		barHealth.createGradientBar([0xEE000000, 0xEE0C0C0], [0xFF00FF00, 0xFFFFFF00, 0xFFFF0000], 1, 180, true, 0xFF000000);
@@ -104,6 +108,8 @@ class GameState3 extends FlxState
 	}
 
 	override public function update() {
+		super.update();
+		
 		barHealth.y = ogre.y - 30;
 		
 		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene3()));
@@ -116,6 +122,7 @@ class GameState3 extends FlxState
 		//check collisions
 		FlxG.collide(player, floor);
 		FlxG.collide(ogre, floor);
+		FlxG.collide(player, obstacles);
 		
 		// Ogre attacks when player and _hammer overlap
 		if(ogre.isMove) FlxG.overlap(player, ogre._hammer, ogreAttack);
@@ -169,7 +176,7 @@ class GameState3 extends FlxState
 			projectileUpdate(p);
 		}
 		
-		super.update();
+		//super.update();
 	}
 	
 	public function updateBarPos() {

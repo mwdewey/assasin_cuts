@@ -192,10 +192,8 @@ class HairDresser extends FlxSprite
 		}
 		
 		// movement
-		//if (isOnGround && this.isTouching(FlxObject.FLOOR) && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED;
-		if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP) {  this.velocity.y = -SPEED;}
 		if (isOnGround && this.isTouching(FlxObject.FLOOR) && (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)) this.velocity.y    = -SPEED;
-		//if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP)  this.velocity.y = -SPEED;
+		//if (FlxG.keys.pressed.W || FlxG.keys.pressed.UP) {  this.velocity.y = -SPEED;}
 		if (FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN)  this.velocity.y = SPEED;
 		if (FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT) this.velocity.x  = -SPEED;
 		if (FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT) this.velocity.x = SPEED;
