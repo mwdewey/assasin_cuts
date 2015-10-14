@@ -34,6 +34,7 @@ class GameState3 extends FlxState
 	
 	var floor:FlxTilemap;
 	var obstacles:FlxTilemap;
+	var scenary:FlxTilemap;
 	
 	var pProjectiles:FlxGroup;
 	var eProjectiles:FlxGroup;
@@ -64,14 +65,17 @@ class GameState3 extends FlxState
 		
 		obstacles = new FlxTilemap();
 		obstacles.loadMap(Assets.getText("assets/data/level3_obstacle.csv"), "assets/images/Levels/tilemap.png", 32, 32);
-		//for(i in 0...40) floor.add(new StaticObject(i*32, FlxG.height-32, "assets/images/GroundTile.png"));
 		add(obstacles);
+		
+		scenary = new FlxTilemap();
+		scenary.loadMap(Assets.getText("assets/data/level3_scenary.csv"), "assets/images/Levels/tilemap.png", 32, 32);
+		add(scenary);
 		
 		player = new HairDresser();
 		add(player.spriteGroup);
 		
 		
-		ogre = new Ogre(600, FlxG.height - 255, player);
+		ogre = new Ogre(16*32, 36*32, player);
 		add(ogre);
 		hammer = ogre._hammer;
 		add(hammer);
@@ -92,7 +96,7 @@ class GameState3 extends FlxState
 		barHealth = new FlxBar(0,0,FlxBar.FILL_LEFT_TO_RIGHT, 250,25);
 		barHealth.createGradientBar([0xEE000000, 0xEE0C0C0], [0xFF00FF00, 0xFFFFFF00, 0xFFFF0000], 1, 180, true, 0xFF000000);
 		updateBarPos();
-		barHealth.y = ogre.y - 30;
+		
 		barHealth.percent = 100;
 		add(barHealth);
 		
@@ -100,6 +104,7 @@ class GameState3 extends FlxState
 	}
 
 	override public function update() {
+		barHealth.y = ogre.y - 30;
 		
 		if (FlxG.keys.justPressed.R) FlxG.switchState(new RestartState(new CutScene3()));
 		else if (FlxG.keys.justPressed.F5) FlxG.switchState(new EndState());

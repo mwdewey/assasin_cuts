@@ -33,6 +33,8 @@ class GameState2 extends FlxState
 	var ui:UI;
 	
 	var sound:Sound;
+	
+	var endState:FlxSprite;
 
 	public function new() 
 	{
@@ -52,6 +54,7 @@ class GameState2 extends FlxState
 		hairDresser = new HairDresser();
 		hairDresser.x = Reg.hair_x;
 		hairDresser.y = Reg.hair_y - 30 * 32;
+		hairDresser.health = Reg.score / 100 * 4; // 4 points of health per haircut
 		
 		ui = new UI();
 		// set time to play
@@ -74,7 +77,7 @@ class GameState2 extends FlxState
 		wallGroup.loadMap(Assets.getText("assets/data/level2_obstacle.csv"), "assets/images/Levels/tilemap.png", 32, 32);
 		
 		// scenery
-		//sceneGroup.loadMap(Assets.getText("assets/data/level2_grass.csv"), "assets/images/Levels/tilemap.png", 32, 32);
+		sceneGroup.loadMap(Assets.getText("assets/data/level2_scenary.csv"), "assets/images/Levels/tilemap.png", 32, 32);
 		
 		// enemies
 		var refs:Array<PositionRef> =  TileMapLoader.load(100, 100, 32, 32, "assets/data/level2_enemy.csv");
@@ -84,12 +87,18 @@ class GameState2 extends FlxState
 			}
 		}
 		
+		endState = new FlxSprite();
+		endState.makeGraphic(32 * 4, 32 * 8, FlxColor.TRANSPARENT);
+		endState.x = 32 * 5;
+		endState.y = (100 - 13) * 32;
+		
 		add(new Background());
 		add(floorGroup);
 		add(sceneGroup);
 		add(wallGroup);
 		add(enemyGroup);
 		add(eProjectiles);
+		add(endState);
 		
 		add(hairDresser.spriteGroup);
 		add(ui);
@@ -107,8 +116,11 @@ class GameState2 extends FlxState
 		FlxG.collide(hairDresser, wallGroup);
 		FlxG.collide(hairDresser, floorGroup);
 		
-		// if time runs out, switch to next stage
-		if (ui.getRemainingTime() <= 0) {
+		// update health
+		ui.updateHealthBar(hairDresser.health);
+		
+		// if player reaches end state, switch to next stage
+		if (FlxG.overlap(hairDresser,endState)) {
 			FlxG.camera.fade(FlxColor.BLACK, .5, false,
 			function() {
 			FlxG.switchState(new CutScene3());
