@@ -3,9 +3,9 @@ import flixel.FlxSprite;
 
 /**
  * ...
- * @author robert
+ * @author
  */
-class Projectile2 extends FlxSprite 
+class Bullet extends FlxSprite 
 {
 	
 	static var projectileSpeed:Int = 500;
@@ -19,8 +19,8 @@ class Projectile2 extends FlxSprite
 	{
 		super();
 		
-		this.loadGraphic("assets/images/Characters/Enemy/projectile.png", true, 64, 64);
-		animation.add("move", [0, 1], 16, true);
+		this.loadGraphic("assets/images/Characters/Enemy/bullet.png", true, 32, 32);
+		animation.add("fly", [0, 1, 2, 3, 4, 5], 16, true);
 		
 		// set init position
 		this.setPosition(pos_x, pos_y);
@@ -31,11 +31,11 @@ class Projectile2 extends FlxSprite
 		var dMax:Float = Math.sqrt(Math.pow(dX,2) + Math.pow(dY,2));
 		
 		this.velocity.x = (dX / dMax) * projectileSpeed;
-		this.velocity.y = (dY / dMax) * projectileSpeed;
+		this.velocity.y = 0;
 		
 		damage = 10;
 		
-		animation.play("move");
+		animation.play("fly");
 	}
 	
 	override public function update():Void

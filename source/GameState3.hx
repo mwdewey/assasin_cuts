@@ -24,6 +24,7 @@ class GameState3 extends FlxState
 	var player:HairDresser;
 	var ogre:Ogre;
 	var enemies:FlxGroup;
+	//var enemies_1:FlxGroup;
 	
 	var floor:FlxGroup;
 	
@@ -60,8 +61,12 @@ class GameState3 extends FlxState
 		add(ogre);
 		
 		enemies = new FlxGroup();
-		for (i in 0...4) enemies.add(new Enemy2(20+(i*400), FlxG.height - 160));
+		for (i in 0...2) enemies.add(new Enemy2(20+(i*400), FlxG.height - 160));
 		add(enemies);
+		
+		/*enemies_1 = new FlxGroup();
+		for (i in 0...2) enemies_1.add(new Enemy1(820+(i*400), FlxG.height - 160));
+		add(enemies_1);*/
 		
 		pProjectiles = new FlxGroup();
 		add(pProjectiles);
@@ -122,6 +127,17 @@ class GameState3 extends FlxState
 				enemy.isThrowing = false;
 			}
 		}
+		
+		//Enemy1's bullet attack
+		/*for (obj in enemies_1) {
+			
+			var enemy_1:Enemy1 = cast obj;
+			
+			if (enemy_1.isFiring) {
+				eProjectiles.add(new Bullet(enemy_1.x, enemy_1.y, player));
+				enemy_1.isFiring = false;
+			}
+		}*/
 		
 		super.update();
 	}
