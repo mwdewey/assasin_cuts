@@ -42,7 +42,7 @@ class CutScene2 extends FlxState
 		//new FlxTimer(1.0, endCutScene, 1);
 		
 		texts = new Array<String>();
-		texts.push("Dan: And that boy, Hunter Leventhorpe was the terror of Widebrook. No one could get him to behave, much less cut his hair. But Ellie Prescott never shied away from the challenge. She-");
+		texts.push("Dan: There was a kid, Hunter Leventhorpe, who was the terror of Widebrook. No one could get him to behave, much less cut his hair. But Ellie Prescott never shied away from the challenge. She-");
 		texts.push("Ambrose: You're getting it all confused, Dan. A child wasn't her biggest challenge!");
 		texts.push("Dan: Well why don't you take up the story now Ambrose.");
 		texts.push("Ambrose: Widebrook wasn't always peaceful like you see it today, Will. Some 50 years ago, in rode the Leventhorpe Gang, a band of bloodthirsty cutthroats. If you came at odds with one of them, somebody was gonna die.");
