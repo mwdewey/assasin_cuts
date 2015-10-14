@@ -89,7 +89,7 @@ import flixel.tweens.FlxEase;
 		_player = player;
 		//ogre moves horizontally towards player.  
 		//Set a point using the player's x-position and a fixed y-position
-		movePoint = new FlxPoint(_player.centerX, Y + 160);
+		movePoint = new FlxPoint(_player.centerX, _player.centerY);
 		
 		//_brain starts in stun
 		_brain = new FSM(stun);

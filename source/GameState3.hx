@@ -8,6 +8,7 @@ import flixel.FlxState;
 import flixel.FlxG;
 import flixel.FlxSubState;
 import flixel.group.FlxGroup;
+import flixel.tile.FlxTilemap;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.FlxObject;
@@ -15,6 +16,9 @@ import flixel.ui.FlxBar;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxTimer;
+//import openfl.display.Tilemap;
+import openfl.Assets;
+
 
 /**
  * ...
@@ -28,7 +32,7 @@ class GameState3 extends FlxState
 	var enemies:FlxGroup;
 	//var enemies_1:FlxGroup;
 	
-	var floor:FlxGroup;
+	var floor:FlxTilemap;
 	
 	var pProjectiles:FlxGroup;
 	var eProjectiles:FlxGroup;
@@ -52,8 +56,9 @@ class GameState3 extends FlxState
 		background.scrollFactor.set();
 		add(background);
 		
-		floor = new FlxGroup();
-		for(i in 0...40) floor.add(new StaticObject(i*32, FlxG.height-32, "assets/images/GroundTile.png"));
+		floor = new FlxTilemap();
+		floor.loadMap(Assets.getText("assets/data/level3_floor.csv"), "assets/images/Levels/tilemap.png", 32, 32);
+		//for(i in 0...40) floor.add(new StaticObject(i*32, FlxG.height-32, "assets/images/GroundTile.png"));
 		add(floor);
 		
 		player = new HairDresser();
