@@ -21,11 +21,9 @@ using flixel.util.FlxSpriteUtil;
 
 class GameState1 extends FlxState
 	{
-		
-	var tileMap:FlxTilemap;
-
-	var floorGroup:FlxGroup;
-	var wallGroup:FlxGroup;
+	
+	var floorGroup:FlxTilemap;
+	var wallGroup:FlxTilemap;
 	var townPeopleGroup:FlxGroup;
 	var doorGroup:FlxGroup;
 	var doorCollidableGroup:FlxGroup;
@@ -64,17 +62,19 @@ class GameState1 extends FlxState
 		// when reset occures, score is then prev score
 		Reg.prevScore = Reg.score;
 		
-		floorGroup = new FlxGroup();
-		wallGroup = new FlxGroup();
+		floorGroup = new FlxTilemap();
+		wallGroup = new FlxTilemap();
 		doorGroup = new FlxGroup();
 		doorCollidableGroup = new FlxGroup();
 		townPeopleGroup = new FlxGroup();
 		sceneGroup = new FlxTilemap();
 		var d:Door;
 		
-		// main collidable map
-		tileMap = new FlxTilemap();
-        tileMap.loadMap(Assets.getText("assets/data/level1_ground.csv"), "assets/images/Levels/tilemap.png", 32, 32);
+		// floor
+        floorGroup.loadMap(Assets.getText("assets/data/level1_floor.csv"), "assets/images/Levels/tilemap.png", 32, 32);
+		
+		// other collidable that is not floor
+		wallGroup.loadMap(Assets.getText("assets/data/level1_obstacle.csv"), "assets/images/Levels/tilemap.png", 32, 32);
 		
 		// doors
 		var refs:Array<PositionRef> =  TileMapLoader.load(100, 100, 32, 32, "assets/data/level1_door.csv");
@@ -102,7 +102,6 @@ class GameState1 extends FlxState
 		
 		add(new Background());
 		add(floorGroup);
-		add(tileMap);
 		add(sceneGroup);
 		add(wallGroup);
 		add(doorGroup);
@@ -124,7 +123,6 @@ class GameState1 extends FlxState
 		// move character
 		FlxG.collide(hairDresser, wallGroup);
 		FlxG.collide(hairDresser, floorGroup);
-		FlxG.collide(hairDresser, tileMap);
 		
 		// check overlapable obejcts
 		FlxG.overlap(hairDresser, townPeopleGroup, townspersonDetect);
