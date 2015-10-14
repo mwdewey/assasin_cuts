@@ -53,7 +53,7 @@ class GameState3 extends FlxState
 		add(background);
 		
 		floor = new FlxGroup();
-		for(i in 0...20) floor.add(new StaticObject(i*64, FlxG.height-64, "assets/images/GroundTile.png"));
+		for(i in 0...40) floor.add(new StaticObject(i*32, FlxG.height-32, "assets/images/GroundTile.png"));
 		add(floor);
 		
 		player = new HairDresser();

@@ -82,7 +82,7 @@ import flixel.tweens.FlxEase;
 		stalled = false;
 		
 		// set gravity
-		this.acceleration.y = 1500;
+		//this.acceleration.y = 1500;
 		this.acceleration.x = 0;
 		
 		//reference player sprite
