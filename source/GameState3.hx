@@ -233,9 +233,9 @@ class GameState3 extends FlxState
 	
 	public function playerDeath():Void {
 		if (player.HP <= 0) {
-			//player.kill();
+			player.kill();
 			
-			//FlxG.switchState(new RestartState(new CutScene3()));
+			FlxG.switchState(new RestartState(new CutScene3()));
 		}
 	}
 	
