@@ -19,7 +19,9 @@ class TownPerson extends FlxSprite
 	
 	public var spriteGroup:FlxGroup;
 	var hair_sprite:FlxSprite;
-	var top_sprite:FlxSprite;
+	var top_sprite1:FlxSprite;
+	var top_sprite2:FlxSprite;
+	var top_sprite3:FlxSprite;
 	var bottom_sprite:FlxSprite;
 	var sparkle_sprite:FlxSprite;
 	var smokeSprite:FlxSprite;
@@ -49,12 +51,23 @@ class TownPerson extends FlxSprite
 		hair_sprite.animation.add("idle", [hairFrames[hairIndex]], 1, true);
 		hair_sprite.animation.play("idle");
 		
-		top_sprite = new FlxSprite();
-		top_sprite.loadGraphic(resLocation, true, 64, 96);
-		top_sprite.setPosition(pos_x, pos_y);
-		top_sprite.animation.add("idle", [topFrames[FlxRandom.intRanged(0, topFrames.length-1)]], 1, true);
-		top_sprite.animation.play("idle");
+		top_sprite1 = new FlxSprite();
+		top_sprite1.loadGraphic(resLocation, true, 64, 96);
+		top_sprite1.setPosition(pos_x, pos_y);
+		top_sprite1.animation.add("idle", [topFrames[FlxRandom.intRanged(0, topFrames.length-1)]], 1, true);
+		top_sprite1.animation.play("idle");
 		
+		top_sprite2 = new FlxSprite();
+		top_sprite2.loadGraphic(resLocation, true, 64, 96);
+		top_sprite2.setPosition(pos_x, pos_y);
+		top_sprite2.animation.add("idle", [topFrames[FlxRandom.intRanged(0, topFrames.length-1)]], 1, true);
+		top_sprite2.animation.play("idle");
+		
+		top_sprite3 = new FlxSprite();
+		top_sprite3.loadGraphic(resLocation, true, 64, 96);
+		top_sprite3.setPosition(pos_x, pos_y);
+		top_sprite3.animation.add("idle", [topFrames[FlxRandom.intRanged(0, topFrames.length-1)]], 1, true);
+		top_sprite3.animation.play("idle");
 		
 		bottom_sprite = new FlxSprite();
 		bottom_sprite.loadGraphic(resLocation, true, 64, 96);
@@ -76,7 +89,9 @@ class TownPerson extends FlxSprite
 		isPoof = false;
 		
 		spriteGroup.add(this);
-		spriteGroup.add(top_sprite);
+		spriteGroup.add(top_sprite1);
+		spriteGroup.add(top_sprite2);
+		spriteGroup.add(top_sprite3);
 		spriteGroup.add(bottom_sprite);
 		spriteGroup.add(hair_sprite);
 		spriteGroup.add(sparkle_sprite);
