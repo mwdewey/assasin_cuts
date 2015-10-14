@@ -128,6 +128,13 @@ class GameState3 extends FlxState
 			}
 		}
 		
+		//update projectiles
+		for (obj in pProjectiles) {
+			var p:Projectile = cast obj;
+			projectileUpdate(p);
+		}
+		
+		
 		//Enemy1's bullet attack
 		/*for (obj in enemies_1) {
 			
@@ -167,6 +174,15 @@ class GameState3 extends FlxState
 			player.isAttack = false;
 		}
 		ogre.startAttack();
+	}
+	
+	// update projectiles: if too far from player, destroy it
+	private function projectileUpdate(Object:FlxObject):Void {
+		var p:Projectile = cast Object;
+		
+		if ( (p.startpoint_x - p.x) * (p.startpoint_x - p.x) > 90000) {
+			p.destroy();
+		}
 	}
 	
 	// projectile and enemy interaction

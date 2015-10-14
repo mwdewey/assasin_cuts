@@ -7,6 +7,7 @@ class Projectile extends FlxSprite
 {
 	
 	static var projectileSpeed:Int = 500;
+	public var startpoint_x:Float;
 	var pos_x:Float;
 	var pos_y:Float;
 	var aim_x:Float;
@@ -22,6 +23,7 @@ class Projectile extends FlxSprite
 		
 		// set init position
 		this.setPosition(pos_x, pos_y);
+		startpoint_x = pos_x;
 		
 		// set velocity
 		var dX:Float = aim_x - pos_x;
@@ -39,8 +41,6 @@ class Projectile extends FlxSprite
 	override public function update():Void
 	{
 		super.update();
-		
-		
 	}
 	
 }

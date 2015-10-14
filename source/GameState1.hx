@@ -185,6 +185,15 @@ class GameState1 extends FlxState
 	
 	// player and enemy interaction --- melee
 	
+	// update projectiles: if too far from player, destroy it
+	private function projectileUpdate(Object:FlxObject):Void {
+		var p:Projectile = cast Object;
+		
+		if ( (p.startpoint_x - p.x) * (p.startpoint_x - p.x) > 90000) {
+			p.destroy();
+		}
+	}
+	
 	// projectile and enemy interaction
 	private function projectileDetect(Object1:FlxObject, Object2:FlxObject):Void {
 		var p:Projectile = cast Object1;
